@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="scandit-cordova-datacapture-id" version="6.6.2"
+<plugin id="scandit-cordova-datacapture-id" version="6.6.3"
     xmlns="http://apache.org/cordova/ns/plugins/1.0">
 
     <name>ScanditIdCapture</name>
@@ -37,11 +37,11 @@
         <source-file src="src/ios/ScanditIdCapture+IdCaptureDeserializerDelegate.swift" />
         <source-file src="src/ios/ScanditIdCapture+IdCaptureListener.swift" />
 
-        <dependency id="scandit-cordova-datacapture-core" version="6.6.2" />
-        <dependency id="scandit-cordova-datacapture-text" version="6.6.2" />
+        <dependency id="scandit-cordova-datacapture-core" version="6.6.3" />
+        <dependency id="scandit-cordova-datacapture-text" version="6.6.3" />
 
         <framework custom="true" embed="true" src="src/ios/framework/ScanditIdCapture.framework"
-            version="6.6.2" />
+            version="6.6.3" />
 
         <hook src="src/hooks/add-frameworks.js" type="before_plugin_install" />
     </platform>
@@ -86,14 +86,14 @@
         <source-file src="src/android/handlers/IdCaptureHandler.kt"
             target-dir="kotlin/com/scandit/datacapture/cordova/id/handlers" />
 
-        <dependency id="scandit-cordova-datacapture-core" version="6.6.2" />
+        <dependency id="scandit-cordova-datacapture-core" version="6.6.3" />
         <dependency id="cordova-plugin-androidx" />
 
         <framework custom="true" src="src/android/build.gradle" type="gradleReference" />
         <framework src="androidx.appcompat:appcompat:1.1.0" />
 
         <resource-file custom="true" src="src/android/library/ScanditIdCapture.aar"
-            target="libs/ScanditIdCapture.aar" version="6.6.2" />
+            target="libs/ScanditIdCapture.aar" version="6.6.3" />
 
         <hook src="src/hooks/add-frameworks.js" type="before_plugin_install" />
         <hook src="src/hooks/support-kotlin.js" type="after_plugin_install" />
