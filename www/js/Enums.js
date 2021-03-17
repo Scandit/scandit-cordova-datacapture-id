@@ -39,6 +39,16 @@ var DocumentType;
     DocumentType["HealthInsuranceCard"] = "healthInsuranceCard";
     DocumentType["Passport"] = "passport";
     DocumentType["Visa"] = "visa";
+    DocumentType["SPass"] = "sPass";
+    DocumentType["AddressCard"] = "addressCard";
+    DocumentType["AlienId"] = "alienId";
+    DocumentType["AlienPassport"] = "alienPassport";
+    DocumentType["GreenCard"] = "greenCard";
+    DocumentType["MinorsId"] = "minorsId";
+    DocumentType["PostalId"] = "postalId";
+    DocumentType["ProfessionalDl"] = "professionalDl";
+    DocumentType["TaxId"] = "taxId";
+    DocumentType["WeaponPermit"] = "weaponPermit";
 })(DocumentType = exports.DocumentType || (exports.DocumentType = {}));
 var IdDocumentType;
 (function (IdDocumentType) {
