@@ -2,11 +2,15 @@
 /// <amd-module name="scandit-cordova-datacapture-id.Enums"/>
 // ^ needed because Cordova can't resolve "../xx" style dependencies
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.IdLayout = exports.IdImageType = exports.SupportedSides = exports.IdDocumentType = exports.DocumentType = exports.CapturedResultType = void 0;
+exports.IdLayoutLineStyle = exports.IdLayoutStyle = exports.IdLayout = exports.IdImageType = exports.SupportedSides = exports.IdDocumentType = exports.DocumentType = exports.CapturedResultType = void 0;
 var CapturedResultType;
 (function (CapturedResultType) {
     CapturedResultType["AAMVABarcodeResult"] = "aamvaBarcodeResult";
+    CapturedResultType["ArgentinaIdBarcodeResult"] = "argentinaIdBarcodeResult";
+    CapturedResultType["ColombiaIdBarcodeResult"] = "colombiaIdBarcodeResult";
     CapturedResultType["MRZResult"] = "mrzResult";
+    CapturedResultType["SouthAfricaDlBarcodeResult"] = "southAfricaDlBarcodeResult";
+    CapturedResultType["SouthAfricaIdBarcodeResult"] = "southAfricaIdBarcodeResult";
     CapturedResultType["USUniformedServicesBarcodeResult"] = "usUniformedServicesBarcodeResult";
     CapturedResultType["VIZResult"] = "vizResult";
 })(CapturedResultType = exports.CapturedResultType || (exports.CapturedResultType = {}));
@@ -49,17 +53,31 @@ var DocumentType;
     DocumentType["ProfessionalDl"] = "professionalDl";
     DocumentType["TaxId"] = "taxId";
     DocumentType["WeaponPermit"] = "weaponPermit";
+    DocumentType["BorderCrossingCard"] = "borderCrossingCard";
+    DocumentType["DriverCard"] = "driverCard";
+    DocumentType["GlobalEntryCard"] = "globalEntryCard";
+    DocumentType["MyPolis"] = "myPolis";
+    DocumentType["NexusCard"] = "nexusCard";
+    DocumentType["PassportCard"] = "passportCard";
+    DocumentType["ProofOfAgeCard"] = "proofOfAgeCard";
+    DocumentType["RefugeeId"] = "refugeeId";
+    DocumentType["TribalId"] = "tribalId";
+    DocumentType["VeteranId"] = "veteranId";
 })(DocumentType = exports.DocumentType || (exports.DocumentType = {}));
 var IdDocumentType;
 (function (IdDocumentType) {
-    IdDocumentType["DLVIZ"] = "dlViz";
     IdDocumentType["AAMVABarcode"] = "aamvaBarcode";
-    IdDocumentType["VisaMRZ"] = "visaMrz";
-    IdDocumentType["PassportMRZ"] = "passportMrz";
-    IdDocumentType["SwissDLMRZ"] = "swissDlMrz";
+    IdDocumentType["ArgentinaIdBarcode"] = "argentinaIdBarcode";
+    IdDocumentType["ColombiaIdBarcode"] = "colombiaIdBarcode";
+    IdDocumentType["DLVIZ"] = "dlViz";
     IdDocumentType["IdCardMRZ"] = "idCardMrz";
     IdDocumentType["IdCardVIZ"] = "idCardViz";
+    IdDocumentType["PassportMRZ"] = "passportMrz";
+    IdDocumentType["SouthAfricaDlBarcode"] = "southAfricaDlBarcode";
+    IdDocumentType["SouthAfricaIdBarcode"] = "southAfricaIdBarcode";
+    IdDocumentType["SwissDLMRZ"] = "swissDlMrz";
     IdDocumentType["USUSIdBarcode"] = "usUsIdBarcode";
+    IdDocumentType["VisaMRZ"] = "visaMrz";
 })(IdDocumentType = exports.IdDocumentType || (exports.IdDocumentType = {}));
 var SupportedSides;
 (function (SupportedSides) {
@@ -83,3 +101,13 @@ var IdLayout;
     IdLayout["Auto"] = "auto";
     IdLayout["None"] = "none";
 })(IdLayout = exports.IdLayout || (exports.IdLayout = {}));
+var IdLayoutStyle;
+(function (IdLayoutStyle) {
+    IdLayoutStyle["Rounded"] = "rounded";
+    IdLayoutStyle["Square"] = "square";
+})(IdLayoutStyle = exports.IdLayoutStyle || (exports.IdLayoutStyle = {}));
+var IdLayoutLineStyle;
+(function (IdLayoutLineStyle) {
+    IdLayoutLineStyle["Light"] = "light";
+    IdLayoutLineStyle["Bold"] = "bold";
+})(IdLayoutLineStyle = exports.IdLayoutLineStyle || (exports.IdLayoutLineStyle = {}));

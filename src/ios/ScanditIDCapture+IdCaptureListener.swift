@@ -24,7 +24,7 @@ extension ScanditIdCapture: IdCaptureListener {
         }
 
         let event = ListenerEvent(name: .didFailInIdCapture,
-                                  argument: ["session":session.jsonString])
+                                  argument: ["session": session.jsonString])
         commandDelegate.send(.listenerCallback(event), callbackId: callback.id)
     }
 }

@@ -1,7 +1,22 @@
 declare module Scandit {
 
+interface PrivateDateResult {
+    fromJSON(json: DateResultJSON | null): DateResult;
+}
+interface PrivateProfessionalDrivingPermit {
+    fromJSON(json: ProfessionalDrivingPermitJSON | null): ProfessionalDrivingPermit;
+}
+interface PrivateVehicleRestriction {
+    fromJSON(json: VehicleRestrictionJSON | null): VehicleRestriction;
+}
 interface PrivateAAMVABarcodeResult {
     fromJSON(json: AAMVABarcodeResultJSON): AAMVABarcodeResult;
+}
+interface PrivateArgentinaIdBarcodeResult {
+    fromJSON(json: ArgentinaIdBarcodeResultJSON): ArgentinaIdBarcodeResult;
+}
+interface PrivateColombiaIdBarcodeResult {
+    fromJSON(json: ColombiaIdBarcodeResultJSON): ColombiaIdBarcodeResult;
 }
 interface PrivateMRZResult {
     fromJSON(json: MRZResultJSON): MRZResult;
@@ -12,6 +27,12 @@ interface PrivateUSUniformedServicesBarcodeResult {
 interface PrivateVIZResult {
     fromJSON(json: VIZResultJSON): VIZResult;
 }
+interface PrivateSouthAfricaIdBarcodeResult {
+    fromJSON(json: SouthAfricaIdBarcodeResultJSON): SouthAfricaIdBarcodeResult;
+}
+interface PrivateSouthAfricaDlBarcodeResult {
+    fromJSON(json: SouthAfricaDlBarcodeResultJSON): SouthAfricaDlBarcodeResult;
+}
 interface PrivateCapturedId {
     fromJSON(json: CapturedIdJSON): CapturedId;
 }
@@ -20,6 +41,19 @@ export class DateResult {
     get day(): number;
     get month(): number;
     get year(): number;
+    private static fromJSON;
+}
+export class ProfessionalDrivingPermit {
+    private json;
+    get dateOfExpiry(): DateResult;
+    get codes(): string[];
+    private static fromJSON;
+}
+export class VehicleRestriction {
+    private json;
+    get vehicleCode(): string;
+    get vehicleRestriction(): string;
+    get dateOfIssue(): DateResult;
     private static fromJSON;
 }
 export class CapturedId {
@@ -40,10 +74,18 @@ export class CapturedId {
     get dateOfIssue(): DateResult | null;
     private _aamvaBarcodeResult;
     get aamvaBarcodeResult(): AAMVABarcodeResult | null;
-    private _usUniformedServicesBarcodeResult;
-    get usUniformedServicesBarcodeResult(): USUniformedServicesBarcodeResult | null;
+    private _argentinaIdBarcodeResult;
+    get argentinaIdBarcodeResult(): ArgentinaIdBarcodeResult | null;
+    private _colombiaIdBarcodeResult;
+    get colombiaIdBarcodeResult(): ColombiaIdBarcodeResult | null;
     private _mrzResult;
     get mrzResult(): MRZResult | null;
+    private _southAfricaIdBarcodeResult;
+    get southAfricaIdBarcodeResult(): SouthAfricaIdBarcodeResult | null;
+    private _southAfricaDlBarcodeResult;
+    get southAfricaDlBarcodeResult(): SouthAfricaDlBarcodeResult | null;
+    private _usUniformedServicesBarcodeResult;
+    get usUniformedServicesBarcodeResult(): USUniformedServicesBarcodeResult | null;
     private _vizResult;
     get vizResult(): VIZResult | null;
     private static fromJSON;
@@ -89,6 +131,7 @@ export class MRZResult {
     get namesAreTruncated(): boolean;
     get optional(): string | null;
     get optional1(): string | null;
+    get capturedMrz(): string;
     private static fromJSON;
 }
 export class USUniformedServicesBarcodeResult {
@@ -151,11 +194,46 @@ export class VIZResult {
     get isBackSideCaptureSupported(): boolean;
     private static fromJSON;
 }
+export class ArgentinaIdBarcodeResult {
+    private json;
+    get personalIdNumber(): string;
+    get documentCopy(): string;
+    private static fromJSON;
+}
+export class ColombiaIdBarcodeResult {
+    private json;
+    get bloodType(): string;
+    private static fromJSON;
+}
+export class SouthAfricaIdBarcodeResult {
+    private json;
+    get countryOfBirth(): string;
+    get countryOfBirthIso(): string;
+    get citizenshipStatus(): string;
+    get personalIdNumber(): string;
+    private static fromJSON;
+}
+export class SouthAfricaDlBarcodeResult {
+    private json;
+    get version(): number;
+    get licenseCountryOfIssue(): string;
+    get personalIdNumber(): string;
+    get personalIdNumberType(): string;
+    get documentCopy(): number;
+    get driverRestrictionCodes(): number[];
+    get professionalDrivingPermit(): ProfessionalDrivingPermit | null;
+    get vehicleRestrictions(): VehicleRestriction[];
+    private static fromJSON;
+}
 
 
 export enum CapturedResultType {
     AAMVABarcodeResult = "aamvaBarcodeResult",
+    ArgentinaIdBarcodeResult = "argentinaIdBarcodeResult",
+    ColombiaIdBarcodeResult = "colombiaIdBarcodeResult",
     MRZResult = "mrzResult",
+    SouthAfricaDlBarcodeResult = "southAfricaDlBarcodeResult",
+    SouthAfricaIdBarcodeResult = "southAfricaIdBarcodeResult",
     USUniformedServicesBarcodeResult = "usUniformedServicesBarcodeResult",
     VIZResult = "vizResult"
 }
@@ -196,17 +274,31 @@ export enum DocumentType {
     PostalId = "postalId",
     ProfessionalDl = "professionalDl",
     TaxId = "taxId",
-    WeaponPermit = "weaponPermit"
+    WeaponPermit = "weaponPermit",
+    BorderCrossingCard = "borderCrossingCard",
+    DriverCard = "driverCard",
+    GlobalEntryCard = "globalEntryCard",
+    MyPolis = "myPolis",
+    NexusCard = "nexusCard",
+    PassportCard = "passportCard",
+    ProofOfAgeCard = "proofOfAgeCard",
+    RefugeeId = "refugeeId",
+    TribalId = "tribalId",
+    VeteranId = "veteranId"
 }
 export enum IdDocumentType {
-    DLVIZ = "dlViz",
     AAMVABarcode = "aamvaBarcode",
-    VisaMRZ = "visaMrz",
-    PassportMRZ = "passportMrz",
-    SwissDLMRZ = "swissDlMrz",
+    ArgentinaIdBarcode = "argentinaIdBarcode",
+    ColombiaIdBarcode = "colombiaIdBarcode",
+    DLVIZ = "dlViz",
     IdCardMRZ = "idCardMrz",
     IdCardVIZ = "idCardViz",
-    USUSIdBarcode = "usUsIdBarcode"
+    PassportMRZ = "passportMrz",
+    SouthAfricaDlBarcode = "southAfricaDlBarcode",
+    SouthAfricaIdBarcode = "southAfricaIdBarcode",
+    SwissDLMRZ = "swissDlMrz",
+    USUSIdBarcode = "usUsIdBarcode",
+    VisaMRZ = "visaMrz"
 }
 export enum SupportedSides {
     FrontOnly = "frontOnly",
@@ -226,6 +318,14 @@ export enum IdLayout {
     PDF417 = "pdf417",
     Auto = "auto",
     None = "none"
+}
+export enum IdLayoutStyle {
+    Rounded = "rounded",
+    Square = "square"
+}
+export enum IdLayoutLineStyle {
+    Light = "light",
+    Bold = "bold"
 }
 
 
@@ -284,10 +384,16 @@ export class IdCaptureOverlay implements DataCaptureOverlay {
     private type;
     private idCapture;
     private _idLayout;
+    private _idLayoutStyle;
+    private _idLayoutLineStyle;
     static withIdCapture(idCapture: IdCapture): IdCaptureOverlay;
     static withIdCaptureForView(idCapture: IdCapture, view: DataCaptureView | null): IdCaptureOverlay;
     private constructor();
     setIdLayout(idLayout: IdLayout): void;
+    get idLayoutStyle(): IdLayoutStyle;
+    set idLayoutStyle(style: IdLayoutStyle);
+    get idLayoutLineStyle(): IdLayoutLineStyle;
+    set idLayoutLineStyle(lineStyle: IdLayoutLineStyle);
 }
 
 

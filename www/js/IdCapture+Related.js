@@ -50,6 +50,8 @@ class IdCaptureOverlay extends Serializeable_1.DefaultSerializeable {
         super();
         this.type = 'idCapture';
         this._idLayout = Enums_1.IdLayout.Auto;
+        this._idLayoutStyle = Enums_1.IdLayoutStyle.Rounded;
+        this._idLayoutLineStyle = Enums_1.IdLayoutLineStyle.Light;
     }
     static withIdCapture(idCapture) {
         return IdCaptureOverlay.withIdCaptureForView(idCapture, null);
@@ -66,6 +68,18 @@ class IdCaptureOverlay extends Serializeable_1.DefaultSerializeable {
         this._idLayout = idLayout;
         this.idCapture.didChange();
     }
+    get idLayoutStyle() {
+        return this._idLayoutStyle;
+    }
+    set idLayoutStyle(style) {
+        this._idLayoutStyle = style;
+    }
+    get idLayoutLineStyle() {
+        return this._idLayoutLineStyle;
+    }
+    set idLayoutLineStyle(lineStyle) {
+        this._idLayoutLineStyle = lineStyle;
+    }
 }
 __decorate([
     Serializeable_1.ignoreFromSerialization
@@ -73,4 +87,10 @@ __decorate([
 __decorate([
     Serializeable_1.nameForSerialization('idLayout')
 ], IdCaptureOverlay.prototype, "_idLayout", void 0);
+__decorate([
+    Serializeable_1.nameForSerialization('idLayoutStyle')
+], IdCaptureOverlay.prototype, "_idLayoutStyle", void 0);
+__decorate([
+    Serializeable_1.nameForSerialization('idLayoutLineStyle')
+], IdCaptureOverlay.prototype, "_idLayoutLineStyle", void 0);
 exports.IdCaptureOverlay = IdCaptureOverlay;

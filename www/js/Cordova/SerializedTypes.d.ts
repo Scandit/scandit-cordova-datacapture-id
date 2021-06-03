@@ -4,6 +4,15 @@ export interface DateResultJSON {
     month: number;
     year: number;
 }
+export interface ProfessionalDrivingPermitJSON {
+    dateOfExpiry: DateResultJSON;
+    codes: string[];
+}
+export interface VehicleRestrictionJSON {
+    vehicleCode: string;
+    vehicleRestriction: string;
+    dateOfIssue: DateResultJSON;
+}
 export interface ImageInfoJSON {
     face: string;
     idFront: string;
@@ -26,7 +35,11 @@ export interface CapturedIdJSON {
     dateOfIssue: DateResultJSON | null;
     imageInfo: ImageInfoJSON | null;
     aamvaBarcodeResult: AAMVABarcodeResultJSON | null;
+    argentinaIdBarcodeResult: ArgentinaIdBarcodeResultJSON | null;
+    colombiaIdBarcodeResult: ColombiaIdBarcodeResultJSON | null;
     mrzResult: MRZResultJSON | null;
+    southAfricaDlBarcodeResult: SouthAfricaDlBarcodeResultJSON | null;
+    southAfricaIdBarcodeResult: SouthAfricaIdBarcodeResultJSON | null;
     usUniformedServicesBarcodeResult: USUniformedServicesBarcodeResultJSON | null;
     vizResult: VIZResultJSON | null;
 }
@@ -62,11 +75,35 @@ export interface AAMVABarcodeResultJSON {
         [key: string]: string;
     };
 }
+export interface ArgentinaIdBarcodeResultJSON {
+    documentCopy: string;
+    personalIdNumber: string;
+}
+export interface ColombiaIdBarcodeResultJSON {
+    bloodType: string;
+}
 export interface MRZResultJSON {
     documentCode: string;
     namesAreTruncated: boolean;
     optional: string | null;
     optional1: string | null;
+    capturedMrz: string;
+}
+export interface SouthAfricaDlBarcodeResultJSON {
+    version: number;
+    licenseCountryOfIssue: string;
+    personalIdNumber: string;
+    personalIdNumberType: string;
+    documentCopy: number;
+    driverRestrictionCodes: number[];
+    professionalDrivingPermit: ProfessionalDrivingPermitJSON | null;
+    vehicleRestrictions: VehicleRestrictionJSON[];
+}
+export interface SouthAfricaIdBarcodeResultJSON {
+    countryOfBirth: string;
+    countryOfBirthIso: string;
+    citizenshipStatus: string;
+    personalIdNumber: string;
 }
 export interface USUniformedServicesBarcodeResultJSON {
     bloodType: string | null;
