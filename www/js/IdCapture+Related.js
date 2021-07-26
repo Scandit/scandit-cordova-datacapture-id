@@ -73,12 +73,14 @@ class IdCaptureOverlay extends Serializeable_1.DefaultSerializeable {
     }
     set idLayoutStyle(style) {
         this._idLayoutStyle = style;
+        this.idCapture.didChange();
     }
     get idLayoutLineStyle() {
         return this._idLayoutLineStyle;
     }
     set idLayoutLineStyle(lineStyle) {
         this._idLayoutLineStyle = lineStyle;
+        this.idCapture.didChange();
     }
 }
 __decorate([
