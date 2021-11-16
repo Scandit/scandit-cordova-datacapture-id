@@ -10,8 +10,10 @@ import com.scandit.datacapture.cordova.core.actions.Action
 import com.scandit.datacapture.cordova.core.actions.ActionJsonParseErrorResultListener
 import com.scandit.datacapture.cordova.core.data.defaults.SerializableCameraSettingsDefault
 import com.scandit.datacapture.cordova.id.data.defaults.SerializableIdCaptureDefaults
+import com.scandit.datacapture.cordova.id.data.defaults.SerializableIdCaptureOverlayDefaults
 import com.scandit.datacapture.cordova.id.data.defaults.SerializableIdDefaults
 import com.scandit.datacapture.id.capture.IdCapture
+import com.scandit.datacapture.id.ui.overlay.IdCaptureOverlay
 import org.apache.cordova.CallbackContext
 import org.json.JSONArray
 
@@ -24,6 +26,11 @@ class ActionGetDefaults(
                 serializableIdCaptureDefaults = SerializableIdCaptureDefaults(
                     recommendedCameraSettings = SerializableCameraSettingsDefault(
                         IdCapture.createRecommendedCameraSettings()
+                    ),
+                    idCaptureOverlay = SerializableIdCaptureOverlayDefaults(
+                        IdCaptureOverlay.defaultCapturedBrush(),
+                        IdCaptureOverlay.defaultLocalizedBrush(),
+                        IdCaptureOverlay.defaultRejectedBrush(),
                     )
                 )
             )

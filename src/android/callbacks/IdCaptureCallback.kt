@@ -11,6 +11,8 @@ import com.scandit.datacapture.cordova.core.data.SerializableFinishModeCallbackD
 import com.scandit.datacapture.cordova.core.handlers.ActionsHandler
 import com.scandit.datacapture.cordova.id.factories.IdCaptureActionFactory.Companion.SEND_ERROR_CAPTURING_EVENT
 import com.scandit.datacapture.cordova.id.factories.IdCaptureActionFactory.Companion.SEND_ID_CAPTURED_EVENT
+import com.scandit.datacapture.cordova.id.factories.IdCaptureActionFactory.Companion.SEND_ID_LOCALIZED_EVENT
+import com.scandit.datacapture.cordova.id.factories.IdCaptureActionFactory.Companion.SEND_ID_REJECTED_EVENT
 import com.scandit.datacapture.core.data.FrameData
 import com.scandit.datacapture.id.capture.IdCapture
 import com.scandit.datacapture.id.capture.IdCaptureListener
@@ -36,6 +38,26 @@ class IdCaptureCallback(
 
         lock.withLock {
             addActionOnCaptureEvent(SEND_ID_CAPTURED_EVENT, session)
+            lockAndWait()
+            onUnlock(mode)
+        }
+    }
+
+    override fun onIdLocalized(mode: IdCapture, session: IdCaptureSession, data: FrameData) {
+        if (disposed.get()) return
+
+        lock.withLock {
+            addActionOnCaptureEvent(SEND_ID_LOCALIZED_EVENT, session)
+            lockAndWait()
+            onUnlock(mode)
+        }
+    }
+
+    override fun onIdRejected(mode: IdCapture, session: IdCaptureSession, data: FrameData) {
+        if (disposed.get()) return
+
+        lock.withLock {
+            addActionOnCaptureEvent(SEND_ID_REJECTED_EVENT, session)
             lockAndWait()
             onUnlock(mode)
         }

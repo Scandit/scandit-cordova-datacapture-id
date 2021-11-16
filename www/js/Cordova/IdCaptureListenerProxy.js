@@ -6,6 +6,8 @@ const Cordova_1 = require("scandit-cordova-datacapture-id.Cordova");
 var IdCaptureListenerEvent;
 (function (IdCaptureListenerEvent) {
     IdCaptureListenerEvent["DidCapture"] = "didCaptureInIdCapture";
+    IdCaptureListenerEvent["DidLocalize"] = "didLocalizeInIdCapture";
+    IdCaptureListenerEvent["DidReject"] = "didRejectInIdCapture";
     IdCaptureListenerEvent["DidFail"] = "didFailInIdCapture";
 })(IdCaptureListenerEvent || (IdCaptureListenerEvent = {}));
 class IdCaptureListenerProxy {
@@ -38,6 +40,18 @@ class IdCaptureListenerProxy {
                 case IdCaptureListenerEvent.DidCapture:
                     if (listener.didCaptureId) {
                         listener.didCaptureId(this.idCapture, IdCapture_Related_1.IdCaptureSession
+                            .fromJSON(JSON.parse(event.argument.session)));
+                    }
+                    break;
+                case IdCaptureListenerEvent.DidLocalize:
+                    if (listener.didLocalizeId) {
+                        listener.didLocalizeId(this.idCapture, IdCapture_Related_1.IdCaptureSession
+                            .fromJSON(JSON.parse(event.argument.session)));
+                    }
+                    break;
+                case IdCaptureListenerEvent.DidReject:
+                    if (listener.didRejectId) {
+                        listener.didRejectId(this.idCapture, IdCapture_Related_1.IdCaptureSession
                             .fromJSON(JSON.parse(event.argument.session)));
                     }
                     break;

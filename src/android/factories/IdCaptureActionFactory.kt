@@ -27,6 +27,8 @@ class IdCaptureActionFactory(
             SUBSCRIBE_ID_CAPTURE_LISTENER -> createActionSubscribeIdCapture()
             FINISH_BLOCKING_ACTION -> createActionFinishBlocking()
             SEND_ID_CAPTURED_EVENT -> createActionIdCaptured()
+            SEND_ID_LOCALIZED_EVENT -> createActionIdLocalized()
+            SEND_ID_REJECTED_EVENT -> createActionIdRejected()
             SEND_ERROR_CAPTURING_EVENT -> createActionErrorIdCapturing()
             RESET_ID_CAPTURE_ACTION -> createResetIdCaptureAction()
             else -> throw InvalidActionNameError(actionName)
@@ -48,6 +50,20 @@ class IdCaptureActionFactory(
         shouldNotifyWhenFinished = true
     )
 
+    private fun createActionIdLocalized() = ActionSend(
+        ACTION_ID_LOCALIZED,
+        listener,
+        finishCallbackId = ACTION_ID_LOCALIZED,
+        shouldNotifyWhenFinished = true
+    )
+
+    private fun createActionIdRejected() = ActionSend(
+        ACTION_ID_REJECTED,
+        listener,
+        finishCallbackId = ACTION_ID_REJECTED,
+        shouldNotifyWhenFinished = true
+    )
+
     private fun createActionErrorIdCapturing() = ActionSend(
         ACTION_ERROR_CAPTURING,
         listener
@@ -62,8 +78,12 @@ class IdCaptureActionFactory(
         private const val RESET_ID_CAPTURE_ACTION = "resetIdCapture"
 
         const val SEND_ID_CAPTURED_EVENT = "sendIdCaptureEvent"
+        const val SEND_ID_LOCALIZED_EVENT = "sendIdLocalizedEvent"
+        const val SEND_ID_REJECTED_EVENT = "sendIdRejectedEvent"
         const val SEND_ERROR_CAPTURING_EVENT = "sendErrorCapturingEvent"
         const val ACTION_ID_CAPTURED = "didCaptureInIdCapture"
+        const val ACTION_ID_LOCALIZED = "didLocalizeInIdCapture"
+        const val ACTION_ID_REJECTED = "didRejectInIdCapture"
         const val ACTION_ERROR_CAPTURING = "didFailWithError"
     }
 }

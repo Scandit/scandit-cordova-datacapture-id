@@ -16,6 +16,34 @@ extension ScanditIdCapture: IdCaptureListener {
     }
 
     public func idCapture(_ idCapture: IdCapture,
+                          didLocalizeIn session: IdCaptureSession,
+                          frameData: FrameData) {
+        guard let callback = callbacks.idCaptureListener else {
+            return
+        }
+
+        let listenerEvent = ListenerEvent(name: .didLocalizeInIdCapture,
+                                          argument: ["session": session.jsonString],
+                                          shouldNotifyWhenFinished: true)
+        waitForFinished(listenerEvent, callbackId: callback.id)
+        finishBlockingCallback(with: idCapture, for: listenerEvent)
+    }
+
+    public func idCapture(_ idCapture: IdCapture,
+                          didRejectIn session: IdCaptureSession,
+                          frameData: FrameData) {
+        guard let callback = callbacks.idCaptureListener else {
+            return
+        }
+
+        let listenerEvent = ListenerEvent(name: .didRejectInIdCapture,
+                                          argument: ["session": session.jsonString],
+                                          shouldNotifyWhenFinished: true)
+        waitForFinished(listenerEvent, callbackId: callback.id)
+        finishBlockingCallback(with: idCapture, for: listenerEvent)
+    }
+
+    public func idCapture(_ idCapture: IdCapture,
                           didFailWithError error: Error,
                           session: IdCaptureSession,
                           frameData: FrameData) {

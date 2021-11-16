@@ -12,6 +12,8 @@ exports.IdCaptureOverlay = exports.IdCaptureSession = exports.IdCaptureError = v
 const CapturedId_1 = require("scandit-cordova-datacapture-id.CapturedId");
 const Enums_1 = require("scandit-cordova-datacapture-id.Enums");
 const Serializeable_1 = require("scandit-cordova-datacapture-core.Serializeable");
+const Viewfinder_1 = require("scandit-cordova-datacapture-core.Viewfinder");
+const Cordova_1 = require("scandit-cordova-datacapture-id.Cordova");
 class IdCaptureError {
     get type() {
         return this._type;
@@ -34,6 +36,12 @@ class IdCaptureSession {
     get frameSequenceId() {
         return this._frameSequenceId;
     }
+    get localizedOnlyId() {
+        return this._localizedOnlyId;
+    }
+    get newlyRejectedId() {
+        return this._newlyRejectedId;
+    }
     static fromJSON(json) {
         const session = new IdCaptureSession();
         if (json.newlyCapturedId) {
@@ -51,6 +59,12 @@ class IdCaptureOverlay extends Serializeable_1.DefaultSerializeable {
         this.type = 'idCapture';
         this._idLayout = Enums_1.IdLayout.Auto;
         this._idLayoutStyle = Enums_1.IdLayoutStyle.Rounded;
+        this._defaultCapturedBrush = new Viewfinder_1.Brush(Cordova_1.Cordova.defaults.IdCapture.IdCaptureOverlayDefaults.defaultCapturedBrush.fillColor, Cordova_1.Cordova.defaults.IdCapture.IdCaptureOverlayDefaults.defaultCapturedBrush.strokeColor, Cordova_1.Cordova.defaults.IdCapture.IdCaptureOverlayDefaults.defaultCapturedBrush.strokeWidth);
+        this._defaultLocalizedBrush = new Viewfinder_1.Brush(Cordova_1.Cordova.defaults.IdCapture.IdCaptureOverlayDefaults.defaultLocalizedBrush.fillColor, Cordova_1.Cordova.defaults.IdCapture.IdCaptureOverlayDefaults.defaultLocalizedBrush.strokeColor, Cordova_1.Cordova.defaults.IdCapture.IdCaptureOverlayDefaults.defaultLocalizedBrush.strokeWidth);
+        this._defaultRejectedBrush = new Viewfinder_1.Brush(Cordova_1.Cordova.defaults.IdCapture.IdCaptureOverlayDefaults.defaultRejectedBrush.fillColor, Cordova_1.Cordova.defaults.IdCapture.IdCaptureOverlayDefaults.defaultRejectedBrush.strokeColor, Cordova_1.Cordova.defaults.IdCapture.IdCaptureOverlayDefaults.defaultRejectedBrush.strokeWidth);
+        this._capturedBrush = this._defaultCapturedBrush;
+        this._localizedBrush = this._defaultLocalizedBrush;
+        this._rejectedBrush = this._defaultRejectedBrush;
         this._idLayoutLineStyle = Enums_1.IdLayoutLineStyle.Light;
     }
     static withIdCapture(idCapture) {
@@ -82,6 +96,36 @@ class IdCaptureOverlay extends Serializeable_1.DefaultSerializeable {
         this._idLayoutLineStyle = lineStyle;
         this.idCapture.didChange();
     }
+    get capturedBrush() {
+        return this._capturedBrush;
+    }
+    set capturedBrush(brush) {
+        this._capturedBrush = brush;
+        this.idCapture.didChange();
+    }
+    get localizedBrush() {
+        return this._localizedBrush;
+    }
+    set localizedBrush(brush) {
+        this._localizedBrush = brush;
+        this.idCapture.didChange();
+    }
+    get rejectedBrush() {
+        return this._rejectedBrush;
+    }
+    set rejectedBrush(brush) {
+        this._rejectedBrush = brush;
+        this.idCapture.didChange();
+    }
+    get defaultCapturedBrush() {
+        return this._defaultCapturedBrush;
+    }
+    get defaultLocalizedBrush() {
+        return this._defaultLocalizedBrush;
+    }
+    get defaultRejectedBrush() {
+        return this._defaultRejectedBrush;
+    }
 }
 __decorate([
     Serializeable_1.ignoreFromSerialization
@@ -92,6 +136,15 @@ __decorate([
 __decorate([
     Serializeable_1.nameForSerialization('idLayoutStyle')
 ], IdCaptureOverlay.prototype, "_idLayoutStyle", void 0);
+__decorate([
+    Serializeable_1.nameForSerialization('capturedBrush')
+], IdCaptureOverlay.prototype, "_capturedBrush", void 0);
+__decorate([
+    Serializeable_1.nameForSerialization('localizedBrush')
+], IdCaptureOverlay.prototype, "_localizedBrush", void 0);
+__decorate([
+    Serializeable_1.nameForSerialization('rejectedBrush')
+], IdCaptureOverlay.prototype, "_rejectedBrush", void 0);
 __decorate([
     Serializeable_1.nameForSerialization('idLayoutLineStyle')
 ], IdCaptureOverlay.prototype, "_idLayoutLineStyle", void 0);

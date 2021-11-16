@@ -225,6 +225,14 @@ export class SouthAfricaDlBarcodeResult {
     get vehicleRestrictions(): VehicleRestriction[];
     private static fromJSON;
 }
+export class LocalizedOnlyId {
+    private _location;
+    get location(): Quadrilateral;
+}
+export class RejectedId {
+    private _location;
+    get location(): Quadrilateral;
+}
 
 
 export enum CapturedResultType {
@@ -373,11 +381,17 @@ export class IdCaptureSession {
     get newlyCapturedId(): CapturedId | null;
     private _frameSequenceId;
     get frameSequenceId(): number;
+    private _localizedOnlyId;
+    get localizedOnlyId(): LocalizedOnlyId | null;
+    private _newlyRejectedId;
+    get newlyRejectedId(): RejectedId | null;
     private _error;
     private static fromJSON;
 }
 export interface IdCaptureListener {
     didCaptureId?(idCapture: IdCapture, session: IdCaptureSession): void;
+    didLocalizeId?(idCapture: IdCapture, session: IdCaptureSession): void;
+    didRejectId?(idCapture: IdCapture, session: IdCaptureSession): void;
     didFailWithError?(idCapture: IdCapture, error: IdCaptureError, session: IdCaptureSession): void;
 }
 export class IdCaptureOverlay implements DataCaptureOverlay {
@@ -385,6 +399,12 @@ export class IdCaptureOverlay implements DataCaptureOverlay {
     private idCapture;
     private _idLayout;
     private _idLayoutStyle;
+    private _defaultCapturedBrush;
+    private _defaultLocalizedBrush;
+    private _defaultRejectedBrush;
+    private _capturedBrush;
+    private _localizedBrush;
+    private _rejectedBrush;
     private _idLayoutLineStyle;
     static withIdCapture(idCapture: IdCapture): IdCaptureOverlay;
     static withIdCaptureForView(idCapture: IdCapture, view: DataCaptureView | null): IdCaptureOverlay;
@@ -394,6 +414,15 @@ export class IdCaptureOverlay implements DataCaptureOverlay {
     set idLayoutStyle(style: IdLayoutStyle);
     get idLayoutLineStyle(): IdLayoutLineStyle;
     set idLayoutLineStyle(lineStyle: IdLayoutLineStyle);
+    get capturedBrush(): Brush;
+    set capturedBrush(brush: Brush);
+    get localizedBrush(): Brush;
+    set localizedBrush(brush: Brush);
+    get rejectedBrush(): Brush;
+    set rejectedBrush(brush: Brush);
+    get defaultCapturedBrush(): Brush;
+    get defaultLocalizedBrush(): Brush;
+    get defaultRejectedBrush(): Brush;
 }
 
 

@@ -105,6 +105,14 @@ class ScanditIdCapture : CordovaPlugin(),
         idCaptureCallback?.onIdCaptured(mode, session, data)
     }
 
+    override fun onIdLocalized(mode: IdCapture, session: IdCaptureSession, data: FrameData) {
+        idCaptureCallback?.onIdLocalized(mode, session, data)
+    }
+
+    override fun onIdRejected(mode: IdCapture, session: IdCaptureSession, data: FrameData) {
+        idCaptureCallback?.onIdCaptured(mode, session, data)
+    }
+
     override fun onErrorEncountered(
         mode: IdCapture,
         error: Throwable,

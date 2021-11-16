@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SouthAfricaDlBarcodeResult = exports.SouthAfricaIdBarcodeResult = exports.ColombiaIdBarcodeResult = exports.ArgentinaIdBarcodeResult = exports.VIZResult = exports.USUniformedServicesBarcodeResult = exports.MRZResult = exports.AAMVABarcodeResult = exports.CapturedId = exports.VehicleRestriction = exports.ProfessionalDrivingPermit = exports.DateResult = void 0;
+exports.RejectedId = exports.LocalizedOnlyId = exports.SouthAfricaDlBarcodeResult = exports.SouthAfricaIdBarcodeResult = exports.ColombiaIdBarcodeResult = exports.ArgentinaIdBarcodeResult = exports.VIZResult = exports.USUniformedServicesBarcodeResult = exports.MRZResult = exports.AAMVABarcodeResult = exports.CapturedId = exports.VehicleRestriction = exports.ProfessionalDrivingPermit = exports.DateResult = void 0;
 class DateResult {
     get day() { return this.json.day; }
     get month() { return this.json.month; }
@@ -311,3 +311,15 @@ class SouthAfricaDlBarcodeResult {
     }
 }
 exports.SouthAfricaDlBarcodeResult = SouthAfricaDlBarcodeResult;
+class LocalizedOnlyId {
+    get location() {
+        return this._location;
+    }
+}
+exports.LocalizedOnlyId = LocalizedOnlyId;
+class RejectedId {
+    get location() {
+        return this._location;
+    }
+}
+exports.RejectedId = RejectedId;
