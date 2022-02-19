@@ -38,7 +38,8 @@ import org.apache.cordova.CordovaPlugin
 import org.json.JSONArray
 import org.json.JSONObject
 
-class ScanditIdCapture : CordovaPlugin(),
+class ScanditIdCapture :
+    CordovaPlugin(),
     ModeDeserializersProvider,
     IdCaptureDeserializerListener,
     IdCaptureListener,
@@ -87,9 +88,10 @@ class ScanditIdCapture : CordovaPlugin(),
         return try {
             actionsHandler.addAction(action, args, callbackContext)
         } catch (e: InvalidActionNameError) {
+            println(e)
             false
         } catch (e: Exception) {
-            e.printStackTrace()
+            println(e)
             true
         }
     }
@@ -189,7 +191,8 @@ class ScanditIdCapture : CordovaPlugin(),
     //endregion ActionFinishCallback.ResultListener
 }
 
-interface IdActionsListeners : ActionGetDefaults.ResultListener,
+interface IdActionsListeners :
+    ActionGetDefaults.ResultListener,
     ActionSubscribeIdCapture.ResultListener,
     ActionSend.ResultListener,
     ActionFinishCallback.ResultListener,

@@ -11,6 +11,8 @@ import com.scandit.datacapture.cordova.core.actions.ActionJsonParseErrorResultLi
 import com.scandit.datacapture.cordova.core.data.SerializableCallbackAction.Companion.FIELD_FINISH_CALLBACK_ID
 import com.scandit.datacapture.cordova.core.data.SerializableFinishModeCallbackData
 import com.scandit.datacapture.cordova.id.factories.IdCaptureActionFactory.Companion.ACTION_ID_CAPTURED
+import com.scandit.datacapture.cordova.id.factories.IdCaptureActionFactory.Companion.ACTION_ID_LOCALIZED
+import com.scandit.datacapture.cordova.id.factories.IdCaptureActionFactory.Companion.ACTION_ID_REJECTED
 import org.apache.cordova.CallbackContext
 import org.json.JSONArray
 import org.json.JSONException
@@ -36,17 +38,20 @@ class ActionFinishCallback(
                     throw JSONException("Cannot recognise finish callback action with data $data")
             }
         } catch (e: JSONException) {
-            e.printStackTrace()
+            println(e)
             listener.onJsonParseError(e, callbackContext)
         } catch (e: RuntimeException) { // TODO [SDC-1851] - fine-catch deserializer exceptions
-            e.printStackTrace()
+            println(e)
             listener.onJsonParseError(e, callbackContext)
         }
     }
 
     private fun isFinishTextCaptureModeCallback(data: JSONObject) =
-        data.has(FIELD_FINISH_CALLBACK_ID) &&
-            data[FIELD_FINISH_CALLBACK_ID] == ACTION_ID_CAPTURED
+        data.has(FIELD_FINISH_CALLBACK_ID) && (
+            data[FIELD_FINISH_CALLBACK_ID] == ACTION_ID_CAPTURED ||
+                data[FIELD_FINISH_CALLBACK_ID] == ACTION_ID_LOCALIZED ||
+                data[FIELD_FINISH_CALLBACK_ID] == ACTION_ID_REJECTED
+            )
 
     companion object {
         private const val FIELD_RESULT = "result"

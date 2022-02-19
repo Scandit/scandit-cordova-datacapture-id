@@ -36,6 +36,12 @@ interface PrivateSouthAfricaDlBarcodeResult {
 interface PrivateCapturedId {
     fromJSON(json: CapturedIdJSON): CapturedId;
 }
+interface PrivateLocalizedId {
+    fromJSON(json: LocalizedIdJSON): LocalizedOnlyId;
+}
+interface PrivateRejectedId {
+    fromJSON(json: RejectedIdJSON): RejectedId;
+}
 export class DateResult {
     private json;
     get day(): number;
@@ -228,10 +234,12 @@ export class SouthAfricaDlBarcodeResult {
 export class LocalizedOnlyId {
     private _location;
     get location(): Quadrilateral;
+    private static fromJSON;
 }
 export class RejectedId {
     private _location;
     get location(): Quadrilateral;
+    private static fromJSON;
 }
 
 
@@ -292,7 +300,8 @@ export enum DocumentType {
     ProofOfAgeCard = "proofOfAgeCard",
     RefugeeId = "refugeeId",
     TribalId = "tribalId",
-    VeteranId = "veteranId"
+    VeteranId = "veteranId",
+    CitizenshipCertificate = "citizenshipCertificate"
 }
 export enum IdDocumentType {
     AAMVABarcode = "aamvaBarcode",

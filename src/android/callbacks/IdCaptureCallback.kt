@@ -17,12 +17,12 @@ import com.scandit.datacapture.core.data.FrameData
 import com.scandit.datacapture.id.capture.IdCapture
 import com.scandit.datacapture.id.capture.IdCaptureListener
 import com.scandit.datacapture.id.capture.IdCaptureSession
-import java.util.concurrent.atomic.AtomicReference
-import java.util.concurrent.locks.ReentrantLock
-import kotlin.concurrent.withLock
 import org.apache.cordova.CallbackContext
 import org.json.JSONArray
 import org.json.JSONObject
+import java.util.concurrent.atomic.AtomicReference
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
 class IdCaptureCallback(
     private val actionsHandler: ActionsHandler,

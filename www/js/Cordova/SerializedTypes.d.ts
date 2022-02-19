@@ -1,4 +1,5 @@
 /// <amd-module name="scandit-cordova-datacapture-id.SerializedTypes" />
+import { QuadrilateralJSON } from 'Common';
 export interface DateResultJSON {
     day: number;
     month: number;
@@ -161,12 +162,20 @@ export interface VIZResultJSON {
     capturedSides: string;
     isBackSideCaptureSupported: boolean;
 }
+export interface LocalizedIdJSON {
+    location: QuadrilateralJSON;
+}
+export interface RejectedIdJSON {
+    location: QuadrilateralJSON;
+}
 export interface IdCaptureErrorJSON {
     type: string;
     message: string;
 }
 export interface IdCaptureSessionJSON {
     newlyCapturedId: CapturedIdJSON | null;
+    localizedOnlyId: LocalizedIdJSON;
+    newlyRejectedId: RejectedIdJSON;
     frameSequenceId: number;
     error: IdCaptureErrorJSON;
 }

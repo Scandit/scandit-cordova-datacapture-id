@@ -36,7 +36,7 @@ class ActionGetDefaults(
             )
             listener.onIdCaptureDefaults(defaults, callbackContext)
         } catch (e: Exception) {
-            e.printStackTrace()
+            println(e)
             listener.onJsonParseError(e, callbackContext)
         }
     }

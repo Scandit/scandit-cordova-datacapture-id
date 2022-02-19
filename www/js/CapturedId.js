@@ -1,6 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RejectedId = exports.LocalizedOnlyId = exports.SouthAfricaDlBarcodeResult = exports.SouthAfricaIdBarcodeResult = exports.ColombiaIdBarcodeResult = exports.ArgentinaIdBarcodeResult = exports.VIZResult = exports.USUniformedServicesBarcodeResult = exports.MRZResult = exports.AAMVABarcodeResult = exports.CapturedId = exports.VehicleRestriction = exports.ProfessionalDrivingPermit = exports.DateResult = void 0;
+/// <amd-module name="scandit-cordova-datacapture-id.CapturedId"/>
+// ^ needed because Cordova can't resolve "../xx" style dependencies
+const Common_1 = require("scandit-cordova-datacapture-core.Common");
 class DateResult {
     get day() { return this.json.day; }
     get month() { return this.json.month; }
@@ -315,11 +318,21 @@ class LocalizedOnlyId {
     get location() {
         return this._location;
     }
+    static fromJSON(json) {
+        const result = new LocalizedOnlyId();
+        result._location = Common_1.Quadrilateral.fromJSON(json.location);
+        return result;
+    }
 }
 exports.LocalizedOnlyId = LocalizedOnlyId;
 class RejectedId {
     get location() {
         return this._location;
+    }
+    static fromJSON(json) {
+        const result = new RejectedId();
+        result._location = Common_1.Quadrilateral.fromJSON(json.location);
+        return result;
     }
 }
 exports.RejectedId = RejectedId;
