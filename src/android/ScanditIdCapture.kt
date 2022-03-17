@@ -22,6 +22,7 @@ import com.scandit.datacapture.cordova.id.actions.ActionFinishCallback
 import com.scandit.datacapture.cordova.id.actions.ActionGetDefaults
 import com.scandit.datacapture.cordova.id.actions.ActionIdCaptureReset
 import com.scandit.datacapture.cordova.id.actions.ActionSubscribeIdCapture
+import com.scandit.datacapture.cordova.id.actions.ActionVerifyCapturedId
 import com.scandit.datacapture.cordova.id.callbacks.IdCaptureCallback
 import com.scandit.datacapture.cordova.id.data.defaults.SerializableIdDefaults
 import com.scandit.datacapture.cordova.id.factories.IdCaptureActionFactory
@@ -33,6 +34,8 @@ import com.scandit.datacapture.id.capture.IdCaptureListener
 import com.scandit.datacapture.id.capture.IdCaptureSession
 import com.scandit.datacapture.id.capture.serialization.IdCaptureDeserializer
 import com.scandit.datacapture.id.capture.serialization.IdCaptureDeserializerListener
+import com.scandit.datacapture.id.data.CapturedId
+import com.scandit.datacapture.id.verification.aamvavizbarcode.AamvaVizBarcodeComparisonVerifier
 import org.apache.cordova.CallbackContext
 import org.apache.cordova.CordovaPlugin
 import org.json.JSONArray
@@ -167,6 +170,14 @@ class ScanditIdCapture :
     }
     //endregion ActionSubscribeIdCapture.ResultListener
 
+    //region ActionVerifyCapturedId.ResultListener
+    override fun onVerifyCapturedId(capturedId: CapturedId, callbackContext: CallbackContext) {
+        callbackContext.success(
+            AamvaVizBarcodeComparisonVerifier.create().verify(capturedId).toJson()
+        )
+    }
+    //endregion ActionVerifyCapturedId.ResultListener
+
     //region ActionSend.ResultListener
     override fun onSendAction(
         actionName: String,
@@ -194,6 +205,7 @@ class ScanditIdCapture :
 interface IdActionsListeners :
     ActionGetDefaults.ResultListener,
     ActionSubscribeIdCapture.ResultListener,
+    ActionVerifyCapturedId.ResultListener,
     ActionSend.ResultListener,
     ActionFinishCallback.ResultListener,
     ActionIdCaptureReset.ResultListener

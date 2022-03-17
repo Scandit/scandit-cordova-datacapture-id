@@ -7,5 +7,6 @@ export declare const Cordova: {
 };
 export declare enum CordovaFunction {
     SubscribeIdCaptureListener = "subscribeIdCaptureListener",
-    ResetIdCapture = "resetIdCapture"
+    ResetIdCapture = "resetIdCapture",
+    VerifyCapturedId = "verifyCapturedId"
 }

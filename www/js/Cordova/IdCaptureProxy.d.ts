@@ -5,5 +5,6 @@ export declare class IdCaptureProxy {
     private idCapture;
     static forIdCapture(idCapture: IdCapture): IdCaptureProxy;
     reset(): Promise<void>;
+    verifyCapturedId(capturedId: string): Promise<string | null>;
 }
 export {};

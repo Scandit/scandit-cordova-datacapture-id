@@ -72,7 +72,7 @@ class IdCaptureCallback(
         addActionOnCaptureEvent(SEND_ERROR_CAPTURING_EVENT, session)
     }
 
-    private fun addActionOnCaptureEvent(actionName: String, session: IdCaptureSession) =
+    private fun addActionOnCaptureEvent(actionName: String, session: IdCaptureSession) {
         actionsHandler.addAction(
             actionName,
             JSONArray().apply {
@@ -86,6 +86,7 @@ class IdCaptureCallback(
             },
             callbackContext
         )
+    }
 
     private fun onUnlock(mode: IdCapture) {
         latestStateData.get()?.let { latestData ->

@@ -41,6 +41,7 @@ public class ScanditIdCapture: CDVPlugin, DataCapturePlugin {
     lazy var callbackLocks = CallbackLocks()
 
     var idCapture: IdCapture?
+    var idCaptureSession: IdCaptureSession?
 
     override public func pluginInitialize() {
         super.pluginInitialize()
@@ -72,6 +73,16 @@ public class ScanditIdCapture: CDVPlugin, DataCapturePlugin {
         callbackLocks.setResult(result, for: result.finishCallbackID)
         callbackLocks.release(for: result.finishCallbackID)
         commandDelegate.send(.success, callbackId: command.callbackId)
+    }
+
+    @objc(verifyCapturedId:)
+    func verifyCapturedId(command: CDVInvokedUrlCommand) {
+        guard let capturedId = try? CapturedId(jsonString: command.arguments[0] as! String) else {
+            commandDelegate.send(.success, callbackId: command.callbackId)
+            return
+        }
+        let result = AAMVAVizBarcodeComparisonVerifier.init().verify(capturedId).jsonString
+        commandDelegate.send(.success(message: result), callbackId: command.callbackId)
     }
 
     func waitForFinished(_ listenerEvent: ListenerEvent, callbackId: String) {

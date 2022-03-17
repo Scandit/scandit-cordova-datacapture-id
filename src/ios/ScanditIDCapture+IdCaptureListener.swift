@@ -8,6 +8,8 @@ extension ScanditIdCapture: IdCaptureListener {
             return
         }
 
+        idCaptureSession = session
+
         let listenerEvent = ListenerEvent(name: .didCaptureInIdCapture,
                                           argument: ["session": session.jsonString],
                                           shouldNotifyWhenFinished: true)
@@ -21,6 +23,8 @@ extension ScanditIdCapture: IdCaptureListener {
         guard let callback = callbacks.idCaptureListener else {
             return
         }
+
+        idCaptureSession = session
 
         let listenerEvent = ListenerEvent(name: .didLocalizeInIdCapture,
                                           argument: ["session": session.jsonString],
@@ -36,6 +40,8 @@ extension ScanditIdCapture: IdCaptureListener {
             return
         }
 
+        idCaptureSession = session
+
         let listenerEvent = ListenerEvent(name: .didRejectInIdCapture,
                                           argument: ["session": session.jsonString],
                                           shouldNotifyWhenFinished: true)
@@ -50,6 +56,8 @@ extension ScanditIdCapture: IdCaptureListener {
         guard let callback = callbacks.idCaptureListener else {
             return
         }
+
+        idCaptureSession = session
 
         let event = ListenerEvent(name: .didFailInIdCapture,
                                   argument: ["session": session.jsonString])

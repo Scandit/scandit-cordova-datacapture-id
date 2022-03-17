@@ -15,6 +15,7 @@ import com.scandit.datacapture.cordova.id.actions.ActionFinishCallback
 import com.scandit.datacapture.cordova.id.actions.ActionGetDefaults
 import com.scandit.datacapture.cordova.id.actions.ActionIdCaptureReset
 import com.scandit.datacapture.cordova.id.actions.ActionSubscribeIdCapture
+import com.scandit.datacapture.cordova.id.actions.ActionVerifyCapturedId
 
 class IdCaptureActionFactory(
     private val listener: IdActionsListeners
@@ -25,6 +26,7 @@ class IdCaptureActionFactory(
         return when (actionName) {
             GET_DEFAULTS -> createActionGetDefaults()
             SUBSCRIBE_ID_CAPTURE_LISTENER -> createActionSubscribeIdCapture()
+            VERIFY_LAST_SESSION -> createActionVerifyCapturedId()
             FINISH_BLOCKING_ACTION -> createActionFinishBlocking()
             SEND_ID_CAPTURED_EVENT -> createActionIdCaptured()
             SEND_ID_LOCALIZED_EVENT -> createActionIdLocalized()
@@ -40,6 +42,8 @@ class IdCaptureActionFactory(
     private fun createActionGetDefaults(): Action = ActionGetDefaults(listener)
 
     private fun createActionSubscribeIdCapture(): Action = ActionSubscribeIdCapture(listener)
+
+    private fun createActionVerifyCapturedId(): Action = ActionVerifyCapturedId(listener)
 
     private fun createActionFinishBlocking() = ActionFinishCallback(listener)
 
@@ -85,5 +89,6 @@ class IdCaptureActionFactory(
         const val ACTION_ID_LOCALIZED = "didLocalizeInIdCapture"
         const val ACTION_ID_REJECTED = "didRejectInIdCapture"
         const val ACTION_ERROR_CAPTURING = "didFailWithError"
+        const val VERIFY_LAST_SESSION = "verifyCapturedId"
     }
 }

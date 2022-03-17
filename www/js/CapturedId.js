@@ -1,9 +1,17 @@
 "use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RejectedId = exports.LocalizedOnlyId = exports.SouthAfricaDlBarcodeResult = exports.SouthAfricaIdBarcodeResult = exports.ColombiaIdBarcodeResult = exports.ArgentinaIdBarcodeResult = exports.VIZResult = exports.USUniformedServicesBarcodeResult = exports.MRZResult = exports.AAMVABarcodeResult = exports.CapturedId = exports.VehicleRestriction = exports.ProfessionalDrivingPermit = exports.DateResult = void 0;
+exports.AamvaVizBarcodeComparisonVerifier = exports.AamvaVizBarcodeComparisonResult = exports.RejectedId = exports.LocalizedOnlyId = exports.SouthAfricaDlBarcodeResult = exports.SouthAfricaIdBarcodeResult = exports.ColombiaIdBarcodeResult = exports.ArgentinaIdBarcodeResult = exports.VIZResult = exports.USUniformedServicesBarcodeResult = exports.MRZResult = exports.AAMVABarcodeResult = exports.CapturedId = exports.VehicleRestriction = exports.ProfessionalDrivingPermit = exports.DateResult = void 0;
 /// <amd-module name="scandit-cordova-datacapture-id.CapturedId"/>
 // ^ needed because Cordova can't resolve "../xx" style dependencies
 const Common_1 = require("scandit-cordova-datacapture-core.Common");
+const IdCaptureProxy_1 = require("scandit-cordova-datacapture-id.IdCaptureProxy");
+const Serializeable_1 = require("scandit-cordova-datacapture-core.Serializeable");
 class DateResult {
     get day() { return this.json.day; }
     get month() { return this.json.month; }
@@ -60,6 +68,9 @@ class CapturedId {
     get nationality() { return this.json.nationality; }
     get address() { return this.json.address; }
     get capturedResultType() { return this.json.capturedResultType; }
+    get capturedResultTypes() {
+        return this.json.capturedResultTypes;
+    }
     get documentType() { return this.json.documentType; }
     get issuingCountryIso() { return this.json.issuingCountryIso; }
     get issuingCountry() { return this.json.issuingCountry; }
@@ -246,6 +257,7 @@ class VIZResult {
     get employer() { return this.json.employer; }
     get issuingAuthority() { return this.json.issuingAuthority; }
     get issuingJurisdiction() { return this.json.issuingJurisdiction; }
+    get issuingJurisdictionIso() { return this.json.issuingJurisdictionIso; }
     get maritalStatus() { return this.json.maritalStatus; }
     get personalIdNumber() { return this.json.personalIdNumber; }
     get placeOfBirth() { return this.json.placeOfBirth; }
@@ -336,3 +348,94 @@ class RejectedId {
     }
 }
 exports.RejectedId = RejectedId;
+class StringComparisonCheck {
+    get vizValue() { return this.json.vizValue; }
+    get aamvaBarcodeValue() { return this.json.aamvaBarcodeValue; }
+    get checkResult() { return this.json.checkResult; }
+    get resultDescription() { return this.json.resultDescription; }
+    static fromJSON(json) {
+        const result = new StringComparisonCheck();
+        result.json = json;
+        return result;
+    }
+}
+class DateComparisonCheck {
+    get vizValue() {
+        return DateResult.fromJSON(this.json.vizValue);
+    }
+    get aamvaBarcodeValue() {
+        return DateResult.fromJSON(this.json.aamvaBarcodeValue);
+    }
+    get checkResult() { return this.json.checkResult; }
+    get resultDescription() { return this.json.resultDescription; }
+    static fromJSON(json) {
+        const result = new DateComparisonCheck();
+        result.json = json;
+        return result;
+    }
+}
+class AamvaVizBarcodeComparisonResult {
+    get checksPassed() { return this.json.checksPassed; }
+    get resultDescription() { return this.json.resultDescription; }
+    get issuingCountryIsoMatch() {
+        return StringComparisonCheck
+            .fromJSON(this.json.issuingCountryIsoMatch);
+    }
+    get issuingJurisdictionIsoMatch() {
+        return StringComparisonCheck
+            .fromJSON(this.json.issuingJurisdictionIsoMatch);
+    }
+    get documentNumbersMatch() {
+        return StringComparisonCheck
+            .fromJSON(this.json.documentNumbersMatch);
+    }
+    get fullNamesMatch() {
+        return StringComparisonCheck
+            .fromJSON(this.json.fullNamesMatch);
+    }
+    get datesOfBirthMatch() {
+        return DateComparisonCheck
+            .fromJSON(this.json.datesOfBirth);
+    }
+    get datesOfExpiryMatch() {
+        return DateComparisonCheck
+            .fromJSON(this.json.datesOfExpiry);
+    }
+    get datesOfIssueMatch() {
+        return DateComparisonCheck
+            .fromJSON(this.json.datesOfIssue);
+    }
+    static fromJSON(json) {
+        const result = new AamvaVizBarcodeComparisonResult();
+        result.json = json;
+        return result;
+    }
+}
+exports.AamvaVizBarcodeComparisonResult = AamvaVizBarcodeComparisonResult;
+class AamvaVizBarcodeComparisonVerifier {
+    constructor() {
+        this.proxy = new IdCaptureProxy_1.IdCaptureProxy();
+    }
+    static create() {
+        return new AamvaVizBarcodeComparisonVerifier();
+    }
+    verify(capturedId) {
+        return new Promise((resolve, reject) => {
+            this.proxy
+                .verifyCapturedId(JSON.stringify(capturedId))
+                .then((json) => {
+                if (!json) {
+                    resolve();
+                }
+                else {
+                    resolve(AamvaVizBarcodeComparisonResult
+                        .fromJSON(JSON.parse(json)));
+                }
+            }, reject);
+        });
+    }
+}
+__decorate([
+    Serializeable_1.ignoreFromSerialization
+], AamvaVizBarcodeComparisonVerifier.prototype, "proxy", void 0);
+exports.AamvaVizBarcodeComparisonVerifier = AamvaVizBarcodeComparisonVerifier;

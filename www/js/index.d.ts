@@ -42,6 +42,15 @@ interface PrivateLocalizedId {
 interface PrivateRejectedId {
     fromJSON(json: RejectedIdJSON): RejectedId;
 }
+interface PrivateStringComparisonCheck {
+    fromJSON(json: StringComparisonCheckJSON): StringComparisonCheck;
+}
+interface PrivateDateComparisonCheck {
+    fromJSON(json: DateComparisonCheckJSON): DateComparisonCheck;
+}
+interface PrivateAamvaVizBarcodeComparisonResult {
+    fromJSON(json: AamvaVizBarcodeComparisonResultJSON): AamvaVizBarcodeComparisonResult;
+}
 export class DateResult {
     private json;
     get day(): number;
@@ -72,6 +81,7 @@ export class CapturedId {
     get nationality(): string | null;
     get address(): string | null;
     get capturedResultType(): CapturedResultType;
+    get capturedResultTypes(): CapturedResultType[];
     get documentType(): DocumentType;
     get issuingCountryIso(): string | null;
     get issuingCountry(): string | null;
@@ -189,6 +199,7 @@ export class VIZResult {
     get employer(): string | null;
     get issuingAuthority(): string | null;
     get issuingJurisdiction(): string | null;
+    get issuingJurisdictionIso(): string | null;
     get maritalStatus(): string | null;
     get personalIdNumber(): string | null;
     get placeOfBirth(): string | null;
@@ -241,6 +252,44 @@ export class RejectedId {
     get location(): Quadrilateral;
     private static fromJSON;
 }
+export interface ComparisonCheck<T> {
+    readonly aamvaBarcodeValue: T | null;
+    readonly checkResult: ComparisonCheckResult;
+    readonly resultDescription: string;
+    readonly vizValue: T | null;
+} class StringComparisonCheck implements ComparisonCheck<string> {
+    private json;
+    get vizValue(): string | null;
+    get aamvaBarcodeValue(): string | null;
+    get checkResult(): ComparisonCheckResult;
+    get resultDescription(): string;
+    private static fromJSON;
+} class DateComparisonCheck implements ComparisonCheck<DateResult> {
+    private json;
+    get vizValue(): DateResult | null;
+    get aamvaBarcodeValue(): DateResult | null;
+    get checkResult(): ComparisonCheckResult;
+    get resultDescription(): string;
+    private static fromJSON;
+}
+export class AamvaVizBarcodeComparisonResult {
+    private json;
+    get checksPassed(): boolean;
+    get resultDescription(): string;
+    get issuingCountryIsoMatch(): ComparisonCheck<string>;
+    get issuingJurisdictionIsoMatch(): ComparisonCheck<string>;
+    get documentNumbersMatch(): ComparisonCheck<string>;
+    get fullNamesMatch(): ComparisonCheck<string>;
+    get datesOfBirthMatch(): ComparisonCheck<DateResult>;
+    get datesOfExpiryMatch(): ComparisonCheck<DateResult>;
+    get datesOfIssueMatch(): ComparisonCheck<DateResult>;
+    private static fromJSON;
+}
+export class AamvaVizBarcodeComparisonVerifier {
+    private proxy;
+    static create(): AamvaVizBarcodeComparisonVerifier;
+    verify(capturedId: CapturedId): Promise<AamvaVizBarcodeComparisonResult>;
+}
 
 
 export enum CapturedResultType {
@@ -280,6 +329,9 @@ export enum DocumentType {
     SocialSecurityCard = "socialSecurityCard",
     HealthInsuranceCard = "healthInsuranceCard",
     Passport = "passport",
+    DiplomaticPassport = "diplomaticPassport",
+    ServicePassport = "servicePassport",
+    TemporaryPassport = "temporaryPassport",
     Visa = "visa",
     SPass = "sPass",
     AddressCard = "addressCard",
@@ -343,6 +395,11 @@ export enum IdLayoutStyle {
 export enum IdLayoutLineStyle {
     Light = "light",
     Bold = "bold"
+}
+export enum ComparisonCheckResult {
+    Passed = "Passed",
+    Skipped = "Skipped",
+    Failed = "Failed"
 }
 
 

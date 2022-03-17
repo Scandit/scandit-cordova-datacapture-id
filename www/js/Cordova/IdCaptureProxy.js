@@ -15,6 +15,13 @@ class IdCaptureProxy {
             IdCaptureProxy.cordovaExec(resolve, reject, Cordova_1.CordovaFunction.ResetIdCapture, null);
         });
     }
+    verifyCapturedId(capturedId) {
+        return new Promise((resolve, reject) => {
+            IdCaptureProxy.cordovaExec(resolve, reject, Cordova_1.CordovaFunction.VerifyCapturedId, [
+                capturedId,
+            ]);
+        });
+    }
 }
 exports.IdCaptureProxy = IdCaptureProxy;
 IdCaptureProxy.cordovaExec = Cordova_1.Cordova.exec;
