@@ -57,7 +57,7 @@ class VehicleRestriction {
     }
 }
 exports.VehicleRestriction = VehicleRestriction;
-class CapturedId {
+class CommonCapturedIdFields {
     get firstName() { return this.json.firstName; }
     get lastName() { return this.json.lastName; }
     get fullName() { return this.json.fullName; }
@@ -67,19 +67,48 @@ class CapturedId {
     }
     get nationality() { return this.json.nationality; }
     get address() { return this.json.address; }
-    get capturedResultType() { return this.json.capturedResultType; }
-    get capturedResultTypes() {
-        return this.json.capturedResultTypes;
-    }
     get documentType() { return this.json.documentType; }
-    get issuingCountryIso() { return this.json.issuingCountryIso; }
-    get issuingCountry() { return this.json.issuingCountry; }
     get documentNumber() { return this.json.documentNumber; }
+    get issuingCountry() { return this.json.issuingCountry; }
+    get issuingCountryIso() { return this.json.issuingCountryIso; }
     get dateOfExpiry() {
         return DateResult.fromJSON(this.json.dateOfExpiry);
     }
     get dateOfIssue() {
         return DateResult.fromJSON(this.json.dateOfIssue);
+    }
+    static fromJSON(json) {
+        if (json === null) {
+            return null;
+        }
+        const object = new CommonCapturedIdFields();
+        object.json = json;
+        return object;
+    }
+}
+class CapturedId {
+    get firstName() { return this.commonCapturedFields.firstName; }
+    get lastName() { return this.commonCapturedFields.lastName; }
+    get fullName() { return this.commonCapturedFields.fullName; }
+    get sex() { return this.commonCapturedFields.sex; }
+    get dateOfBirth() {
+        return DateResult.fromJSON(this.commonCapturedFields.dateOfBirth);
+    }
+    get nationality() { return this.commonCapturedFields.nationality; }
+    get address() { return this.commonCapturedFields.address; }
+    get capturedResultType() { return this.json.capturedResultType; }
+    get capturedResultTypes() {
+        return this.json.capturedResultTypes;
+    }
+    get documentType() { return this.commonCapturedFields.documentType; }
+    get issuingCountryIso() { return this.commonCapturedFields.issuingCountryIso; }
+    get issuingCountry() { return this.commonCapturedFields.issuingCountry; }
+    get documentNumber() { return this.commonCapturedFields.documentNumber; }
+    get dateOfExpiry() {
+        return DateResult.fromJSON(this.commonCapturedFields.dateOfExpiry);
+    }
+    get dateOfIssue() {
+        return DateResult.fromJSON(this.commonCapturedFields.dateOfIssue);
     }
     get aamvaBarcodeResult() {
         if (this._aamvaBarcodeResult == null && this.json.aamvaBarcodeResult != null) {
@@ -138,6 +167,30 @@ class CapturedId {
     static fromJSON(json) {
         const result = new CapturedId();
         result.json = json;
+        if (json.aamvaBarcodeResult) {
+            result.commonCapturedFields = CommonCapturedIdFields.fromJSON(json.aamvaBarcodeResult);
+        }
+        if (json.argentinaIdBarcodeResult) {
+            result.commonCapturedFields = CommonCapturedIdFields.fromJSON(json.argentinaIdBarcodeResult);
+        }
+        if (json.colombiaIdBarcodeResult) {
+            result.commonCapturedFields = CommonCapturedIdFields.fromJSON(json.colombiaIdBarcodeResult);
+        }
+        if (json.mrzResult) {
+            result.commonCapturedFields = CommonCapturedIdFields.fromJSON(json.mrzResult);
+        }
+        if (json.southAfricaIdBarcodeResult) {
+            result.commonCapturedFields = CommonCapturedIdFields.fromJSON(json.southAfricaIdBarcodeResult);
+        }
+        if (json.southAfricaDlBarcodeResult) {
+            result.commonCapturedFields = CommonCapturedIdFields.fromJSON(json.southAfricaDlBarcodeResult);
+        }
+        if (json.usUniformedServicesBarcodeResult) {
+            result.commonCapturedFields = CommonCapturedIdFields.fromJSON(json.usUniformedServicesBarcodeResult);
+        }
+        if (json.vizResult) {
+            result.commonCapturedFields = CommonCapturedIdFields.fromJSON(json.vizResult);
+        }
         return result;
     }
     idImageOfType(type) {

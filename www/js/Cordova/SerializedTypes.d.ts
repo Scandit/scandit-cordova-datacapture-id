@@ -20,6 +20,21 @@ export interface ImageInfoJSON {
     idFront: string;
     idBack: string;
 }
+export interface CommonCapturedIdFieldsJSON {
+    firstName: string | null;
+    lastName: string | null;
+    fullName: string;
+    sex: string | null;
+    dateOfBirth: DateResultJSON | null;
+    nationality: string | null;
+    address: string | null;
+    documentType: string | null;
+    documentNumber: string | null;
+    issuingCountry: string | null;
+    issuingCountryIso: string | null;
+    dateOfExpiry: DateResultJSON | null;
+    dateOfIssue: DateResultJSON | null;
+}
 export interface CapturedIdJSON {
     capturedResultType: string;
     capturedResultTypes: string[];

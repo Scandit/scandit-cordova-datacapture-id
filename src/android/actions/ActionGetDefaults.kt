@@ -30,7 +30,7 @@ class ActionGetDefaults(
                     idCaptureOverlay = SerializableIdCaptureOverlayDefaults(
                         IdCaptureOverlay.defaultCapturedBrush(),
                         IdCaptureOverlay.defaultLocalizedBrush(),
-                        IdCaptureOverlay.defaultRejectedBrush(),
+                        IdCaptureOverlay.defaultRejectedBrush()
                     )
                 )
             )

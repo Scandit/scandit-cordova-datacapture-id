@@ -14,7 +14,7 @@ import org.json.JSONObject
 data class SerializableIdCaptureOverlayDefaults(
     private val defaultCapturedBrush: Brush,
     private val defaultLocalizedBrush: Brush,
-    private val defaultRejectedBrush: Brush,
+    private val defaultRejectedBrush: Brush
 ) : SerializableData {
 
     override fun toJson(): JSONObject = JSONObject(
@@ -27,7 +27,7 @@ data class SerializableIdCaptureOverlayDefaults(
             ).toJson(),
             FIELD_DEFAULT_REJECTED_BRUSH to SerializableBrushDefaults(
                 defaultRejectedBrush
-            ).toJson(),
+            ).toJson()
         )
     )
 

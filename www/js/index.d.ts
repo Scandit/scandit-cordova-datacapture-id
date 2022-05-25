@@ -1,5 +1,8 @@
 declare module Scandit {
 
+interface PrivateCommonCapturedIdFields {
+    fromJSON(json: CommonCapturedIdFieldsJSON | null): CommonCapturedIdFields;
+}
 interface PrivateDateResult {
     fromJSON(json: DateResultJSON | null): DateResult;
 }
@@ -70,9 +73,26 @@ export class VehicleRestriction {
     get vehicleRestriction(): string;
     get dateOfIssue(): DateResult;
     private static fromJSON;
+} class CommonCapturedIdFields {
+    private json;
+    get firstName(): string | null;
+    get lastName(): string | null;
+    get fullName(): string;
+    get sex(): string | null;
+    get dateOfBirth(): DateResult | null;
+    get nationality(): string | null;
+    get address(): string | null;
+    get documentType(): string | null;
+    get documentNumber(): string | null;
+    get issuingCountry(): string | null;
+    get issuingCountryIso(): string | null;
+    get dateOfExpiry(): DateResult | null;
+    get dateOfIssue(): DateResult | null;
+    private static fromJSON;
 }
 export class CapturedId {
     private json;
+    private commonCapturedFields;
     get firstName(): string | null;
     get lastName(): string | null;
     get fullName(): string;
