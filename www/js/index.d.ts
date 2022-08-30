@@ -373,7 +373,8 @@ export enum DocumentType {
     RefugeeId = "refugeeId",
     TribalId = "tribalId",
     VeteranId = "veteranId",
-    CitizenshipCertificate = "citizenshipCertificate"
+    CitizenshipCertificate = "citizenshipCertificate",
+    MyNumberCard = "myNumberCard"
 }
 export enum IdDocumentType {
     AAMVABarcode = "aamvaBarcode",

@@ -67,6 +67,7 @@ var DocumentType;
     DocumentType["TribalId"] = "tribalId";
     DocumentType["VeteranId"] = "veteranId";
     DocumentType["CitizenshipCertificate"] = "citizenshipCertificate";
+    DocumentType["MyNumberCard"] = "myNumberCard";
 })(DocumentType = exports.DocumentType || (exports.DocumentType = {}));
 var IdDocumentType;
 (function (IdDocumentType) {
