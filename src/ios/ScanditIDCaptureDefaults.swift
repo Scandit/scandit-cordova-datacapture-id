@@ -4,20 +4,29 @@ struct ScanditIdCaptureDefaults: Encodable {
     typealias CameraSettingsDefaults = ScanditCaptureCoreDefaults.CameraSettingsDefaults
 
     struct IdCaptureDefaultsContainer: Encodable {
-        let RecommendedCameraSettings: CameraSettingsDefaults
-        let IdCaptureOverlayDefaults: [String: ScanditCaptureCoreDefaults.BrushDefaults]
+        let recommendedCameraSettings: CameraSettingsDefaults
+        let idCaptureOverlayDefaults: [String: ScanditCaptureCoreDefaults.BrushDefaults]
+
+        enum CodingKeys: String, CodingKey {
+            case recommendedCameraSettings = "RecommendedCameraSettings"
+            case idCaptureOverlayDefaults = "IdCaptureOverlayDefaults"
+        }
     }
 
-    let IdCapture = IdCaptureDefaultsContainer()
+    let idCapture = IdCaptureDefaultsContainer()
+
+    enum CodingKeys: String, CodingKey {
+        case idCapture = "IdCapture"
+    }
 }
 
 extension ScanditIdCaptureDefaults.IdCaptureDefaultsContainer {
     typealias BrushDefaults = ScanditCaptureCoreDefaults.BrushDefaults
 
     init() {
-        self.RecommendedCameraSettings = ScanditCaptureCoreDefaults.CameraSettingsDefaults
+        self.recommendedCameraSettings = ScanditCaptureCoreDefaults.CameraSettingsDefaults
             .from(IdCapture.recommendedCameraSettings)
-        self.IdCaptureOverlayDefaults = [
+        self.idCaptureOverlayDefaults = [
             "defaultCapturedBrush": BrushDefaults.from(
                 IdCaptureOverlay.defaultCapturedBrush
             ),
