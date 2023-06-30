@@ -76,7 +76,7 @@ class IdCapture extends Serializeable_1.DefaultSerializeable {
     }
 }
 __decorate([
-    Serializeable_1.nameForSerialization('enabled')
+    (0, Serializeable_1.nameForSerialization)('enabled')
 ], IdCapture.prototype, "_isEnabled", void 0);
 __decorate([
     Serializeable_1.ignoreFromSerialization

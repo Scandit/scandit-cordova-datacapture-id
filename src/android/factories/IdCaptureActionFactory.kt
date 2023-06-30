@@ -31,7 +31,6 @@ class IdCaptureActionFactory(
             SEND_ID_CAPTURED_EVENT -> createActionIdCaptured()
             SEND_ID_LOCALIZED_EVENT -> createActionIdLocalized()
             SEND_ID_REJECTED_EVENT -> createActionIdRejected()
-            SEND_ERROR_CAPTURING_EVENT -> createActionErrorIdCapturing()
             RESET_ID_CAPTURE_ACTION -> createResetIdCaptureAction()
             else -> throw InvalidActionNameError(actionName)
         }
@@ -68,11 +67,6 @@ class IdCaptureActionFactory(
         shouldNotifyWhenFinished = true
     )
 
-    private fun createActionErrorIdCapturing() = ActionSend(
-        ACTION_ERROR_CAPTURING,
-        listener
-    )
-
     private fun createResetIdCaptureAction() = ActionIdCaptureReset(listener)
 
     companion object {
@@ -84,11 +78,9 @@ class IdCaptureActionFactory(
         const val SEND_ID_CAPTURED_EVENT = "sendIdCaptureEvent"
         const val SEND_ID_LOCALIZED_EVENT = "sendIdLocalizedEvent"
         const val SEND_ID_REJECTED_EVENT = "sendIdRejectedEvent"
-        const val SEND_ERROR_CAPTURING_EVENT = "sendErrorCapturingEvent"
         const val ACTION_ID_CAPTURED = "didCaptureInIdCapture"
         const val ACTION_ID_LOCALIZED = "didLocalizeInIdCapture"
         const val ACTION_ID_REJECTED = "didRejectInIdCapture"
-        const val ACTION_ERROR_CAPTURING = "didFailWithError"
         const val VERIFY_LAST_SESSION = "verifyCapturedId"
     }
 }

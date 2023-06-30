@@ -9,7 +9,6 @@ package com.scandit.datacapture.cordova.id.callbacks
 import com.scandit.datacapture.cordova.core.callbacks.Callback
 import com.scandit.datacapture.cordova.core.data.SerializableFinishModeCallbackData
 import com.scandit.datacapture.cordova.core.handlers.ActionsHandler
-import com.scandit.datacapture.cordova.id.factories.IdCaptureActionFactory.Companion.SEND_ERROR_CAPTURING_EVENT
 import com.scandit.datacapture.cordova.id.factories.IdCaptureActionFactory.Companion.SEND_ID_CAPTURED_EVENT
 import com.scandit.datacapture.cordova.id.factories.IdCaptureActionFactory.Companion.SEND_ID_LOCALIZED_EVENT
 import com.scandit.datacapture.cordova.id.factories.IdCaptureActionFactory.Companion.SEND_ID_REJECTED_EVENT
@@ -61,15 +60,6 @@ class IdCaptureCallback(
             lockAndWait()
             onUnlock(mode)
         }
-    }
-
-    override fun onErrorEncountered(
-        mode: IdCapture,
-        error: Throwable,
-        session: IdCaptureSession,
-        data: FrameData
-    ) {
-        addActionOnCaptureEvent(SEND_ERROR_CAPTURING_EVENT, session)
     }
 
     private fun addActionOnCaptureEvent(actionName: String, session: IdCaptureSession) {

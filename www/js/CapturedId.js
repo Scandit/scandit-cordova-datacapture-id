@@ -478,6 +478,7 @@ class AamvaVizBarcodeComparisonVerifier {
                 .verifyCapturedId(JSON.stringify(capturedId))
                 .then((json) => {
                 if (!json) {
+                    // @ts-ignore
                     resolve();
                 }
                 else {

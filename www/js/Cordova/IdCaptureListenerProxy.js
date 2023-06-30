@@ -8,7 +8,6 @@ var IdCaptureListenerEvent;
     IdCaptureListenerEvent["DidCapture"] = "didCaptureInIdCapture";
     IdCaptureListenerEvent["DidLocalize"] = "didLocalizeInIdCapture";
     IdCaptureListenerEvent["DidReject"] = "didRejectInIdCapture";
-    IdCaptureListenerEvent["DidFail"] = "didFailInIdCapture";
 })(IdCaptureListenerEvent || (IdCaptureListenerEvent = {}));
 class IdCaptureListenerProxy {
     static forIdCapture(idCapture) {
@@ -55,12 +54,6 @@ class IdCaptureListenerProxy {
                             .fromJSON(JSON.parse(event.argument.session)));
                     }
                     break;
-                case IdCaptureListenerEvent.DidFail:
-                    if (listener.didFailWithError) {
-                        const session = IdCapture_Related_1.IdCaptureSession
-                            .fromJSON(JSON.parse(event.argument.session));
-                        listener.didFailWithError(this.idCapture, session._error, session);
-                    }
             }
         });
         return done();

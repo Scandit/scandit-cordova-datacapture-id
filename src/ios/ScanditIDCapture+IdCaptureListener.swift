@@ -48,19 +48,4 @@ extension ScanditIdCapture: IdCaptureListener {
         waitForFinished(listenerEvent, callbackId: callback.id)
         finishBlockingCallback(with: idCapture, for: listenerEvent)
     }
-
-    public func idCapture(_ idCapture: IdCapture,
-                          didFailWithError error: Error,
-                          session: IdCaptureSession,
-                          frameData: FrameData) {
-        guard let callback = callbacks.idCaptureListener else {
-            return
-        }
-
-        idCaptureSession = session
-
-        let event = ListenerEvent(name: .didFailInIdCapture,
-                                  argument: ["session": session.jsonString])
-        commandDelegate.send(.listenerCallback(event), callbackId: callback.id)
-    }
 }

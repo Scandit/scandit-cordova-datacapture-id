@@ -117,15 +117,6 @@ class ScanditIdCapture :
     override fun onIdRejected(mode: IdCapture, session: IdCaptureSession, data: FrameData) {
         idCaptureCallback?.onIdCaptured(mode, session, data)
     }
-
-    override fun onErrorEncountered(
-        mode: IdCapture,
-        error: Throwable,
-        session: IdCaptureSession,
-        data: FrameData
-    ) {
-        idCaptureCallback?.onErrorEncountered(mode, error, session, data)
-    }
     //endregion IdCaptureListener
 
     //region ModeDeserializersProvider
