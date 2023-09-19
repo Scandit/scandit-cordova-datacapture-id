@@ -1,4 +1,4 @@
-<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" id="scandit-cordova-datacapture-id" version="6.18.2">
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" id="scandit-cordova-datacapture-id" version="6.19.0">
     <name>ScanditIdCapture</name>
     <js-module name="Cordova" src="www/js/Cordova/Cordova.js" />
     <js-module name="Defaults" src="www/js/Cordova/Defaults.js" />
@@ -36,16 +36,16 @@
         <source-file src="src/ios/ScanditIdCaptureDefaults.swift" />
         <source-file src="src/ios/ScanditIdCapture+IdCaptureDeserializerDelegate.swift" />
         <source-file src="src/ios/ScanditIdCapture+IdCaptureListener.swift" />
-        <dependency id="scandit-cordova-datacapture-core" version="6.18.2" />
+        <dependency id="scandit-cordova-datacapture-core" version="6.19.0" />
         <podspec>
             <pods use-frameworks="true">
-                <pod name="ScanditIdCapture" spec="= 6.18.2" />
+                <pod name="ScanditIdCapture" spec="= 6.19.0" />
+                <pod name="ScanditIDC" spec="= 6.19.0" />
             </pods>
         </podspec>
     </platform>
     <platform name="android">
         <config-file parent="/*" target="config.xml">
-            <preference name="android-minSdkVersion" value="23" />
             <feature name="ScanditIdCapture">
                 <param name="android-package" value="com.scandit.datacapture.cordova.id.ScanditIdCapture" />
             </feature>
@@ -56,13 +56,8 @@
         <source-file src="src/android/actions/ActionVerifyCapturedId.kt" target-dir="kotlin/com/scandit/datacapture/cordova/id/actions" />
         <source-file src="src/android/actions/ActionFinishCallback.kt" target-dir="kotlin/com/scandit/datacapture/cordova/id/actions" />
         <source-file src="src/android/actions/ActionIdCaptureReset.kt" target-dir="kotlin/com/scandit/datacapture/cordova/id/actions" />
-        <source-file src="src/android/callbacks/IdCaptureCallback.kt" target-dir="kotlin/com/scandit/datacapture/cordova/id/callbacks" />
-        <source-file src="src/android/data/defaults/SerializableIdCaptureDefaults.kt" target-dir="kotlin/com/scandit/datacapture/cordova/id/data/defaults" />
-        <source-file src="src/android/data/defaults/SerializableIdCaptureOverlayDefaults.kt" target-dir="kotlin/com/scandit/datacapture/cordova/id/data/defaults" />
-        <source-file src="src/android/data/defaults/SerializableIdDefaults.kt" target-dir="kotlin/com/scandit/datacapture/cordova/id/data/defaults" />
         <source-file src="src/android/factories/IdCaptureActionFactory.kt" target-dir="kotlin/com/scandit/datacapture/cordova/id/factories" />
-        <source-file src="src/android/handlers/IdCaptureHandler.kt" target-dir="kotlin/com/scandit/datacapture/cordova/id/handlers" />
-        <dependency id="scandit-cordova-datacapture-core" version="6.18.2" />
+        <dependency id="scandit-cordova-datacapture-core" version="6.19.0" />
         <framework custom="true" src="src/android/build.gradle" type="gradleReference" />
         <framework src="androidx.appcompat:appcompat:1.1.0" />
         <hook src="src/hooks/support-kotlin.js" type="after_plugin_install" />
