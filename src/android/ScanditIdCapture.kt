@@ -56,6 +56,7 @@ class ScanditIdCapture :
 
     override fun onReset() {
         idCaptureModule.onDestroy()
+        pluginInitialize()
     }
 
     override fun execute(
