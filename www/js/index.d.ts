@@ -420,9 +420,9 @@ export enum IdLayoutLineStyle {
     Bold = "bold"
 }
 export enum ComparisonCheckResult {
-    Passed = "passed",
-    Skipped = "skipped",
-    Failed = "failed"
+    Passed = "Passed",
+    Skipped = "Skipped",
+    Failed = "Failed"
 }
 
 
