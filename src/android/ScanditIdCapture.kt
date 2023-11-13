@@ -8,37 +8,60 @@ package com.scandit.datacapture.cordova.id
 
 import android.Manifest
 import com.scandit.datacapture.cordova.core.ScanditCaptureCore
+import com.scandit.datacapture.cordova.core.actions.ActionSend
 import com.scandit.datacapture.cordova.core.communication.CameraPermissionGrantedListener
+import com.scandit.datacapture.cordova.core.communication.ModeDeserializersProvider
+import com.scandit.datacapture.cordova.core.data.SerializableFinishModeCallbackData
 import com.scandit.datacapture.cordova.core.errors.InvalidActionNameError
+import com.scandit.datacapture.cordova.core.errors.JsonParseError
 import com.scandit.datacapture.cordova.core.factories.ActionFactory
 import com.scandit.datacapture.cordova.core.handlers.ActionsHandler
 import com.scandit.datacapture.cordova.core.handlers.CameraPermissionsActionsHandlerHelper
-import com.scandit.datacapture.cordova.core.utils.CordovaEventEmitter
+import com.scandit.datacapture.cordova.core.utils.successAndKeepCallback
+import com.scandit.datacapture.cordova.id.actions.ActionFinishCallback
+import com.scandit.datacapture.cordova.id.actions.ActionGetDefaults
+import com.scandit.datacapture.cordova.id.actions.ActionIdCaptureReset
+import com.scandit.datacapture.cordova.id.actions.ActionSubscribeIdCapture
+import com.scandit.datacapture.cordova.id.actions.ActionVerifyCapturedId
+import com.scandit.datacapture.cordova.id.callbacks.IdCaptureCallback
+import com.scandit.datacapture.cordova.id.data.defaults.SerializableIdDefaults
 import com.scandit.datacapture.cordova.id.factories.IdCaptureActionFactory
-import com.scandit.datacapture.frameworks.id.IdCaptureModule
-import com.scandit.datacapture.frameworks.id.listeners.FrameworksIdCaptureListener
+import com.scandit.datacapture.cordova.id.handlers.IdCaptureHandler
+import com.scandit.datacapture.core.data.FrameData
+import com.scandit.datacapture.core.json.JsonValue
+import com.scandit.datacapture.id.capture.IdCapture
+import com.scandit.datacapture.id.capture.IdCaptureListener
+import com.scandit.datacapture.id.capture.IdCaptureSession
+import com.scandit.datacapture.id.capture.serialization.IdCaptureDeserializer
+import com.scandit.datacapture.id.capture.serialization.IdCaptureDeserializerListener
+import com.scandit.datacapture.id.data.CapturedId
+import com.scandit.datacapture.id.verification.aamvavizbarcode.AamvaVizBarcodeComparisonVerifier
 import org.apache.cordova.CallbackContext
 import org.apache.cordova.CordovaPlugin
 import org.json.JSONArray
+import org.json.JSONObject
 
 class ScanditIdCapture :
     CordovaPlugin(),
+    ModeDeserializersProvider,
+    IdCaptureDeserializerListener,
+    IdCaptureListener,
+    IdActionsListeners,
     CameraPermissionGrantedListener {
 
-    private val eventEmitter = CordovaEventEmitter()
-    private val idCaptureModule = IdCaptureModule(FrameworksIdCaptureListener(eventEmitter))
-
-    private val actionFactory: ActionFactory = IdCaptureActionFactory(idCaptureModule, eventEmitter)
+    private val actionFactory: ActionFactory = IdCaptureActionFactory(this)
     private val actionsHandler: ActionsHandler = ActionsHandler(
         actionFactory, CameraPermissionsActionsHandlerHelper(actionFactory)
     )
+
+    private var idCaptureCallback: IdCaptureCallback? = null
+    private val idCaptureHandler: IdCaptureHandler = IdCaptureHandler(this)
 
     private var lastIdCaptureEnabledState: Boolean = false
 
     override fun pluginInitialize() {
         super.pluginInitialize()
         ScanditCaptureCore.addPlugin(serviceName)
-        idCaptureModule.onCreate(cordova.context)
 
         if (cordova.hasPermission(Manifest.permission.CAMERA)) {
             onCameraPermissionGranted()
@@ -46,16 +69,18 @@ class ScanditIdCapture :
     }
 
     override fun onStop() {
-        lastIdCaptureEnabledState = idCaptureModule.isModeEnabled()
-        idCaptureModule.setModeEnabled(false)
+        lastIdCaptureEnabledState = idCaptureHandler.idCapture?.isEnabled ?: false
+        idCaptureHandler.idCapture?.isEnabled = false
+        idCaptureCallback?.forceRelease()
     }
 
     override fun onStart() {
-        idCaptureModule.setModeEnabled(lastIdCaptureEnabledState)
+        idCaptureHandler.idCapture?.isEnabled = lastIdCaptureEnabledState
     }
 
     override fun onReset() {
-        idCaptureModule.onDestroy()
+        idCaptureHandler.disposeCurrent()
+        idCaptureCallback?.dispose()
     }
 
     override fun execute(
@@ -79,4 +104,99 @@ class ScanditIdCapture :
         actionsHandler.onCameraPermissionGranted()
     }
     //endregion
+
+    //region IdCaptureListener
+    override fun onIdCaptured(mode: IdCapture, session: IdCaptureSession, data: FrameData) {
+        idCaptureCallback?.onIdCaptured(mode, session, data)
+    }
+
+    override fun onIdLocalized(mode: IdCapture, session: IdCaptureSession, data: FrameData) {
+        idCaptureCallback?.onIdLocalized(mode, session, data)
+    }
+
+    override fun onIdRejected(mode: IdCapture, session: IdCaptureSession, data: FrameData) {
+        idCaptureCallback?.onIdCaptured(mode, session, data)
+    }
+    //endregion IdCaptureListener
+
+    //region ModeDeserializersProvider
+    override fun provideModeDeserializers() = listOf(
+        IdCaptureDeserializer().also {
+            it.listener = this
+        }
+    )
+    //endregion ModeDeserializersProvider
+
+    //region IdCaptureDeserializerListener
+    override fun onModeDeserializationFinished(
+        deserializer: IdCaptureDeserializer,
+        mode: IdCapture,
+        json: JsonValue
+    ) {
+        if (json.contains("enabled")) {
+            mode.isEnabled = json.requireByKeyAsBoolean("enabled")
+        }
+        idCaptureHandler.attachIdCapture(mode)
+    }
+    //endregion IdCaptureDeserializerListener
+
+    //region ActionInjectDefaults.ResultListener
+    override fun onIdCaptureDefaults(
+        defaults: SerializableIdDefaults,
+        callbackContext: CallbackContext
+    ) {
+        callbackContext.success(defaults.toJson())
+    }
+    //endregion ActionInjectDefaults.ResultListener
+
+    override fun onJsonParseError(error: Throwable, callbackContext: CallbackContext) {
+        JsonParseError(error.message).sendResult(callbackContext)
+    }
+
+    //region ActionSubscribeIdCapture.ResultListener
+    override fun onSubscribeToIdCapture(callbackContext: CallbackContext) {
+        idCaptureCallback?.dispose()
+        idCaptureCallback = IdCaptureCallback(actionsHandler, callbackContext)
+        callbackContext.successAndKeepCallback()
+    }
+    //endregion ActionSubscribeIdCapture.ResultListener
+
+    //region ActionVerifyCapturedId.ResultListener
+    override fun onVerifyCapturedId(capturedId: CapturedId, callbackContext: CallbackContext) {
+        callbackContext.success(
+            AamvaVizBarcodeComparisonVerifier.create().verify(capturedId).toJson()
+        )
+    }
+    //endregion ActionVerifyCapturedId.ResultListener
+
+    //region ActionSend.ResultListener
+    override fun onSendAction(
+        actionName: String,
+        message: JSONObject,
+        callbackContext: CallbackContext
+    ) {
+        callbackContext.successAndKeepCallback(message)
+    }
+    //endregion ActionSend.ResultListener
+
+    //region ActionFinishCallback.ResultListener
+    override fun onFinishIdCaptureMode(finishData: SerializableFinishModeCallbackData?) {
+        idCaptureCallback?.onFinishCallback(finishData)
+    }
+    //endregion ActionFinishCallback.ResultListener
+
+    //region ActionFinishCallback.ResultListener
+    override fun onReset(callbackContext: CallbackContext) {
+        idCaptureHandler.idCapture?.reset()
+        callbackContext.success()
+    }
+    //endregion ActionFinishCallback.ResultListener
 }
+
+interface IdActionsListeners :
+    ActionGetDefaults.ResultListener,
+    ActionSubscribeIdCapture.ResultListener,
+    ActionVerifyCapturedId.ResultListener,
+    ActionSend.ResultListener,
+    ActionFinishCallback.ResultListener,
+    ActionIdCaptureReset.ResultListener

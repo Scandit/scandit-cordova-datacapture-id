@@ -26,12 +26,12 @@ struct IdCaptureCallbackResult: BlockingListenerCallbackResult {
 }
 
 @objc(ScanditIdCapture)
-public class ScanditIdCapture: CDVPlugin {
+public class ScanditIdCapture: CDVPlugin, DataCapturePlugin {
 
-    lazy var modeDeserializer: IdCaptureDeserializer = {
+    lazy var modeDeserializers: [DataCaptureModeDeserializer] = {
         let idCaptureDeserializer = IdCaptureDeserializer()
         idCaptureDeserializer.delegate = self
-        return idCaptureDeserializer
+        return [idCaptureDeserializer]
     }()
 
     lazy var componentDeserializers: [DataCaptureComponentDeserializer] = []
@@ -45,7 +45,7 @@ public class ScanditIdCapture: CDVPlugin {
 
     override public func pluginInitialize() {
         super.pluginInitialize()
-        ScanditCaptureCore.registerModeDeserializer(modeDeserializer)
+        ScanditCaptureCore.dataCapturePlugins.append(self)
     }
 
     public override func onReset() {
@@ -110,7 +110,8 @@ public class ScanditIdCapture: CDVPlugin {
 
     @objc(getDefaults:)
     func getDefaults(command: CDVInvokedUrlCommand) {
-        commandDelegate.send(.success(message: ScanditIdCaptureDefaults.defaults), callbackId: command.callbackId)
+        let defaults = ScanditIdCaptureDefaults()
+        commandDelegate.send(.success(message: defaults), callbackId: command.callbackId)
     }
 
     // MARK: Reset

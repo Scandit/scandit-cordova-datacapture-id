@@ -1,34 +1,40 @@
 import ScanditIdCapture
 
-fileprivate typealias IdCaptureOverlayClass = IdCaptureOverlay
-
 struct ScanditIdCaptureDefaults: Encodable {
+    typealias CameraSettingsDefaults = ScanditCaptureCoreDefaults.CameraSettingsDefaults
+
     struct IdCaptureDefaultsContainer: Encodable {
         let recommendedCameraSettings: CameraSettingsDefaults
-        let idCaptureOverlay: [String: BrushDefaults]
+        let idCaptureOverlayDefaults: [String: ScanditCaptureCoreDefaults.BrushDefaults]
 
         enum CodingKeys: String, CodingKey {
             case recommendedCameraSettings = "RecommendedCameraSettings"
-            case idCaptureOverlay = "IdCaptureOverlay"
+            case idCaptureOverlayDefaults = "IdCaptureOverlayDefaults"
         }
     }
-    
-    static let defaults = IdCaptureDefaultsContainer()
 
+    let idCapture = IdCaptureDefaultsContainer()
+
+    enum CodingKeys: String, CodingKey {
+        case idCapture = "IdCapture"
+    }
 }
 
 extension ScanditIdCaptureDefaults.IdCaptureDefaultsContainer {
+    typealias BrushDefaults = ScanditCaptureCoreDefaults.BrushDefaults
+
     init() {
-        self.recommendedCameraSettings = CameraSettingsDefaults.from(IdCapture.recommendedCameraSettings)
-        self.idCaptureOverlay = [
-            "DefaultCapturedBrush": BrushDefaults.from(
-                IdCaptureOverlayClass.defaultCapturedBrush
+        self.recommendedCameraSettings = ScanditCaptureCoreDefaults.CameraSettingsDefaults
+            .from(IdCapture.recommendedCameraSettings)
+        self.idCaptureOverlayDefaults = [
+            "defaultCapturedBrush": BrushDefaults.from(
+                IdCaptureOverlay.defaultCapturedBrush
             ),
-            "DefaultLocalizedBrush": BrushDefaults.from(
-                IdCaptureOverlayClass.defaultLocalizedBrush
+            "defaultLocalizedBrush": BrushDefaults.from(
+                IdCaptureOverlay.defaultLocalizedBrush
             ),
-            "DefaultRejectedBrush": BrushDefaults.from(
-                IdCaptureOverlayClass.defaultRejectedBrush
+            "defaultRejectedBrush": BrushDefaults.from(
+                IdCaptureOverlay.defaultRejectedBrush
             ),
         ]
     }
