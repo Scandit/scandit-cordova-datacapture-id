@@ -23,4 +23,5 @@ var CordovaFunction;
     CordovaFunction["SubscribeIdCaptureListener"] = "subscribeIdCaptureListener";
     CordovaFunction["ResetIdCapture"] = "resetIdCapture";
     CordovaFunction["VerifyCapturedId"] = "verifyCapturedId";
+    CordovaFunction["FinishCallback"] = "finishCallback";
 })(CordovaFunction = exports.CordovaFunction || (exports.CordovaFunction = {}));
