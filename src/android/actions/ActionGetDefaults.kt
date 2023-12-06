@@ -7,15 +7,44 @@
 package com.scandit.datacapture.cordova.id.actions
 
 import com.scandit.datacapture.cordova.core.actions.Action
-import com.scandit.datacapture.frameworks.id.IdCaptureModule
+import com.scandit.datacapture.cordova.core.actions.ActionJsonParseErrorResultListener
+import com.scandit.datacapture.cordova.core.data.defaults.SerializableCameraSettingsDefault
+import com.scandit.datacapture.cordova.id.data.defaults.SerializableIdCaptureDefaults
+import com.scandit.datacapture.cordova.id.data.defaults.SerializableIdCaptureOverlayDefaults
+import com.scandit.datacapture.cordova.id.data.defaults.SerializableIdDefaults
+import com.scandit.datacapture.id.capture.IdCapture
+import com.scandit.datacapture.id.ui.overlay.IdCaptureOverlay
 import org.apache.cordova.CallbackContext
 import org.json.JSONArray
-import org.json.JSONObject
 
 class ActionGetDefaults(
-    private val idCaptureModule: IdCaptureModule
+    private val listener: ResultListener
 ) : Action {
     override fun run(args: JSONArray, callbackContext: CallbackContext) {
-        callbackContext.success(JSONObject(idCaptureModule.getDefaults()))
+        try {
+            val defaults = SerializableIdDefaults(
+                serializableIdCaptureDefaults = SerializableIdCaptureDefaults(
+                    recommendedCameraSettings = SerializableCameraSettingsDefault(
+                        IdCapture.createRecommendedCameraSettings()
+                    ),
+                    idCaptureOverlay = SerializableIdCaptureOverlayDefaults(
+                        IdCaptureOverlay.defaultCapturedBrush(),
+                        IdCaptureOverlay.defaultLocalizedBrush(),
+                        IdCaptureOverlay.defaultRejectedBrush()
+                    )
+                )
+            )
+            listener.onIdCaptureDefaults(defaults, callbackContext)
+        } catch (e: Exception) {
+            println(e)
+            listener.onJsonParseError(e, callbackContext)
+        }
+    }
+
+    interface ResultListener : ActionJsonParseErrorResultListener {
+        fun onIdCaptureDefaults(
+            defaults: SerializableIdDefaults,
+            callbackContext: CallbackContext
+        )
     }
 }

@@ -60,17 +60,6 @@ class IdCaptureSession {
 }
 exports.IdCaptureSession = IdCaptureSession;
 class IdCaptureOverlay extends Serializeable_1.DefaultSerializeable {
-    static withIdCapture(idCapture) {
-        return IdCaptureOverlay.withIdCaptureForView(idCapture, null);
-    }
-    static withIdCaptureForView(idCapture, view) {
-        const overlay = new IdCaptureOverlay();
-        overlay.idCapture = idCapture;
-        if (view) {
-            view.addOverlay(overlay);
-        }
-        return overlay;
-    }
     constructor() {
         super();
         this.type = 'idCapture';
@@ -83,6 +72,17 @@ class IdCaptureOverlay extends Serializeable_1.DefaultSerializeable {
         this._localizedBrush = this._defaultLocalizedBrush;
         this._rejectedBrush = this._defaultRejectedBrush;
         this._idLayoutLineStyle = Enums_1.IdLayoutLineStyle.Light;
+    }
+    static withIdCapture(idCapture) {
+        return IdCaptureOverlay.withIdCaptureForView(idCapture, null);
+    }
+    static withIdCaptureForView(idCapture, view) {
+        const overlay = new IdCaptureOverlay();
+        overlay.idCapture = idCapture;
+        if (view) {
+            view.addOverlay(overlay);
+        }
+        return overlay;
     }
     setIdLayout(idLayout) {
         this._idLayout = idLayout;
@@ -137,21 +137,21 @@ __decorate([
     Serializeable_1.ignoreFromSerialization
 ], IdCaptureOverlay.prototype, "idCapture", void 0);
 __decorate([
-    (0, Serializeable_1.nameForSerialization)('idLayout')
+    Serializeable_1.nameForSerialization('idLayout')
 ], IdCaptureOverlay.prototype, "_idLayout", void 0);
 __decorate([
-    (0, Serializeable_1.nameForSerialization)('idLayoutStyle')
+    Serializeable_1.nameForSerialization('idLayoutStyle')
 ], IdCaptureOverlay.prototype, "_idLayoutStyle", void 0);
 __decorate([
-    (0, Serializeable_1.nameForSerialization)('capturedBrush')
+    Serializeable_1.nameForSerialization('capturedBrush')
 ], IdCaptureOverlay.prototype, "_capturedBrush", void 0);
 __decorate([
-    (0, Serializeable_1.nameForSerialization)('localizedBrush')
+    Serializeable_1.nameForSerialization('localizedBrush')
 ], IdCaptureOverlay.prototype, "_localizedBrush", void 0);
 __decorate([
-    (0, Serializeable_1.nameForSerialization)('rejectedBrush')
+    Serializeable_1.nameForSerialization('rejectedBrush')
 ], IdCaptureOverlay.prototype, "_rejectedBrush", void 0);
 __decorate([
-    (0, Serializeable_1.nameForSerialization)('idLayoutLineStyle')
+    Serializeable_1.nameForSerialization('idLayoutLineStyle')
 ], IdCaptureOverlay.prototype, "_idLayoutLineStyle", void 0);
 exports.IdCaptureOverlay = IdCaptureOverlay;

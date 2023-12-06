@@ -231,7 +231,7 @@ class AAMVABarcodeResult {
         return DateResult.fromJSON(this.json.cardRevisionDate);
     }
     get documentDiscriminatorNumber() { return this.json.documentDiscriminatorNumber; }
-    get barcodeDataElements() { return this.json.dictionary; }
+    get barcodeDataElements() { return this.json.barcodeDataElements; }
     static fromJSON(json) {
         const result = new AAMVABarcodeResult();
         result.json = json;
@@ -478,7 +478,6 @@ class AamvaVizBarcodeComparisonVerifier {
                 .verifyCapturedId(JSON.stringify(capturedId))
                 .then((json) => {
                 if (!json) {
-                    // @ts-ignore
                     resolve();
                 }
                 else {

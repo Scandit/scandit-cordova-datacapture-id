@@ -9,19 +9,18 @@ const Defaults_1 = require("scandit-cordova-datacapture-id.Defaults");
 exports.Cordova = {
     pluginName: 'ScanditIdCapture',
     defaults: {},
-    exec: (success, error, functionName, args) => (0, CommonCordova_1.cordovaExec)(success, error, exports.Cordova.pluginName, functionName, args),
+    exec: (success, error, functionName, args) => CommonCordova_1.cordovaExec(success, error, exports.Cordova.pluginName, functionName, args),
 };
 const getDefaults = new Promise((resolve, reject) => {
     exports.Cordova.exec((defaultsJSON) => {
-        exports.Cordova.defaults = (0, Defaults_1.defaultsFromJSON)(defaultsJSON);
+        exports.Cordova.defaults = Defaults_1.defaultsFromJSON(defaultsJSON);
         resolve();
     }, reject, 'getDefaults', null);
 });
-(0, CommonCordova_1.initializePlugin)(exports.Cordova.pluginName, getDefaults);
+CommonCordova_1.initializePlugin(exports.Cordova.pluginName, getDefaults);
 var CordovaFunction;
 (function (CordovaFunction) {
     CordovaFunction["SubscribeIdCaptureListener"] = "subscribeIdCaptureListener";
     CordovaFunction["ResetIdCapture"] = "resetIdCapture";
     CordovaFunction["VerifyCapturedId"] = "verifyCapturedId";
-    CordovaFunction["FinishCallback"] = "finishCallback";
 })(CordovaFunction = exports.CordovaFunction || (exports.CordovaFunction = {}));
