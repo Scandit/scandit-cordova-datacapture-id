@@ -7,18 +7,15 @@
 package com.scandit.datacapture.cordova.id.actions
 
 import com.scandit.datacapture.cordova.core.actions.Action
-import com.scandit.datacapture.cordova.core.actions.ActionJsonParseErrorResultListener
+import com.scandit.datacapture.frameworks.id.IdCaptureModule
 import org.apache.cordova.CallbackContext
 import org.json.JSONArray
 
 class ActionIdCaptureReset(
-    private val listener: ResultListener
+    private val idCaptureModule: IdCaptureModule
 ) : Action {
-    interface ResultListener : ActionJsonParseErrorResultListener {
-        fun onReset(callbackContext: CallbackContext)
-    }
-
     override fun run(args: JSONArray, callbackContext: CallbackContext) {
-        listener.onReset(callbackContext)
+        idCaptureModule.resetMode()
+        callbackContext.success()
     }
 }

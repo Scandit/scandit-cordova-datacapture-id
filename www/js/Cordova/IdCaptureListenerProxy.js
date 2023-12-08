@@ -5,10 +5,9 @@ const IdCapture_Related_1 = require("scandit-cordova-datacapture-id.IdCapture+Re
 const Cordova_1 = require("scandit-cordova-datacapture-id.Cordova");
 var IdCaptureListenerEvent;
 (function (IdCaptureListenerEvent) {
-    IdCaptureListenerEvent["DidCapture"] = "didCaptureInIdCapture";
-    IdCaptureListenerEvent["DidLocalize"] = "didLocalizeInIdCapture";
-    IdCaptureListenerEvent["DidReject"] = "didRejectInIdCapture";
-    IdCaptureListenerEvent["DidFail"] = "didFailInIdCapture";
+    IdCaptureListenerEvent["DidCapture"] = "IdCaptureListener.didCaptureId";
+    IdCaptureListenerEvent["DidLocalize"] = "IdCaptureListener.didLocalizeId";
+    IdCaptureListenerEvent["DidReject"] = "IdCaptureListener.didRejectId";
 })(IdCaptureListenerEvent || (IdCaptureListenerEvent = {}));
 class IdCaptureListenerProxy {
     static forIdCapture(idCapture) {
@@ -42,11 +41,21 @@ class IdCaptureListenerProxy {
                         listener.didCaptureId(this.idCapture, IdCapture_Related_1.IdCaptureSession
                             .fromJSON(JSON.parse(event.argument.session)));
                     }
+                    if (!event.shouldNotifyWhenFinished) {
+                        IdCaptureListenerProxy.cordovaExec(null, null, Cordova_1.CordovaFunction.FinishCallback, [
+                            { 'finishCallbackID': IdCaptureListenerEvent.DidCapture, 'result': { 'enabled': this.idCapture.isEnabled } }
+                        ]);
+                    }
                     break;
                 case IdCaptureListenerEvent.DidLocalize:
                     if (listener.didLocalizeId) {
                         listener.didLocalizeId(this.idCapture, IdCapture_Related_1.IdCaptureSession
                             .fromJSON(JSON.parse(event.argument.session)));
+                    }
+                    if (!event.shouldNotifyWhenFinished) {
+                        IdCaptureListenerProxy.cordovaExec(null, null, Cordova_1.CordovaFunction.FinishCallback, [
+                            { 'finishCallbackID': IdCaptureListenerEvent.DidLocalize, 'result': { 'enabled': this.idCapture.isEnabled } }
+                        ]);
                     }
                     break;
                 case IdCaptureListenerEvent.DidReject:
@@ -54,13 +63,10 @@ class IdCaptureListenerProxy {
                         listener.didRejectId(this.idCapture, IdCapture_Related_1.IdCaptureSession
                             .fromJSON(JSON.parse(event.argument.session)));
                     }
+                    IdCaptureListenerProxy.cordovaExec(null, null, Cordova_1.CordovaFunction.FinishCallback, [
+                        { 'finishCallbackID': IdCaptureListenerEvent.DidReject, 'result': { 'enabled': this.idCapture.isEnabled } }
+                    ]);
                     break;
-                case IdCaptureListenerEvent.DidFail:
-                    if (listener.didFailWithError) {
-                        const session = IdCapture_Related_1.IdCaptureSession
-                            .fromJSON(JSON.parse(event.argument.session));
-                        listener.didFailWithError(this.idCapture, session._error, session);
-                    }
             }
         });
         return done();

@@ -70,6 +70,12 @@ var DocumentType;
     DocumentType["MyNumberCard"] = "myNumberCard";
     DocumentType["MinorsPassport"] = "minorsPassport";
     DocumentType["MinorsPublicServicesCard"] = "minorsPublicServicesCard";
+    DocumentType["AsylumRequest"] = "asylumRequest";
+    DocumentType["DriverQualificationCard"] = "driverQualificationCard";
+    DocumentType["ProvisionalDl"] = "provisionalDl";
+    DocumentType["RefugeePassport"] = "refugeePassport";
+    DocumentType["SpecialId"] = "specialId";
+    DocumentType["UniformedServicesId"] = "uniformedServicesId";
 })(DocumentType = exports.DocumentType || (exports.DocumentType = {}));
 var IdDocumentType;
 (function (IdDocumentType) {
