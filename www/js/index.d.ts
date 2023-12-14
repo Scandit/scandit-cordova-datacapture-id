@@ -376,13 +376,7 @@ export enum DocumentType {
     CitizenshipCertificate = "citizenshipCertificate",
     MyNumberCard = "myNumberCard",
     MinorsPassport = "minorsPassport",
-    MinorsPublicServicesCard = "minorsPublicServicesCard",
-    AsylumRequest = "asylumRequest",
-    DriverQualificationCard = "driverQualificationCard",
-    ProvisionalDl = "provisionalDl",
-    RefugeePassport = "refugeePassport",
-    SpecialId = "specialId",
-    UniformedServicesId = "uniformedServicesId"
+    MinorsPublicServicesCard = "minorsPublicServicesCard"
 }
 export enum IdDocumentType {
     AAMVABarcode = "aamvaBarcode",
@@ -426,9 +420,9 @@ export enum IdLayoutLineStyle {
     Bold = "bold"
 }
 export enum ComparisonCheckResult {
-    Passed = "Passed",
-    Skipped = "Skipped",
-    Failed = "Failed"
+    Passed = "passed",
+    Skipped = "skipped",
+    Failed = "failed"
 }
 
 
