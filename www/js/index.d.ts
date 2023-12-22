@@ -376,7 +376,13 @@ export enum DocumentType {
     CitizenshipCertificate = "citizenshipCertificate",
     MyNumberCard = "myNumberCard",
     MinorsPassport = "minorsPassport",
-    MinorsPublicServicesCard = "minorsPublicServicesCard"
+    MinorsPublicServicesCard = "minorsPublicServicesCard",
+    AsylumRequest = "asylumRequest",
+    DriverQualificationCard = "driverQualificationCard",
+    ProvisionalDl = "provisionalDl",
+    RefugeePassport = "refugeePassport",
+    SpecialId = "specialId",
+    UniformedServicesId = "uniformedServicesId"
 }
 export enum IdDocumentType {
     AAMVABarcode = "aamvaBarcode",
@@ -420,9 +426,9 @@ export enum IdLayoutLineStyle {
     Bold = "bold"
 }
 export enum ComparisonCheckResult {
-    Passed = "passed",
-    Skipped = "skipped",
-    Failed = "failed"
+    Passed = "Passed",
+    Skipped = "Skipped",
+    Failed = "Failed"
 }
 
 
@@ -442,7 +448,6 @@ export class IdCapture implements DataCaptureMode {
     private listeners;
     private listenerProxy;
     private proxy;
-    private isInListenerCallback;
     static forContext(context: DataCaptureContext | null, settings: IdCaptureSettings): IdCapture;
     addListener(listener: IdCaptureListener): void;
     removeListener(listener: IdCaptureListener): void;
