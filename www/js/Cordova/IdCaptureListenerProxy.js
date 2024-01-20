@@ -24,10 +24,8 @@ class IdCaptureListenerProxy {
     }
     notifyListeners(event) {
         const done = () => {
-            this.idCapture.isInListenerCallback = false;
             return { enabled: this.idCapture.isEnabled };
         };
-        this.idCapture.isInListenerCallback = true;
         if (!event) {
             // The event could be undefined/null in case the plugin result did not pass a "message",
             // which could happen e.g. in case of "ok" results, which could signal e.g. successful
