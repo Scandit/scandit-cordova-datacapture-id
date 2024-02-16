@@ -13,14 +13,14 @@ import com.scandit.datacapture.frameworks.id.IdCaptureModule
 import org.apache.cordova.CallbackContext
 import org.json.JSONArray
 
-class ActionVerifyCapturedId(
+class ActionVerifyCapturedIdAsync(
     private val idCaptureModule: IdCaptureModule
 ) : Action {
 
     override fun run(args: JSONArray, callbackContext: CallbackContext) {
         try {
             val capturedIdJSON = args.get(0).toString()
-            idCaptureModule.verifyCaptureId(capturedIdJSON, CordovaResult(callbackContext))
+            idCaptureModule.verifyCapturedIdBarcode(capturedIdJSON, CordovaResult(callbackContext))
         } catch (e: Exception) {
             callbackContext.error(JsonParseError(e.message).toString())
         }
