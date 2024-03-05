@@ -14,7 +14,7 @@ import com.scandit.datacapture.frameworks.id.listeners.FrameworksIdCaptureListen
 import org.apache.cordova.CallbackContext
 import org.json.JSONArray
 
-class ActionSubscribeDidCapture(
+class ActionSubscribeIdCapture(
     private val idCaptureModule: IdCaptureModule,
     private val eventEmitter: CordovaEventEmitter
 ) : Action {
@@ -22,6 +22,14 @@ class ActionSubscribeDidCapture(
     override fun run(args: JSONArray, callbackContext: CallbackContext) {
         eventEmitter.registerCallback(
             FrameworksIdCaptureListener.ON_ID_CAPTURED_EVENT_NAME,
+            callbackContext
+        )
+        eventEmitter.registerCallback(
+            FrameworksIdCaptureListener.ON_ID_LOCALIZED_EVENT_NAME,
+            callbackContext
+        )
+        eventEmitter.registerCallback(
+            FrameworksIdCaptureListener.ON_ID_REJECTED_EVENT_NAME,
             callbackContext
         )
 
