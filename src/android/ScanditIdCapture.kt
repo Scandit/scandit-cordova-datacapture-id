@@ -61,6 +61,11 @@ class ScanditIdCapture :
         pluginInitialize()
     }
 
+    override fun onDestroy() {
+        idCaptureModule.onDestroy()
+        super.onDestroy()
+    }
+
     override fun execute(
         action: String,
         args: JSONArray,
