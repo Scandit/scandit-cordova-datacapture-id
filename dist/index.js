@@ -32,13 +32,6 @@ class NativeIdCaptureProxy {
             ]);
         });
     }
-    verifyVizMrz(capturedId) {
-        return new Promise((resolve, reject) => {
-            NativeIdCaptureProxy.cordovaExec(resolve, reject, CordovaFunction.VerifyVizMrz, [
-                capturedId,
-            ]);
-        });
-    }
     setModeEnabledState(enabled) {
         NativeIdCaptureProxy.cordovaExec(null, null, CordovaFunction.SetModeEnabledState, [{ 'enabled': enabled }]);
     }
@@ -165,7 +158,6 @@ var CordovaFunction;
     CordovaFunction["ResetIdCapture"] = "resetIdCapture";
     CordovaFunction["VerifyCapturedId"] = "verifyCapturedId";
     CordovaFunction["VerifyCapturedIdAsync"] = "verifyCapturedIdAsync";
-    CordovaFunction["VerifyVizMrz"] = "verifyVizMrz";
     CordovaFunction["FinishCallback"] = "finishCallback";
     CordovaFunction["UpdateIdCaptureMode"] = "updateIdCaptureMode";
     CordovaFunction["ApplyIdCaptureModeSettings"] = "applyIdCaptureModeSettings";
@@ -246,17 +238,7 @@ Object.defineProperty(exports, 'SupportedSides', {
     enumerable: true,
     get: function () { return id.SupportedSides; }
 });
-Object.defineProperty(exports, 'TextHintPosition', {
-    enumerable: true,
-    get: function () { return id.TextHintPosition; }
-});
 exports.USUniformedServicesBarcodeResult = id.USUniformedServicesBarcodeResult;
 exports.USVisaVIZResult = id.USVisaVIZResult;
 exports.VIZResult = id.VIZResult;
 exports.VehicleRestriction = id.VehicleRestriction;
-Object.defineProperty(exports, 'VizMrzComparisonCheckResult', {
-    enumerable: true,
-    get: function () { return id.VizMrzComparisonCheckResult; }
-});
-exports.VizMrzComparisonResult = id.VizMrzComparisonResult;
-exports.VizMrzComparisonVerifier = id.VizMrzComparisonVerifier;

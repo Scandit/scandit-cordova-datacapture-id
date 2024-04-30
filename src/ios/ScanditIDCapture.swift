@@ -113,16 +113,6 @@ public class ScanditIdCapture: CDVPlugin {
                                           result: CordovaResult(commandDelegate, command.callbackId))
     }
 
-    @objc(verifyVizMrz:)
-    func verifyVizMrz(command: CDVInvokedUrlCommand) {
-        guard let jsonString = command.arguments[0] as? String else {
-            commandDelegate.send(.failure(with: .invalidJSON), callbackId: command.callbackId)
-            return
-        }
-        idModule.verifyCaptureIdMrzViz(jsonString: jsonString,
-                                          result: CordovaResult(commandDelegate, command.callbackId))
-    }
-
     @objc(createContextForBarcodeVerification:)
     func createContextForBarcodeVerification(command: CDVInvokedUrlCommand) {
         idModule.createAamvaBarcodeVerifier(result: CordovaResult(commandDelegate, command.callbackId))
@@ -153,7 +143,7 @@ public class ScanditIdCapture: CDVPlugin {
         idModule.resetMode()
         commandDelegate.send(.success, callbackId: command.callbackId)
     }
-
+    
     @objc(updateIdCaptureOverlay:)
     func updateIdCaptureOverlay(command: CDVInvokedUrlCommand) {
         guard let overlayJson = command.defaultArgumentAsString else {
@@ -163,7 +153,7 @@ public class ScanditIdCapture: CDVPlugin {
         idModule.updateOverlay(overlayJson: overlayJson,
                                result: CordovaResult(commandDelegate, command.callbackId))
     }
-
+    
     @objc(updateIdCaptureMode:)
     func updateIdCaptureMode(command: CDVInvokedUrlCommand) {
         guard let modeJson = command.defaultArgumentAsString else {
@@ -173,7 +163,7 @@ public class ScanditIdCapture: CDVPlugin {
         idModule.updateModeFromJson(modeJson: modeJson,
                                     result: CordovaResult(commandDelegate, command.callbackId))
     }
-
+    
     @objc(applyIdCaptureModeSettings:)
     func applyIdCaptureModeSettings(command: CDVInvokedUrlCommand) {
         guard let modeSettingsJson = command.defaultArgumentAsString else {

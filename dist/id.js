@@ -122,47 +122,6 @@ exports.SupportedSides = void 0;
     SupportedSides["FrontAndBack"] = "frontAndBack";
 })(exports.SupportedSides || (exports.SupportedSides = {}));
 
-exports.TextHintPosition = void 0;
-(function (TextHintPosition) {
-    TextHintPosition["AboveViewfinder"] = "aboveViewfinder";
-    TextHintPosition["BelowViewfinder"] = "belowViewfinder";
-})(exports.TextHintPosition || (exports.TextHintPosition = {}));
-
-exports.VizMrzComparisonCheckResult = void 0;
-(function (VizMrzComparisonCheckResult) {
-    VizMrzComparisonCheckResult["Passed"] = "passed";
-    VizMrzComparisonCheckResult["Skipped"] = "skipped";
-    VizMrzComparisonCheckResult["Failed"] = "failed";
-})(exports.VizMrzComparisonCheckResult || (exports.VizMrzComparisonCheckResult = {}));
-
-class VizMrzDateComparisonCheck {
-    get vizValue() {
-        return DateResult.fromJSON(this.json.vizValue);
-    }
-    get mrzValue() {
-        return DateResult.fromJSON(this.json.mrzValue);
-    }
-    get checkResult() { return this.json.checkResult; }
-    get resultDescription() { return this.json.resultDescription; }
-    static fromJSON(json) {
-        const result = new VizMrzDateComparisonCheck();
-        result.json = json;
-        return result;
-    }
-}
-
-class VizMrzStringComparisonCheck {
-    get vizValue() { return this.json.vizValue; }
-    get mrzValue() { return this.json.mrzValue; }
-    get checkResult() { return this.json.checkResult; }
-    get resultDescription() { return this.json.resultDescription; }
-    static fromJSON(json) {
-        const result = new VizMrzStringComparisonCheck();
-        result.json = json;
-        return result;
-    }
-}
-
 function getIdDefaults() {
     return scanditDatacaptureFrameworksCore.FactoryMaker.getInstance('IdDefaults');
 }
@@ -310,9 +269,6 @@ class IdCaptureController extends scanditDatacaptureFrameworksCore.BaseControlle
     }
     verifyCapturedIdAsync(capturedId) {
         return this._proxy.verifyCapturedIdAsync(capturedId);
-    }
-    verifyVizMrz(capturedId) {
-        return this._proxy.verifyVizMrz(capturedId);
     }
     setModeEnabledState(enabled) {
         this._proxy.setModeEnabledState(enabled);
@@ -1216,8 +1172,6 @@ class IdCaptureOverlay extends scanditDatacaptureFrameworksCore.DefaultSerialize
         this._idLayout = exports.IdLayout.Auto;
         this._idLayoutStyle = exports.IdLayoutStyle.Rounded;
         this._idLayoutLineStyle = exports.IdLayoutLineStyle.Light;
-        this._textHintPosition = exports.TextHintPosition.AboveViewfinder;
-        this._showTextHints = true;
         this._defaultCapturedBrush = new scanditDatacaptureFrameworksCore.Brush(IdCaptureOverlay.idCaptureDefaults.IdCapture.IdCaptureOverlayDefaults.defaultCapturedBrush.fillColor, IdCaptureOverlay.idCaptureDefaults.IdCapture.IdCaptureOverlayDefaults.defaultCapturedBrush.strokeColor, IdCaptureOverlay.idCaptureDefaults.IdCapture.IdCaptureOverlayDefaults.defaultCapturedBrush.strokeWidth);
         this._defaultLocalizedBrush = new scanditDatacaptureFrameworksCore.Brush(IdCaptureOverlay.idCaptureDefaults.IdCapture.IdCaptureOverlayDefaults.defaultLocalizedBrush.fillColor, IdCaptureOverlay.idCaptureDefaults.IdCapture.IdCaptureOverlayDefaults.defaultLocalizedBrush.strokeColor, IdCaptureOverlay.idCaptureDefaults.IdCapture.IdCaptureOverlayDefaults.defaultLocalizedBrush.strokeWidth);
         this._defaultRejectedBrush = new scanditDatacaptureFrameworksCore.Brush(IdCaptureOverlay.idCaptureDefaults.IdCapture.IdCaptureOverlayDefaults.defaultRejectedBrush.fillColor, IdCaptureOverlay.idCaptureDefaults.IdCapture.IdCaptureOverlayDefaults.defaultRejectedBrush.strokeColor, IdCaptureOverlay.idCaptureDefaults.IdCapture.IdCaptureOverlayDefaults.defaultRejectedBrush.strokeWidth);
@@ -1283,20 +1237,6 @@ class IdCaptureOverlay extends scanditDatacaptureFrameworksCore.DefaultSerialize
     get defaultRejectedBrush() {
         return this._defaultRejectedBrush;
     }
-    get textHintPosition() {
-        return this._textHintPosition;
-    }
-    set textHintPosition(position) {
-        this._textHintPosition = position;
-        this.idCapture.controller.updateIdCaptureOverlay(this);
-    }
-    get showTextHints() {
-        return this._showTextHints;
-    }
-    set showTextHints(enabled) {
-        this._showTextHints = enabled;
-        this.idCapture.controller.updateIdCaptureOverlay(this);
-    }
 }
 __decorate([
     scanditDatacaptureFrameworksCore.ignoreFromSerialization
@@ -1313,12 +1253,6 @@ __decorate([
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('idLayoutLineStyle')
 ], IdCaptureOverlay.prototype, "_idLayoutLineStyle", void 0);
-__decorate([
-    scanditDatacaptureFrameworksCore.nameForSerialization('textHintPosition')
-], IdCaptureOverlay.prototype, "_textHintPosition", void 0);
-__decorate([
-    scanditDatacaptureFrameworksCore.nameForSerialization('showTextHints')
-], IdCaptureOverlay.prototype, "_showTextHints", void 0);
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('capturedBrush')
 ], IdCaptureOverlay.prototype, "_capturedBrush", void 0);
@@ -1563,75 +1497,7 @@ exports.DocumentType = void 0;
     DocumentType["ImmigrantVisa"] = "immigrantVisa";
     DocumentType["ConsularVoterId"] = "consularVoterId";
     DocumentType["TwicCard"] = "twicCard";
-    DocumentType["ExitEntryPermit"] = "exitEntryPermit";
-    DocumentType["MainlandTravelPermitTaiwan"] = "mainlandTravelPermitTaiwan";
-    DocumentType["NbiClearance"] = "nbiClearance";
-    DocumentType["ProofOfRegistration"] = "proofOfRegistration";
-    DocumentType["TemporaryProtectionPermit"] = "temporaryProtectionPermit";
 })(exports.DocumentType || (exports.DocumentType = {}));
-
-class VizMrzComparisonResult {
-    get checksPassed() { return this.json.checksPassed; }
-    get resultDescription() { return this.json.resultDescription; }
-    get issuingCountryIsoMatch() {
-        return VizMrzStringComparisonCheck
-            .fromJSON(this.json.issuingCountryIsoMatch);
-    }
-    get documentNumbersMatch() {
-        return VizMrzStringComparisonCheck
-            .fromJSON(this.json.documentNumbersMatch);
-    }
-    get fullNamesMatch() {
-        return VizMrzStringComparisonCheck
-            .fromJSON(this.json.fullNamesMatch);
-    }
-    get datesOfBirthMatch() {
-        return VizMrzDateComparisonCheck
-            .fromJSON(this.json.datesOfBirthMatch);
-    }
-    get datesOfExpiryMatch() {
-        return VizMrzDateComparisonCheck
-            .fromJSON(this.json.datesOfExpiryMatch);
-    }
-    static fromJSON(json) {
-        const result = new VizMrzComparisonResult();
-        result.json = json;
-        return result;
-    }
-}
-
-class VizMrzComparisonVerifier {
-    constructor() {
-        this.controller = new IdCaptureController();
-    }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    static create(context) {
-        return new VizMrzComparisonVerifier();
-    }
-    verify(capturedId) {
-        // Necessary for not exposing internal API on CapturedId, while only passing the private "json" property
-        // to native iOS and Android.
-        const capturedIdAsString = JSON.stringify(capturedId);
-        const capturedIdJsonData = JSON.parse(capturedIdAsString).json;
-        return new Promise((resolve, reject) => {
-            this.controller
-                .verifyVizMrz(JSON.stringify(capturedIdJsonData))
-                .then((json) => {
-                if (!json) {
-                    resolve(VizMrzComparisonResult
-                        .fromJSON(JSON.parse('{}')));
-                }
-                else {
-                    resolve(VizMrzComparisonResult
-                        .fromJSON(JSON.parse(json)));
-                }
-            }, reject);
-        });
-    }
-}
-__decorate([
-    scanditDatacaptureFrameworksCore.ignoreFromSerialization
-], VizMrzComparisonVerifier.prototype, "controller", void 0);
 
 exports.AAMVABarcodeResult = AAMVABarcodeResult;
 exports.AamvaBarcodeVerificationResult = AamvaBarcodeVerificationResult;
@@ -1670,10 +1536,6 @@ exports.USUniformedServicesBarcodeResult = USUniformedServicesBarcodeResult;
 exports.USVisaVIZResult = USVisaVIZResult;
 exports.VIZResult = VIZResult;
 exports.VehicleRestriction = VehicleRestriction;
-exports.VizMrzComparisonResult = VizMrzComparisonResult;
-exports.VizMrzComparisonVerifier = VizMrzComparisonVerifier;
-exports.VizMrzDateComparisonCheck = VizMrzDateComparisonCheck;
-exports.VizMrzStringComparisonCheck = VizMrzStringComparisonCheck;
 exports.getIdDefaults = getIdDefaults;
 exports.loadIdDefaults = loadIdDefaults;
 exports.parseIdDefaults = parseIdDefaults;
