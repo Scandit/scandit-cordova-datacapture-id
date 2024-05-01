@@ -15,6 +15,7 @@ export declare enum CordovaFunction {
     ResetIdCapture = "resetIdCapture",
     VerifyCapturedId = "verifyCapturedId",
     VerifyCapturedIdAsync = "verifyCapturedIdAsync",
+    VerifyVizMrz = "verifyVizMrz",
     FinishCallback = "finishCallback",
     UpdateIdCaptureMode = "updateIdCaptureMode",
     ApplyIdCaptureModeSettings = "applyIdCaptureModeSettings",
