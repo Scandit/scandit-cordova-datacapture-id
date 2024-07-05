@@ -240,6 +240,10 @@ exports.LocalizedOnlyId = id.LocalizedOnlyId;
 exports.MRZResult = id.MRZResult;
 exports.ProfessionalDrivingPermit = id.ProfessionalDrivingPermit;
 exports.RejectedId = id.RejectedId;
+Object.defineProperty(exports, "RejectionReason", {
+    enumerable: true,
+    get: function () { return id.RejectionReason; }
+});
 exports.SouthAfricaDlBarcodeResult = id.SouthAfricaDlBarcodeResult;
 exports.SouthAfricaIdBarcodeResult = id.SouthAfricaIdBarcodeResult;
 Object.defineProperty(exports, "SupportedSides", {
