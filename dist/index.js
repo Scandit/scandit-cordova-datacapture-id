@@ -32,13 +32,6 @@ class NativeIdCaptureProxy {
             ]);
         });
     }
-    verifyVizMrz(capturedId) {
-        return new Promise((resolve, reject) => {
-            NativeIdCaptureProxy.cordovaExec(resolve, reject, CordovaFunction.VerifyVizMrz, [
-                capturedId,
-            ]);
-        });
-    }
     setModeEnabledState(enabled) {
         NativeIdCaptureProxy.cordovaExec(null, null, CordovaFunction.SetModeEnabledState, [{ 'enabled': enabled }]);
     }
@@ -165,7 +158,6 @@ var CordovaFunction;
     CordovaFunction["ResetIdCapture"] = "resetIdCapture";
     CordovaFunction["VerifyCapturedId"] = "verifyCapturedId";
     CordovaFunction["VerifyCapturedIdAsync"] = "verifyCapturedIdAsync";
-    CordovaFunction["VerifyVizMrz"] = "verifyVizMrz";
     CordovaFunction["FinishCallback"] = "finishCallback";
     CordovaFunction["UpdateIdCaptureMode"] = "updateIdCaptureMode";
     CordovaFunction["ApplyIdCaptureModeSettings"] = "applyIdCaptureModeSettings";
@@ -182,7 +174,7 @@ exports.AamvaVizBarcodeComparisonVerifier = id.AamvaVizBarcodeComparisonVerifier
 exports.ApecBusinessTravelCardMrzResult = id.ApecBusinessTravelCardMrzResult;
 exports.ArgentinaIdBarcodeResult = id.ArgentinaIdBarcodeResult;
 exports.CapturedId = id.CapturedId;
-Object.defineProperty(exports, "CapturedResultType", {
+Object.defineProperty(exports, 'CapturedResultType', {
     enumerable: true,
     get: function () { return id.CapturedResultType; }
 });
@@ -193,46 +185,46 @@ exports.ChinaOneWayPermitFrontMrzResult = id.ChinaOneWayPermitFrontMrzResult;
 exports.ColombiaDlBarcodeResult = id.ColombiaDlBarcodeResult;
 exports.ColombiaIdBarcodeResult = id.ColombiaIdBarcodeResult;
 exports.CommonAccessCardBarcodeResult = id.CommonAccessCardBarcodeResult;
-Object.defineProperty(exports, "ComparisonCheckResult", {
+Object.defineProperty(exports, 'ComparisonCheckResult', {
     enumerable: true,
     get: function () { return id.ComparisonCheckResult; }
 });
 exports.DateResult = id.DateResult;
-Object.defineProperty(exports, "DocumentType", {
+Object.defineProperty(exports, 'DocumentType', {
     enumerable: true,
     get: function () { return id.DocumentType; }
 });
-Object.defineProperty(exports, "IdAnonymizationMode", {
+Object.defineProperty(exports, 'IdAnonymizationMode', {
     enumerable: true,
     get: function () { return id.IdAnonymizationMode; }
 });
 exports.IdCapture = id.IdCapture;
 exports.IdCaptureError = id.IdCaptureError;
 exports.IdCaptureFeedback = id.IdCaptureFeedback;
-Object.defineProperty(exports, "IdCaptureListenerEvents", {
+Object.defineProperty(exports, 'IdCaptureListenerEvents', {
     enumerable: true,
     get: function () { return id.IdCaptureListenerEvents; }
 });
 exports.IdCaptureOverlay = id.IdCaptureOverlay;
 exports.IdCaptureSession = id.IdCaptureSession;
 exports.IdCaptureSettings = id.IdCaptureSettings;
-Object.defineProperty(exports, "IdDocumentType", {
+Object.defineProperty(exports, 'IdDocumentType', {
     enumerable: true,
     get: function () { return id.IdDocumentType; }
 });
-Object.defineProperty(exports, "IdImageType", {
+Object.defineProperty(exports, 'IdImageType', {
     enumerable: true,
     get: function () { return id.IdImageType; }
 });
-Object.defineProperty(exports, "IdLayout", {
+Object.defineProperty(exports, 'IdLayout', {
     enumerable: true,
     get: function () { return id.IdLayout; }
 });
-Object.defineProperty(exports, "IdLayoutLineStyle", {
+Object.defineProperty(exports, 'IdLayoutLineStyle', {
     enumerable: true,
     get: function () { return id.IdLayoutLineStyle; }
 });
-Object.defineProperty(exports, "IdLayoutStyle", {
+Object.defineProperty(exports, 'IdLayoutStyle', {
     enumerable: true,
     get: function () { return id.IdLayoutStyle; }
 });
@@ -240,27 +232,13 @@ exports.LocalizedOnlyId = id.LocalizedOnlyId;
 exports.MRZResult = id.MRZResult;
 exports.ProfessionalDrivingPermit = id.ProfessionalDrivingPermit;
 exports.RejectedId = id.RejectedId;
-Object.defineProperty(exports, "RejectionReason", {
-    enumerable: true,
-    get: function () { return id.RejectionReason; }
-});
 exports.SouthAfricaDlBarcodeResult = id.SouthAfricaDlBarcodeResult;
 exports.SouthAfricaIdBarcodeResult = id.SouthAfricaIdBarcodeResult;
-Object.defineProperty(exports, "SupportedSides", {
+Object.defineProperty(exports, 'SupportedSides', {
     enumerable: true,
     get: function () { return id.SupportedSides; }
-});
-Object.defineProperty(exports, "TextHintPosition", {
-    enumerable: true,
-    get: function () { return id.TextHintPosition; }
 });
 exports.USUniformedServicesBarcodeResult = id.USUniformedServicesBarcodeResult;
 exports.USVisaVIZResult = id.USVisaVIZResult;
 exports.VIZResult = id.VIZResult;
 exports.VehicleRestriction = id.VehicleRestriction;
-Object.defineProperty(exports, "VizMrzComparisonCheckResult", {
-    enumerable: true,
-    get: function () { return id.VizMrzComparisonCheckResult; }
-});
-exports.VizMrzComparisonResult = id.VizMrzComparisonResult;
-exports.VizMrzComparisonVerifier = id.VizMrzComparisonVerifier;
