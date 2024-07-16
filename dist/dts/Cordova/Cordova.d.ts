@@ -1,7 +1,9 @@
 export declare const Cordova: {
     pluginName: string;
     defaults: any;
-    exec: (success: Function | null, error: Function | null, functionName: string, args: [any] | null) => void;
+    exec: (success: Function | null, error: Function | null, functionName: string, args: [
+        any
+    ] | null) => void;
 };
 export declare function initializeCordovaId(): void;
 export declare enum CordovaFunction {
@@ -15,6 +17,7 @@ export declare enum CordovaFunction {
     ResetIdCapture = "resetIdCapture",
     VerifyCapturedId = "verifyCapturedId",
     VerifyCapturedIdAsync = "verifyCapturedIdAsync",
+    VerifyVizMrz = "verifyVizMrz",
     FinishCallback = "finishCallback",
     UpdateIdCaptureMode = "updateIdCaptureMode",
     ApplyIdCaptureModeSettings = "applyIdCaptureModeSettings",
