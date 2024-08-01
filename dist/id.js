@@ -97,9 +97,13 @@ class RejectedId {
     get location() {
         return this._location;
     }
+    get rejectionReason() {
+        return this._rejectionReason;
+    }
     static fromJSON(json) {
         const result = new RejectedId();
         result._location = scanditDatacaptureFrameworksCore.Quadrilateral.fromJSON(json.location);
+        result._rejectionReason = json.rejectionReason;
         return result;
     }
 }
@@ -163,6 +167,13 @@ class VizMrzStringComparisonCheck {
     }
 }
 
+exports.RejectionReason = void 0;
+(function (RejectionReason) {
+    RejectionReason["DocumentTypeNotEnabled"] = "documentTypeNotEnabled";
+    RejectionReason["IncorrectBarcodeFormat"] = "incorrectBarcodeFormat";
+    RejectionReason["DocumentVoided"] = "documentVoided";
+})(exports.RejectionReason || (exports.RejectionReason = {}));
+
 function getIdDefaults() {
     return scanditDatacaptureFrameworksCore.FactoryMaker.getInstance('IdDefaults');
 }
@@ -200,7 +211,8 @@ function parseIdDefaults(jsonDefaults) {
                 },
             },
             IdCaptureSettings: {
-                anonymizationMode: jsonDefaults.IdCaptureSettings.anonymizationMode
+                anonymizationMode: jsonDefaults.IdCaptureSettings.anonymizationMode,
+                rejectVoidedIds: jsonDefaults.IdCaptureSettings.rejectVoidedIds,
             },
         },
     };
@@ -557,6 +569,7 @@ class CommonCapturedIdFields {
     get firstName() { return this.json.firstName; }
     get lastName() { return this.json.lastName; }
     get fullName() { return this.json.fullName; }
+    get secondaryLastName() { return this.json.secondaryLastName; }
     get sex() { return this.json.sex; }
     get dateOfBirth() {
         return DateResult.fromJSON(this.json.dateOfBirth);
@@ -583,6 +596,7 @@ class CommonCapturedIdFields {
         const firstName = json.firstName;
         const lastName = json.lastName;
         const fullName = json.fullName;
+        const secondaryLastName = json.secondaryLastName;
         const sex = json.sex;
         const dateOfBirth = DateResult.fromJSON(json.dateOfBirth);
         const age = json.age;
@@ -604,6 +618,9 @@ class CommonCapturedIdFields {
             }
             if (!existingInstance.fullName) {
                 json.fullName = fullName;
+            }
+            if (!existingInstance.secondaryLastName) {
+                json.secondaryLastName = secondaryLastName;
             }
             if (!existingInstance.sex) {
                 json.sex = sex;
@@ -665,6 +682,10 @@ class VIZResult {
     get residentialStatus() { return this.json.residentialStatus; }
     get capturedSides() { return this.json.capturedSides; }
     get isBackSideCaptureSupported() { return this.json.isBackSideCaptureSupported; }
+    get bloodType() { return this.json.bloodType; }
+    get sponsor() { return this.json.sponsor; }
+    get mothersName() { return this.json.mothersName; }
+    get fathersName() { return this.json.fathersName; }
     static fromJSON(json) {
         const result = new VIZResult();
         result.json = json;
@@ -696,6 +717,7 @@ class CapturedId {
     get firstName() { return this.commonCapturedFields.firstName; }
     get lastName() { return this.commonCapturedFields.lastName; }
     get fullName() { return this.commonCapturedFields.fullName; }
+    get secondaryLastName() { return this.commonCapturedFields.secondaryLastName; }
     get sex() { return this.commonCapturedFields.sex; }
     get dateOfBirth() {
         return DateResult.fromJSON(this.commonCapturedFields.dateOfBirth);
@@ -997,11 +1019,11 @@ class IdCaptureListenerController {
     }
     unsubscribeListener() {
         this._proxy.unregisterListenerForEvents();
-        this.eventEmitter.removeListener(exports.IdCaptureListenerEvents.inCallback);
-        this.eventEmitter.removeListener(exports.IdCaptureListenerEvents.didCapture);
-        this.eventEmitter.removeListener(exports.IdCaptureListenerEvents.didLocalize);
-        this.eventEmitter.removeListener(exports.IdCaptureListenerEvents.didReject);
-        this.eventEmitter.removeListener(exports.IdCaptureListenerEvents.didTimeOut);
+        this.eventEmitter.removeAllListeners(exports.IdCaptureListenerEvents.inCallback);
+        this.eventEmitter.removeAllListeners(exports.IdCaptureListenerEvents.didCapture);
+        this.eventEmitter.removeAllListeners(exports.IdCaptureListenerEvents.didLocalize);
+        this.eventEmitter.removeAllListeners(exports.IdCaptureListenerEvents.didReject);
+        this.eventEmitter.removeAllListeners(exports.IdCaptureListenerEvents.didTimeOut);
     }
     notifyListenersOfDidCapture(session) {
         const mode = this.idCapture;
@@ -1346,6 +1368,7 @@ class IdCaptureSettings extends scanditDatacaptureFrameworksCore.DefaultSerializ
         this.supportedDocuments = [];
         this.supportedSides = exports.SupportedSides.FrontOnly;
         this.anonymizationMode = IdCaptureSettings.idCaptureDefaults.IdCapture.IdCaptureSettings.anonymizationMode;
+        this.rejectVoidedIds = IdCaptureSettings.idCaptureDefaults.IdCapture.IdCaptureSettings.rejectVoidedIds;
     }
     static get idCaptureDefaults() {
         return scanditDatacaptureFrameworksCore.FactoryMaker.getInstance('IdDefaults');
@@ -1564,6 +1587,7 @@ exports.DocumentType = void 0;
     DocumentType["ConsularVoterId"] = "consularVoterId";
     DocumentType["TwicCard"] = "twicCard";
     DocumentType["ExitEntryPermit"] = "exitEntryPermit";
+    DocumentType["MainlandTravelPermitHongKongMacau"] = "mainlandTravelPermitHongKongMacau";
     DocumentType["MainlandTravelPermitTaiwan"] = "mainlandTravelPermitTaiwan";
     DocumentType["NbiClearance"] = "nbiClearance";
     DocumentType["ProofOfRegistration"] = "proofOfRegistration";
