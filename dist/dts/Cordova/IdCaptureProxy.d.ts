@@ -10,4 +10,5 @@ export declare class NativeIdCaptureProxy implements IdCaptureProxy {
     updateIdCaptureMode(modeJson: string): Promise<void>;
     applyIdCaptureModeSettings(newSettingsJson: string): Promise<void>;
     updateIdCaptureOverlay(overlayJson: string): Promise<void>;
+    updateFeedback(feedbackJson: string): Promise<void>;
 }

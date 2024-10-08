@@ -57,6 +57,11 @@ class NativeIdCaptureProxy {
             NativeIdCaptureProxy.cordovaExec(resolve, reject, CordovaFunction.UpdateIdCaptureOverlay, [overlayJson]);
         });
     }
+    updateFeedback(feedbackJson) {
+        return new Promise((resolve, reject) => {
+            NativeIdCaptureProxy.cordovaExec(resolve, reject, CordovaFunction.UpdateIdCaptureFeedback, [feedbackJson]);
+        });
+    }
 }
 
 class NativeIdCaptureListenerProxy extends scanditDatacaptureFrameworksCore.BaseNativeProxy {
@@ -170,12 +175,17 @@ var CordovaFunction;
     CordovaFunction["UpdateIdCaptureMode"] = "updateIdCaptureMode";
     CordovaFunction["ApplyIdCaptureModeSettings"] = "applyIdCaptureModeSettings";
     CordovaFunction["UpdateIdCaptureOverlay"] = "updateIdCaptureOverlay";
+    CordovaFunction["UpdateIdCaptureFeedback"] = "updateIdCaptureFeedback";
 })(CordovaFunction || (CordovaFunction = {}));
 
 initializeCordovaId();
 
 exports.AAMVABarcodeResult = id.AAMVABarcodeResult;
 exports.AamvaBarcodeVerificationResult = id.AamvaBarcodeVerificationResult;
+Object.defineProperty(exports, "AamvaBarcodeVerificationStatus", {
+    enumerable: true,
+    get: function () { return id.AamvaBarcodeVerificationStatus; }
+});
 exports.AamvaBarcodeVerifier = id.AamvaBarcodeVerifier;
 exports.AamvaVizBarcodeComparisonResult = id.AamvaVizBarcodeComparisonResult;
 exports.AamvaVizBarcodeComparisonVerifier = id.AamvaVizBarcodeComparisonVerifier;

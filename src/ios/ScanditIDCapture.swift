@@ -193,4 +193,14 @@ public class ScanditIdCapture: CDVPlugin {
         idModule.setModeEnabled(enabled: enabled)
         commandDelegate.send(.success, callbackId: command.callbackId)
     }
+
+    @objc(updateIdCaptureFeedback:)
+    func updateIdCaptureFeedback(command: CDVInvokedUrlCommand) {
+        guard let feedbackJson = command.defaultArgumentAsString else {
+            commandDelegate.send(.failure(with: .invalidJSON), callbackId: command.callbackId)
+            return
+        }
+        idModule.updateFeedback(feedbackJson: feedbackJson,
+                                result: CordovaResult(commandDelegate, command.callbackId))
+    }
 }

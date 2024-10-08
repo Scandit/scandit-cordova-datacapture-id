@@ -272,4 +272,12 @@ class ScanditIdCapture :
             callbackContext.error(JsonParseError(e.message).toString())
         }
     }
+
+    @PluginMethod
+    fun updateIdCaptureFeedback(args: JSONArray, callbackContext: CallbackContext) {
+        idCaptureModule.updateFeedback(
+            args.defaultArgumentAsString,
+            CordovaResult(callbackContext)
+        )
+    }
 }

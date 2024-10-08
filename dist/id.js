@@ -264,11 +264,35 @@ class AAMVABarcodeResult {
     }
 }
 
+exports.AamvaBarcodeVerificationStatus = void 0;
+(function (AamvaBarcodeVerificationStatus) {
+    AamvaBarcodeVerificationStatus["Authentic"] = "authentic";
+    AamvaBarcodeVerificationStatus["LikelyForged"] = "maybeForged";
+    AamvaBarcodeVerificationStatus["Forged"] = "forged";
+})(exports.AamvaBarcodeVerificationStatus || (exports.AamvaBarcodeVerificationStatus = {}));
+
 class AamvaBarcodeVerificationResult {
+    /**
+     * @deprecated
+     */
     get allChecksPassed() { return this.json.allChecksPassed; }
+    get status() {
+        return this._status;
+    }
     static fromJSON(json) {
         const result = new AamvaBarcodeVerificationResult();
         result.json = json;
+        switch (result.json.verificationStatus) {
+            case "authentic":
+                result._status = exports.AamvaBarcodeVerificationStatus.Authentic;
+                break;
+            case "maybeForged":
+                result._status = exports.AamvaBarcodeVerificationStatus.LikelyForged;
+                break;
+            case "forged":
+                result._status = exports.AamvaBarcodeVerificationStatus.Forged;
+                break;
+        }
         return result;
     }
 }
@@ -337,6 +361,9 @@ class IdCaptureController extends scanditDatacaptureFrameworksCore.BaseControlle
     }
     updateIdCaptureOverlay(overlay) {
         return this._proxy.updateIdCaptureOverlay(JSON.stringify(overlay.toJSON()));
+    }
+    updateFeedback(feedback) {
+        return this._proxy.updateFeedback(JSON.stringify(feedback.toJSON()));
     }
 }
 
@@ -1067,6 +1094,71 @@ class IdCaptureListenerController {
     }
 }
 
+class IdCaptureFeedback extends scanditDatacaptureFrameworksCore.DefaultSerializeable {
+    static get defaultFeedback() {
+        return new IdCaptureFeedback(IdCaptureFeedback.idDefaults.IdCapture.Feedback.idCaptured, IdCaptureFeedback.idDefaults.IdCapture.Feedback.idRejected, IdCaptureFeedback.idDefaults.IdCapture.Feedback.idCaptureTimeout);
+    }
+    get idCaptured() {
+        return this._idCaptured;
+    }
+    set idCaptured(idCaptured) {
+        this._idCaptured = idCaptured;
+        this.updateFeedback();
+    }
+    get idRejected() {
+        return this._idRejected;
+    }
+    set idRejected(idRejected) {
+        this._idRejected = idRejected;
+        this.updateFeedback();
+    }
+    get idCaptureTimeout() {
+        return this._idCaptureTimeout;
+    }
+    set idCaptureTimeout(idCaptureTimeout) {
+        this._idCaptureTimeout = idCaptureTimeout;
+        this.updateFeedback();
+    }
+    static fromJSON(json) {
+        const idCaptured = scanditDatacaptureFrameworksCore.Feedback.fromJSON(json.idCaptured);
+        const idRejected = scanditDatacaptureFrameworksCore.Feedback.fromJSON(json.idRejected);
+        const idCaptureTimeout = scanditDatacaptureFrameworksCore.Feedback.fromJSON(json.idCaptureTimeout);
+        return new IdCaptureFeedback(idCaptured, idRejected, idCaptureTimeout);
+    }
+    static get idDefaults() {
+        return getIdDefaults();
+    }
+    updateFeedback() {
+        var _a;
+        (_a = this.controller) === null || _a === void 0 ? void 0 : _a.updateFeedback(this);
+    }
+    constructor(idCaptured, idRejected, idCaptureTimeout) {
+        super();
+        this.controller = null;
+        this._idCaptured = IdCaptureFeedback.idDefaults.IdCapture.Feedback.idCaptured;
+        this._idRejected = IdCaptureFeedback.idDefaults.IdCapture.Feedback.idRejected;
+        this._idCaptureTimeout = IdCaptureFeedback.idDefaults.IdCapture.Feedback.idCaptureTimeout;
+        this.idCaptured = idCaptured;
+        this.idRejected = idRejected;
+        this.idCaptureTimeout = idCaptureTimeout;
+    }
+}
+__decorate([
+    scanditDatacaptureFrameworksCore.ignoreFromSerialization
+], IdCaptureFeedback.prototype, "controller", void 0);
+__decorate([
+    scanditDatacaptureFrameworksCore.nameForSerialization('idCaptured')
+], IdCaptureFeedback.prototype, "_idCaptured", void 0);
+__decorate([
+    scanditDatacaptureFrameworksCore.nameForSerialization('idRejected')
+], IdCaptureFeedback.prototype, "_idRejected", void 0);
+__decorate([
+    scanditDatacaptureFrameworksCore.nameForSerialization('idCaptureTimeout')
+], IdCaptureFeedback.prototype, "_idCaptureTimeout", void 0);
+__decorate([
+    scanditDatacaptureFrameworksCore.ignoreFromSerialization
+], IdCaptureFeedback, "idDefaults", null);
+
 class IdCapture extends scanditDatacaptureFrameworksCore.DefaultSerializeable {
     get isEnabled() {
         return this._isEnabled;
@@ -1083,7 +1175,8 @@ class IdCapture extends scanditDatacaptureFrameworksCore.DefaultSerializeable {
     }
     set feedback(feedback) {
         this._feedback = feedback;
-        this.controller.updateIdCaptureMode();
+        this._feedback.controller = this.controller;
+        this.controller.updateFeedback(feedback);
     }
     static get recommendedCameraSettings() {
         return new scanditDatacaptureFrameworksCore.CameraSettings(IdCapture.idCaptureDefaults.IdCapture.RecommendedCameraSettings);
@@ -1115,11 +1208,13 @@ class IdCapture extends scanditDatacaptureFrameworksCore.DefaultSerializeable {
         super();
         this.type = 'idCapture';
         this._isEnabled = true;
+        this._feedback = IdCaptureFeedback.defaultFeedback;
         this.privateContext = null;
         this.listeners = [];
         this.isInListenerCallback = false;
         this.controller = IdCaptureController.forIdCapture(this);
         this.listenerController = IdCaptureListenerController.forIdCapture(this);
+        this.feedback.controller = this.controller;
     }
     applySettings(settings) {
         this.settings = settings;
@@ -1165,33 +1260,6 @@ __decorate([
 __decorate([
     scanditDatacaptureFrameworksCore.ignoreFromSerialization
 ], IdCapture, "idCaptureDefaults", null);
-
-class IdCaptureFeedback extends scanditDatacaptureFrameworksCore.DefaultSerializeable {
-    static get defaultFeedback() {
-        return new IdCaptureFeedback(IdCaptureFeedback.idDefaults.IdCapture.Feedback.idCaptured, IdCaptureFeedback.idDefaults.IdCapture.Feedback.idRejected, IdCaptureFeedback.idDefaults.IdCapture.Feedback.idCaptureTimeout);
-    }
-    static fromJSON(json) {
-        const idCaptured = scanditDatacaptureFrameworksCore.Feedback.fromJSON(json.idCaptured);
-        const idRejected = scanditDatacaptureFrameworksCore.Feedback.fromJSON(json.idRejected);
-        const idCaptureTimeout = scanditDatacaptureFrameworksCore.Feedback.fromJSON(json.idCaptureTimeout);
-        return new IdCaptureFeedback(idCaptured, idRejected, idCaptureTimeout);
-    }
-    static get idDefaults() {
-        return getIdDefaults();
-    }
-    constructor(idCaptured, idRejected, idCaptureTimeout) {
-        super();
-        this.idCaptured = IdCaptureFeedback.idDefaults.IdCapture.Feedback.idCaptured;
-        this.idRejected = IdCaptureFeedback.idDefaults.IdCapture.Feedback.idRejected;
-        this.idCaptureTimeout = IdCaptureFeedback.idDefaults.IdCapture.Feedback.idCaptureTimeout;
-        this.idCaptured = idCaptured;
-        this.idRejected = idRejected;
-        this.idCaptureTimeout = idCaptureTimeout;
-    }
-}
-__decorate([
-    scanditDatacaptureFrameworksCore.ignoreFromSerialization
-], IdCaptureFeedback, "idDefaults", null);
 
 exports.IdLayoutLineStyle = void 0;
 (function (IdLayoutLineStyle) {
@@ -1595,6 +1663,12 @@ exports.DocumentType = void 0;
     DocumentType["NbiClearance"] = "nbiClearance";
     DocumentType["ProofOfRegistration"] = "proofOfRegistration";
     DocumentType["TemporaryProtectionPermit"] = "temporaryProtectionPermit";
+    DocumentType["MunicipalId"] = "municipalId";
+    DocumentType["AfghanCitizenCard"] = "afghanCitizenCard";
+    DocumentType["Eid"] = "eid";
+    DocumentType["Pass"] = "pass";
+    DocumentType["SisId"] = "sisId";
+    DocumentType["MedicalMarijuanaCard"] = "medicalMarijuanaCard";
 })(exports.DocumentType || (exports.DocumentType = {}));
 
 class VizMrzComparisonResult {

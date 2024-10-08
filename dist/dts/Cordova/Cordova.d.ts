@@ -21,5 +21,6 @@ export declare enum CordovaFunction {
     FinishCallback = "finishCallback",
     UpdateIdCaptureMode = "updateIdCaptureMode",
     ApplyIdCaptureModeSettings = "applyIdCaptureModeSettings",
-    UpdateIdCaptureOverlay = "updateIdCaptureOverlay"
+    UpdateIdCaptureOverlay = "updateIdCaptureOverlay",
+    UpdateIdCaptureFeedback = "updateIdCaptureFeedback"
 }
