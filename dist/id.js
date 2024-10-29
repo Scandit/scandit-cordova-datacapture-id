@@ -1669,6 +1669,12 @@ exports.DocumentType = void 0;
     DocumentType["Pass"] = "pass";
     DocumentType["SisId"] = "sisId";
     DocumentType["MedicalMarijuanaCard"] = "medicalMarijuanaCard";
+    DocumentType["AsicCard"] = "asicCard";
+    DocumentType["BidoonCard"] = "bidoonCard";
+    DocumentType["InterimHealthInsuranceCard"] = "interimHealthInsuranceCard";
+    DocumentType["NonVoterId"] = "nonVoterId";
+    DocumentType["ReciprocalHealthInsuranceCard"] = "reciprocalHealthInsuranceCard";
+    DocumentType["VehicleRegistration"] = "vehicleRegistration";
 })(exports.DocumentType || (exports.DocumentType = {}));
 
 class VizMrzComparisonResult {
