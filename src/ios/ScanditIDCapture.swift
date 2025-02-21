@@ -51,24 +51,10 @@ public class ScanditIdCapture: CDVPlugin {
         commandDelegate.send(.keepCallback, callbackId: command.callbackId)
     }
 
-    @objc(subscribeDidLocalizeListener:)
-    func subscribeDidLocalizeListener(command: CDVInvokedUrlCommand) {
-        idModule.addListener()
-        emitter.registerCallback(with: FrameworksIdCaptureEvent.didLocalizeId, call: command)
-        commandDelegate.send(.keepCallback, callbackId: command.callbackId)
-    }
-
     @objc(subscribeDidRejectListener:)
     func subscribeDidRejectListener(command: CDVInvokedUrlCommand) {
         idModule.addListener()
         emitter.registerCallback(with: FrameworksIdCaptureEvent.didRejectId, call: command)
-        commandDelegate.send(.keepCallback, callbackId: command.callbackId)
-    }
-
-    @objc(subscribeDidTimeoutListener:)
-    func subscribeDidTimeoutListener(command: CDVInvokedUrlCommand) {
-        idModule.addListener()
-        emitter.registerCallback(with: FrameworksIdCaptureEvent.timeout, call: command)
         commandDelegate.send(.keepCallback, callbackId: command.callbackId)
     }
 
@@ -79,28 +65,14 @@ public class ScanditIdCapture: CDVPlugin {
             return
         }
         let enabled = result.enabled ?? false
-        if result.isForListenerEvent(.didLocalizeInIdCapture) {
-            idModule.finishDidLocalizeId(enabled: enabled)
-        } else if result.isForListenerEvent(.didCaptureInIdCapture) {
+        if result.isForListenerEvent(.didCaptureInIdCapture) {
             idModule.finishDidCaptureId(enabled: enabled)
         } else if result.isForListenerEvent(.didRejectInIdCapture) {
             idModule.finishDidRejectId(enabled: enabled)
-        } else if result.isForListenerEvent(.didTimoutInIdCapture) {
-            idModule.finishTimeout(enabled: enabled)
         } else {
             commandDelegate.send(.failure(with: .invalidJSON), callbackId: command.callbackId)
         }
         commandDelegate.send(.success, callbackId: command.callbackId)
-    }
-
-    @objc(verifyCapturedId:)
-    func verifyCapturedId(command: CDVInvokedUrlCommand) {
-        guard let jsonString = command.arguments[0] as? String else {
-            commandDelegate.send(.failure(with: .invalidJSON), callbackId: command.callbackId)
-            return
-        }
-        idModule.verifyCapturedIdAamvaViz(jsonString: jsonString,
-                                          result: CordovaResult(commandDelegate, command.callbackId))
     }
 
     @objc(verifyCapturedIdAsync:)
@@ -110,16 +82,6 @@ public class ScanditIdCapture: CDVPlugin {
             return
         }
         idModule.verifyCapturedIdWithCloud(jsonString: jsonString,
-                                          result: CordovaResult(commandDelegate, command.callbackId))
-    }
-
-    @objc(verifyVizMrz:)
-    func verifyVizMrz(command: CDVInvokedUrlCommand) {
-        guard let jsonString = command.arguments[0] as? String else {
-            commandDelegate.send(.failure(with: .invalidJSON), callbackId: command.callbackId)
-            return
-        }
-        idModule.verifyCaptureIdMrzViz(jsonString: jsonString,
                                           result: CordovaResult(commandDelegate, command.callbackId))
     }
 
@@ -133,9 +95,7 @@ public class ScanditIdCapture: CDVPlugin {
         idModule.removeListener()
         idModule.removeAsyncListener()
         emitter.unregisterCallback(with: FrameworksIdCaptureEvent.didCaptureId.rawValue)
-        emitter.unregisterCallback(with: FrameworksIdCaptureEvent.didLocalizeId.rawValue)
         emitter.unregisterCallback(with: FrameworksIdCaptureEvent.didRejectId.rawValue)
-        emitter.unregisterCallback(with: FrameworksIdCaptureEvent.timeout.rawValue)
     }
 
     // MARK: Defaults

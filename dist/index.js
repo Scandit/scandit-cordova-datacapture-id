@@ -1,6 +1,6 @@
-var id = require('scandit-cordova-datacapture-id.Id');
-var scanditCordovaDatacaptureCore = require('scandit-cordova-datacapture-core.Core');
-var scanditDatacaptureFrameworksCore = require('scandit-cordova-datacapture-core.Core');
+var id = cordova.require('scandit-cordova-datacapture-id.Id');
+var scanditCordovaDatacaptureCore = cordova.require('scandit-cordova-datacapture-core.Core');
+var scanditDatacaptureFrameworksCore = cordova.require('scandit-cordova-datacapture-core.Core');
 
 class NativeIdCaptureProxy {
     static get cordovaExec() {
@@ -18,23 +18,9 @@ class NativeIdCaptureProxy {
             NativeIdCaptureProxy.cordovaExec(resolve, reject, CordovaFunction.ResetIdCapture, null);
         });
     }
-    verifyCapturedId(capturedId) {
-        return new Promise((resolve, reject) => {
-            NativeIdCaptureProxy.cordovaExec(resolve, reject, CordovaFunction.VerifyCapturedId, [
-                capturedId,
-            ]);
-        });
-    }
     verifyCapturedIdAsync(capturedId) {
         return new Promise((resolve, reject) => {
             NativeIdCaptureProxy.cordovaExec(resolve, reject, CordovaFunction.VerifyCapturedIdAsync, [
-                capturedId,
-            ]);
-        });
-    }
-    verifyVizMrz(capturedId) {
-        return new Promise((resolve, reject) => {
-            NativeIdCaptureProxy.cordovaExec(resolve, reject, CordovaFunction.VerifyVizMrz, [
                 capturedId,
             ]);
         });
@@ -83,51 +69,23 @@ class NativeIdCaptureListenerProxy extends scanditDatacaptureFrameworksCore.Base
             // listener subscriptions.
             return done();
         }
-        switch (event.name) {
-            case id.IdCaptureListenerEvents.didCapture:
-                this.eventEmitter.emit(id.IdCaptureListenerEvents.didCapture, JSON.stringify(event.argument));
-                break;
-            case id.IdCaptureListenerEvents.didLocalize:
-                this.eventEmitter.emit(id.IdCaptureListenerEvents.didLocalize, JSON.stringify(event.argument));
-                break;
-            case id.IdCaptureListenerEvents.didReject:
-                this.eventEmitter.emit(id.IdCaptureListenerEvents.didReject, JSON.stringify(event.argument));
-                break;
-            case id.IdCaptureListenerEvents.didTimeOut:
-                this.eventEmitter.emit(id.IdCaptureListenerEvents.didTimeOut, JSON.stringify(event.argument));
-        }
+        this.eventEmitter.emit(event.name, event.data);
         return done();
     }
     subscribeDidCaptureListener() {
         NativeIdCaptureListenerProxy.cordovaExec(this.notifyListeners.bind(this), null, CordovaFunction.SubscribeDidCaptureListener, null);
     }
-    subscribeDidLocalizeListener() {
-        NativeIdCaptureListenerProxy.cordovaExec(this.notifyListeners.bind(this), null, CordovaFunction.SubscribeDidLocalizeListener, null);
-    }
     subscribeDidRejectListener() {
         NativeIdCaptureListenerProxy.cordovaExec(this.notifyListeners.bind(this), null, CordovaFunction.SubscribeDidRejectListener, null);
-    }
-    subscribeDidTimeOutListener() {
-        NativeIdCaptureListenerProxy.cordovaExec(this.notifyListeners.bind(this), null, CordovaFunction.SubscribeDidTimeOutListener, null);
     }
     finishDidCaptureCallback(isFinished) {
         NativeIdCaptureListenerProxy.cordovaExec(null, null, CordovaFunction.FinishCallback, [
             { 'finishCallbackID': id.IdCaptureListenerEvents.didCapture, 'result': { 'enabled': isFinished } }
         ]);
     }
-    finishDidLocalizeCallback(isFinished) {
-        NativeIdCaptureListenerProxy.cordovaExec(null, null, CordovaFunction.FinishCallback, [
-            { 'finishCallbackID': id.IdCaptureListenerEvents.didLocalize, 'result': { 'enabled': isFinished } }
-        ]);
-    }
     finishDidRejectCallback(isFinished) {
         NativeIdCaptureListenerProxy.cordovaExec(null, null, CordovaFunction.FinishCallback, [
             { 'finishCallbackID': id.IdCaptureListenerEvents.didReject, 'result': { 'enabled': isFinished } }
-        ]);
-    }
-    finishDidTimeOutCallback(isFinished) {
-        NativeIdCaptureListenerProxy.cordovaExec(null, null, CordovaFunction.FinishCallback, [
-            { 'finishCallbackID': id.IdCaptureListenerEvents.didTimeOut, 'result': { 'enabled': isFinished } }
         ]);
     }
     unregisterListenerForEvents() {
@@ -180,64 +138,48 @@ var CordovaFunction;
 
 initializeCordovaId();
 
-exports.AAMVABarcodeResult = id.AAMVABarcodeResult;
 exports.AamvaBarcodeVerificationResult = id.AamvaBarcodeVerificationResult;
 Object.defineProperty(exports, "AamvaBarcodeVerificationStatus", {
     enumerable: true,
     get: function () { return id.AamvaBarcodeVerificationStatus; }
 });
 exports.AamvaBarcodeVerifier = id.AamvaBarcodeVerifier;
-exports.AamvaVizBarcodeComparisonResult = id.AamvaVizBarcodeComparisonResult;
-exports.AamvaVizBarcodeComparisonVerifier = id.AamvaVizBarcodeComparisonVerifier;
-exports.ApecBusinessTravelCardMrzResult = id.ApecBusinessTravelCardMrzResult;
-exports.ArgentinaIdBarcodeResult = id.ArgentinaIdBarcodeResult;
+exports.BarcodeResult = id.BarcodeResult;
 exports.CapturedId = id.CapturedId;
-Object.defineProperty(exports, "CapturedResultType", {
+Object.defineProperty(exports, "CapturedSides", {
     enumerable: true,
-    get: function () { return id.CapturedResultType; }
-});
-exports.ChinaExitEntryPermitMRZResult = id.ChinaExitEntryPermitMRZResult;
-exports.ChinaMainlandTravelPermitMRZResult = id.ChinaMainlandTravelPermitMRZResult;
-exports.ChinaOneWayPermitBackMrzResult = id.ChinaOneWayPermitBackMrzResult;
-exports.ChinaOneWayPermitFrontMrzResult = id.ChinaOneWayPermitFrontMrzResult;
-exports.ColombiaDlBarcodeResult = id.ColombiaDlBarcodeResult;
-exports.ColombiaIdBarcodeResult = id.ColombiaIdBarcodeResult;
-exports.CommonAccessCardBarcodeResult = id.CommonAccessCardBarcodeResult;
-Object.defineProperty(exports, "ComparisonCheckResult", {
-    enumerable: true,
-    get: function () { return id.ComparisonCheckResult; }
+    get: function () { return id.CapturedSides; }
 });
 exports.DateResult = id.DateResult;
-Object.defineProperty(exports, "DocumentType", {
-    enumerable: true,
-    get: function () { return id.DocumentType; }
-});
+exports.DriverLicense = id.DriverLicense;
+exports.FullDocumentScanner = id.FullDocumentScanner;
+exports.HealthInsuranceCard = id.HealthInsuranceCard;
 Object.defineProperty(exports, "IdAnonymizationMode", {
     enumerable: true,
     get: function () { return id.IdAnonymizationMode; }
 });
 exports.IdCapture = id.IdCapture;
-exports.IdCaptureError = id.IdCaptureError;
+Object.defineProperty(exports, "IdCaptureDocumentType", {
+    enumerable: true,
+    get: function () { return id.IdCaptureDocumentType; }
+});
 exports.IdCaptureFeedback = id.IdCaptureFeedback;
 Object.defineProperty(exports, "IdCaptureListenerEvents", {
     enumerable: true,
     get: function () { return id.IdCaptureListenerEvents; }
 });
 exports.IdCaptureOverlay = id.IdCaptureOverlay;
-exports.IdCaptureSession = id.IdCaptureSession;
-exports.IdCaptureSettings = id.IdCaptureSettings;
-Object.defineProperty(exports, "IdDocumentType", {
+Object.defineProperty(exports, "IdCaptureRegion", {
     enumerable: true,
-    get: function () { return id.IdDocumentType; }
+    get: function () { return id.IdCaptureRegion; }
 });
+exports.IdCaptureSettings = id.IdCaptureSettings;
+exports.IdCard = id.IdCard;
 Object.defineProperty(exports, "IdImageType", {
     enumerable: true,
     get: function () { return id.IdImageType; }
 });
-Object.defineProperty(exports, "IdLayout", {
-    enumerable: true,
-    get: function () { return id.IdLayout; }
-});
+exports.IdImages = id.IdImages;
 Object.defineProperty(exports, "IdLayoutLineStyle", {
     enumerable: true,
     get: function () { return id.IdLayoutLineStyle; }
@@ -246,31 +188,28 @@ Object.defineProperty(exports, "IdLayoutStyle", {
     enumerable: true,
     get: function () { return id.IdLayoutStyle; }
 });
-exports.LocalizedOnlyId = id.LocalizedOnlyId;
+Object.defineProperty(exports, "IdSide", {
+    enumerable: true,
+    get: function () { return id.IdSide; }
+});
 exports.MRZResult = id.MRZResult;
+exports.Passport = id.Passport;
 exports.ProfessionalDrivingPermit = id.ProfessionalDrivingPermit;
-exports.RejectedId = id.RejectedId;
+exports.RegionSpecific = id.RegionSpecific;
+Object.defineProperty(exports, "RegionSpecificSubtype", {
+    enumerable: true,
+    get: function () { return id.RegionSpecificSubtype; }
+});
 Object.defineProperty(exports, "RejectionReason", {
     enumerable: true,
     get: function () { return id.RejectionReason; }
 });
-exports.SouthAfricaDlBarcodeResult = id.SouthAfricaDlBarcodeResult;
-exports.SouthAfricaIdBarcodeResult = id.SouthAfricaIdBarcodeResult;
-Object.defineProperty(exports, "SupportedSides", {
-    enumerable: true,
-    get: function () { return id.SupportedSides; }
-});
+exports.ResidencePermit = id.ResidencePermit;
+exports.SingleSideScanner = id.SingleSideScanner;
 Object.defineProperty(exports, "TextHintPosition", {
     enumerable: true,
     get: function () { return id.TextHintPosition; }
 });
-exports.USUniformedServicesBarcodeResult = id.USUniformedServicesBarcodeResult;
-exports.USVisaVIZResult = id.USVisaVIZResult;
 exports.VIZResult = id.VIZResult;
 exports.VehicleRestriction = id.VehicleRestriction;
-Object.defineProperty(exports, "VizMrzComparisonCheckResult", {
-    enumerable: true,
-    get: function () { return id.VizMrzComparisonCheckResult; }
-});
-exports.VizMrzComparisonResult = id.VizMrzComparisonResult;
-exports.VizMrzComparisonVerifier = id.VizMrzComparisonVerifier;
+exports.VisaIcao = id.VisaIcao;
