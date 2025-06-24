@@ -397,24 +397,24 @@ class IdImages {
     constructor() {
         this.json = null;
     }
-    get face() { var _a, _b, _c; return (_c = (_b = (_a = this.json) === null || _a === void 0 ? void 0 : _a.front) === null || _b === void 0 ? void 0 : _b.face) !== null && _c !== void 0 ? _c : null; }
-    get frame() { var _a, _b, _c; return (_c = (_b = (_a = this.json) === null || _a === void 0 ? void 0 : _a.front) === null || _b === void 0 ? void 0 : _b.frame) !== null && _c !== void 0 ? _c : null; }
+    get face() { var _a, _b, _c; return (_c = (_b = (_a = this.json) === null || _a === undefined ? undefined : _a.front) === null || _b === undefined ? undefined : _b.face) !== null && _c !== undefined ? _c : null; }
+    get frame() { var _a, _b, _c; return (_c = (_b = (_a = this.json) === null || _a === undefined ? undefined : _a.front) === null || _b === undefined ? undefined : _b.frame) !== null && _c !== undefined ? _c : null; }
     getFrame(side) {
         var _a, _b, _c, _d, _e, _f;
         switch (side) {
             case exports.IdSide.Front:
-                return (_c = (_b = (_a = this.json) === null || _a === void 0 ? void 0 : _a.front) === null || _b === void 0 ? void 0 : _b.frame) !== null && _c !== void 0 ? _c : null;
+                return (_c = (_b = (_a = this.json) === null || _a === undefined ? undefined : _a.front) === null || _b === undefined ? undefined : _b.frame) !== null && _c !== undefined ? _c : null;
             case exports.IdSide.Back:
-                return (_f = (_e = (_d = this.json) === null || _d === void 0 ? void 0 : _d.back) === null || _e === void 0 ? void 0 : _e.frame) !== null && _f !== void 0 ? _f : null;
+                return (_f = (_e = (_d = this.json) === null || _d === undefined ? undefined : _d.back) === null || _e === undefined ? undefined : _e.frame) !== null && _f !== undefined ? _f : null;
         }
     }
     getCroppedDocument(side) {
         var _a, _b, _c, _d, _e, _f;
         switch (side) {
             case exports.IdSide.Front:
-                return (_c = (_b = (_a = this.json) === null || _a === void 0 ? void 0 : _a.front) === null || _b === void 0 ? void 0 : _b.croppedDocument) !== null && _c !== void 0 ? _c : null;
+                return (_c = (_b = (_a = this.json) === null || _a === undefined ? undefined : _a.front) === null || _b === undefined ? undefined : _b.croppedDocument) !== null && _c !== undefined ? _c : null;
             case exports.IdSide.Back:
-                return (_f = (_e = (_d = this.json) === null || _d === void 0 ? void 0 : _d.back) === null || _e === void 0 ? void 0 : _e.croppedDocument) !== null && _f !== void 0 ? _f : null;
+                return (_f = (_e = (_d = this.json) === null || _d === undefined ? undefined : _d.back) === null || _e === undefined ? undefined : _e.croppedDocument) !== null && _f !== undefined ? _f : null;
         }
     }
     static fromJSON(json) {
@@ -564,7 +564,7 @@ class IdCaptureController extends scanditDatacaptureFrameworksCore.BaseControlle
         return this._proxy.createContextForBarcodeVerification(JSON.stringify(context.toJSON()));
     }
     verifyCapturedIdAsync(capturedId) {
-        return __awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, undefined, undefined, function* () {
             const result = yield this._proxy.verifyCapturedIdAsync(capturedId);
             if (result == null) {
                 return null;
@@ -1088,10 +1088,10 @@ class DriverLicense extends scanditDatacaptureFrameworksCore.DefaultSerializeabl
 }
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('region')
-], DriverLicense.prototype, "_region", void 0);
+], DriverLicense.prototype, "_region", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('documentType')
-], DriverLicense.prototype, "_documentType", void 0);
+], DriverLicense.prototype, "_documentType", undefined);
 
 class HealthInsuranceCard extends scanditDatacaptureFrameworksCore.DefaultSerializeable {
     constructor(region) {
@@ -1126,10 +1126,10 @@ class HealthInsuranceCard extends scanditDatacaptureFrameworksCore.DefaultSerial
 }
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('region')
-], HealthInsuranceCard.prototype, "_region", void 0);
+], HealthInsuranceCard.prototype, "_region", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('documentType')
-], HealthInsuranceCard.prototype, "_documentType", void 0);
+], HealthInsuranceCard.prototype, "_documentType", undefined);
 
 class IdCard extends scanditDatacaptureFrameworksCore.DefaultSerializeable {
     constructor(region) {
@@ -1164,10 +1164,10 @@ class IdCard extends scanditDatacaptureFrameworksCore.DefaultSerializeable {
 }
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('region')
-], IdCard.prototype, "_region", void 0);
+], IdCard.prototype, "_region", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('documentType')
-], IdCard.prototype, "_documentType", void 0);
+], IdCard.prototype, "_documentType", undefined);
 
 class Passport extends scanditDatacaptureFrameworksCore.DefaultSerializeable {
     constructor(region) {
@@ -1202,10 +1202,10 @@ class Passport extends scanditDatacaptureFrameworksCore.DefaultSerializeable {
 }
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('region')
-], Passport.prototype, "_region", void 0);
+], Passport.prototype, "_region", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('documentType')
-], Passport.prototype, "_documentType", void 0);
+], Passport.prototype, "_documentType", undefined);
 
 class RegionSpecific extends scanditDatacaptureFrameworksCore.DefaultSerializeable {
     constructor(subtype) {
@@ -1244,13 +1244,13 @@ class RegionSpecific extends scanditDatacaptureFrameworksCore.DefaultSerializeab
 }
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('region')
-], RegionSpecific.prototype, "_region", void 0);
+], RegionSpecific.prototype, "_region", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('documentSubtype')
-], RegionSpecific.prototype, "_documentSubtype", void 0);
+], RegionSpecific.prototype, "_documentSubtype", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('documentType')
-], RegionSpecific.prototype, "_documentType", void 0);
+], RegionSpecific.prototype, "_documentType", undefined);
 
 class ResidencePermit extends scanditDatacaptureFrameworksCore.DefaultSerializeable {
     constructor(region) {
@@ -1285,10 +1285,10 @@ class ResidencePermit extends scanditDatacaptureFrameworksCore.DefaultSerializea
 }
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('region')
-], ResidencePermit.prototype, "_region", void 0);
+], ResidencePermit.prototype, "_region", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('documentType')
-], ResidencePermit.prototype, "_documentType", void 0);
+], ResidencePermit.prototype, "_documentType", undefined);
 
 class VisaIcao extends scanditDatacaptureFrameworksCore.DefaultSerializeable {
     constructor(region) {
@@ -1323,10 +1323,10 @@ class VisaIcao extends scanditDatacaptureFrameworksCore.DefaultSerializeable {
 }
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('region')
-], VisaIcao.prototype, "_region", void 0);
+], VisaIcao.prototype, "_region", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('documentType')
-], VisaIcao.prototype, "_documentType", void 0);
+], VisaIcao.prototype, "_documentType", undefined);
 
 class CapturedId {
     constructor() {
@@ -1376,31 +1376,31 @@ class CapturedId {
     }
     isIdCard() {
         var _a;
-        return ((_a = this.document) === null || _a === void 0 ? void 0 : _a.isIdCard) === true;
+        return ((_a = this.document) === null || _a === undefined ? undefined : _a.isIdCard) === true;
     }
     isDriverLicense() {
         var _a;
-        return ((_a = this.document) === null || _a === void 0 ? void 0 : _a.isDriverLicense) === true;
+        return ((_a = this.document) === null || _a === undefined ? undefined : _a.isDriverLicense) === true;
     }
     isPassport() {
         var _a;
-        return ((_a = this.document) === null || _a === void 0 ? void 0 : _a.isPassport) === true;
+        return ((_a = this.document) === null || _a === undefined ? undefined : _a.isPassport) === true;
     }
     isVisaIcao() {
         var _a;
-        return ((_a = this.document) === null || _a === void 0 ? void 0 : _a.isVisaIcao) === true;
+        return ((_a = this.document) === null || _a === undefined ? undefined : _a.isVisaIcao) === true;
     }
     isRegionSpecific(subtype) {
         var _a;
-        return ((_a = this.document) === null || _a === void 0 ? void 0 : _a.isRegionSpecific) === true && this.document.subtype === subtype;
+        return ((_a = this.document) === null || _a === undefined ? undefined : _a.isRegionSpecific) === true && this.document.subtype === subtype;
     }
     isResidencePermit() {
         var _a;
-        return ((_a = this.document) === null || _a === void 0 ? void 0 : _a.isResidencePermit) === true;
+        return ((_a = this.document) === null || _a === undefined ? undefined : _a.isResidencePermit) === true;
     }
     isHealthInsuranceCard() {
         var _a;
-        return ((_a = this.document) === null || _a === void 0 ? void 0 : _a.isHealthInsuranceCard) === true;
+        return ((_a = this.document) === null || _a === undefined ? undefined : _a.isHealthInsuranceCard) === true;
     }
     get images() {
         return this._images;
@@ -1547,7 +1547,7 @@ class IdCaptureFeedback extends scanditDatacaptureFrameworksCore.DefaultSerializ
     }
     updateFeedback() {
         var _a;
-        (_a = this.controller) === null || _a === void 0 ? void 0 : _a.updateFeedback(this);
+        (_a = this.controller) === null || _a === undefined ? undefined : _a.updateFeedback(this);
     }
     constructor(idCaptured, idRejected) {
         super();
@@ -1560,13 +1560,13 @@ class IdCaptureFeedback extends scanditDatacaptureFrameworksCore.DefaultSerializ
 }
 __decorate([
     scanditDatacaptureFrameworksCore.ignoreFromSerialization
-], IdCaptureFeedback.prototype, "controller", void 0);
+], IdCaptureFeedback.prototype, "controller", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('idCaptured')
-], IdCaptureFeedback.prototype, "_idCaptured", void 0);
+], IdCaptureFeedback.prototype, "_idCaptured", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('idRejected')
-], IdCaptureFeedback.prototype, "_idRejected", void 0);
+], IdCaptureFeedback.prototype, "_idRejected", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.ignoreFromSerialization
 ], IdCaptureFeedback, "idDefaults", null);
@@ -1650,25 +1650,25 @@ class IdCapture extends scanditDatacaptureFrameworksCore.DefaultSerializeable {
 }
 __decorate([
     scanditDatacaptureFrameworksCore.ignoreFromSerialization
-], IdCapture.prototype, "_isEnabled", void 0);
+], IdCapture.prototype, "_isEnabled", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('feedback')
-], IdCapture.prototype, "_feedback", void 0);
+], IdCapture.prototype, "_feedback", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.ignoreFromSerialization
-], IdCapture.prototype, "privateContext", void 0);
+], IdCapture.prototype, "privateContext", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.ignoreFromSerialization
-], IdCapture.prototype, "listeners", void 0);
+], IdCapture.prototype, "listeners", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.ignoreFromSerialization
-], IdCapture.prototype, "controller", void 0);
+], IdCapture.prototype, "controller", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.ignoreFromSerialization
-], IdCapture.prototype, "listenerController", void 0);
+], IdCapture.prototype, "listenerController", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.ignoreFromSerialization
-], IdCapture.prototype, "isInListenerCallback", void 0);
+], IdCapture.prototype, "isInListenerCallback", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.ignoreFromSerialization
 ], IdCapture, "idCaptureDefaults", null);
@@ -1785,37 +1785,37 @@ class IdCaptureOverlay extends scanditDatacaptureFrameworksCore.DefaultSerialize
 }
 __decorate([
     scanditDatacaptureFrameworksCore.ignoreFromSerialization
-], IdCaptureOverlay.prototype, "idCapture", void 0);
+], IdCaptureOverlay.prototype, "idCapture", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.ignoreFromSerialization
-], IdCaptureOverlay.prototype, "view", void 0);
+], IdCaptureOverlay.prototype, "view", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('idLayoutStyle')
-], IdCaptureOverlay.prototype, "_idLayoutStyle", void 0);
+], IdCaptureOverlay.prototype, "_idLayoutStyle", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('idLayoutLineStyle')
-], IdCaptureOverlay.prototype, "_idLayoutLineStyle", void 0);
+], IdCaptureOverlay.prototype, "_idLayoutLineStyle", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('textHintPosition')
-], IdCaptureOverlay.prototype, "_textHintPosition", void 0);
+], IdCaptureOverlay.prototype, "_textHintPosition", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('showTextHints')
-], IdCaptureOverlay.prototype, "_showTextHints", void 0);
+], IdCaptureOverlay.prototype, "_showTextHints", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('capturedBrush')
-], IdCaptureOverlay.prototype, "_capturedBrush", void 0);
+], IdCaptureOverlay.prototype, "_capturedBrush", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('localizedBrush')
-], IdCaptureOverlay.prototype, "_localizedBrush", void 0);
+], IdCaptureOverlay.prototype, "_localizedBrush", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('rejectedBrush')
-], IdCaptureOverlay.prototype, "_rejectedBrush", void 0);
+], IdCaptureOverlay.prototype, "_rejectedBrush", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('frontSideTextHint')
-], IdCaptureOverlay.prototype, "_frontSideTextHint", void 0);
+], IdCaptureOverlay.prototype, "_frontSideTextHint", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('backSideTextHint')
-], IdCaptureOverlay.prototype, "_backSideTextHint", void 0);
+], IdCaptureOverlay.prototype, "_backSideTextHint", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.ignoreFromSerialization
 ], IdCaptureOverlay, "idCaptureDefaults", null);
@@ -1845,16 +1845,16 @@ class SingleSideScanner extends scanditDatacaptureFrameworksCore.DefaultSerializ
 }
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('isFull')
-], SingleSideScanner.prototype, "_isFull", void 0);
+], SingleSideScanner.prototype, "_isFull", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.ignoreFromSerialization
-], SingleSideScanner.prototype, "_barcode", void 0);
+], SingleSideScanner.prototype, "_barcode", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.ignoreFromSerialization
-], SingleSideScanner.prototype, "_machineReadableZone", void 0);
+], SingleSideScanner.prototype, "_machineReadableZone", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.ignoreFromSerialization
-], SingleSideScanner.prototype, "_visualInspectionZone", void 0);
+], SingleSideScanner.prototype, "_visualInspectionZone", undefined);
 
 class FullDocumentScanner extends scanditDatacaptureFrameworksCore.DefaultSerializeable {
     constructor() {
@@ -1872,16 +1872,16 @@ class FullDocumentScanner extends scanditDatacaptureFrameworksCore.DefaultSerial
 }
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('isFull')
-], FullDocumentScanner.prototype, "_isFull", void 0);
+], FullDocumentScanner.prototype, "_isFull", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.ignoreFromSerialization
-], FullDocumentScanner.prototype, "_barcode", void 0);
+], FullDocumentScanner.prototype, "_barcode", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.ignoreFromSerialization
-], FullDocumentScanner.prototype, "_machineReadableZone", void 0);
+], FullDocumentScanner.prototype, "_machineReadableZone", undefined);
 __decorate([
     scanditDatacaptureFrameworksCore.ignoreFromSerialization
-], FullDocumentScanner.prototype, "_visualInspectionZone", void 0);
+], FullDocumentScanner.prototype, "_visualInspectionZone", undefined);
 
 class IdCaptureSettings extends scanditDatacaptureFrameworksCore.DefaultSerializeable {
     constructor() {
@@ -1954,7 +1954,7 @@ class AamvaBarcodeVerifier {
 }
 __decorate([
     scanditDatacaptureFrameworksCore.ignoreFromSerialization
-], AamvaBarcodeVerifier.prototype, "controller", void 0);
+], AamvaBarcodeVerifier.prototype, "controller", undefined);
 
 class NativeIdCaptureProxy {
     static get cordovaExec() {
