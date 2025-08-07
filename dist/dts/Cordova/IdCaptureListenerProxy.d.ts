@@ -6,12 +6,8 @@ export declare class NativeIdCaptureListenerProxy extends BaseNativeProxy implem
     private emitInCallback;
     private notifyListeners;
     subscribeDidCaptureListener(): void;
-    subscribeDidLocalizeListener(): void;
     subscribeDidRejectListener(): void;
-    subscribeDidTimeOutListener(): void;
     finishDidCaptureCallback(isFinished: boolean): void;
-    finishDidLocalizeCallback(isFinished: boolean): void;
     finishDidRejectCallback(isFinished: boolean): void;
-    finishDidTimeOutCallback(isFinished: boolean): void;
     unregisterListenerForEvents(): void;
 }
