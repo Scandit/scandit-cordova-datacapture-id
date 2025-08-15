@@ -61,8 +61,6 @@ exports.RejectionReason = void 0;
     RejectionReason["HolderUnderage"] = "holderUnderage";
     RejectionReason["ForgedAamvaBarcode"] = "forgedAamvaBarcode";
     RejectionReason["InconsistentData"] = "inconsistentData";
-    RejectionReason["BluetoothCommunicationError"] = "bluetoothCommunicationError";
-    RejectionReason["BluetoothUnavailable"] = "bluetoothUnavailable";
 })(exports.RejectionReason || (exports.RejectionReason = {}));
 
 exports.IdCaptureRegion = void 0;
@@ -320,13 +318,6 @@ exports.IdCaptureRegion = void 0;
     IdCaptureRegion["Zambia"] = "zambia";
     IdCaptureRegion["Zimbabwe"] = "zimbabwe";
 })(exports.IdCaptureRegion || (exports.IdCaptureRegion = {}));
-
-exports.UsRealIdStatus = void 0;
-(function (UsRealIdStatus) {
-    UsRealIdStatus["NotAvailable"] = "notAvailable";
-    UsRealIdStatus["NotRealIdCompliant"] = "notRealIdCompliant";
-    UsRealIdStatus["RealIdCompliant"] = "realIdCompliant";
-})(exports.UsRealIdStatus || (exports.UsRealIdStatus = {}));
 
 exports.RegionSpecificSubtype = void 0;
 (function (RegionSpecificSubtype) {
@@ -735,87 +726,32 @@ class CommonCapturedIdFields {
 }
 
 class VIZResult {
-    get additionalAddressInformation() {
-        return this.json.additionalAddressInformation;
-    }
-    get additionalNameInformation() {
-        return this.json.additionalNameInformation;
-    }
-    get documentAdditionalNumber() {
-        return this.json.documentAdditionalNumber;
-    }
-    get employer() {
-        return this.json.employer;
-    }
-    get issuingAuthority() {
-        return this.json.issuingAuthority;
-    }
-    get issuingJurisdiction() {
-        return this.json.issuingJurisdiction;
-    }
-    get issuingJurisdictionIso() {
-        return this.json.issuingJurisdictionIso;
-    }
-    get maritalStatus() {
-        return this.json.maritalStatus;
-    }
-    get personalIdNumber() {
-        return this.json.personalIdNumber;
-    }
-    get placeOfBirth() {
-        return this.json.placeOfBirth;
-    }
-    get profession() {
-        return this.json.profession;
-    }
-    get race() {
-        return this.json.race;
-    }
-    get religion() {
-        return this.json.religion;
-    }
-    get residentialStatus() {
-        return this.json.residentialStatus;
-    }
-    get usRealIdStatus() {
-        return this.json.usRealIdStatus;
-    }
-    get capturedSides() {
-        return this.json.capturedSides;
-    }
-    get isBackSideCaptureSupported() {
-        return this.json.isBackSideCaptureSupported;
-    }
-    get bloodType() {
-        return this.json.bloodType;
-    }
-    get sponsor() {
-        return this.json.sponsor;
-    }
-    get mothersName() {
-        return this.json.mothersName;
-    }
-    get fathersName() {
-        return this.json.fathersName;
-    }
-    get passportNumber() {
-        return this.json.passportNumber;
-    }
-    get visaNumber() {
-        return this.json.visaNumber;
-    }
-    get firstName() {
-        return this.json.firstName;
-    }
-    get lastName() {
-        return this.json.lastName;
-    }
-    get secondaryLastName() {
-        return this.json.secondaryLastName;
-    }
-    get fullName() {
-        return this.json.fullName;
-    }
+    get additionalAddressInformation() { return this.json.additionalAddressInformation; }
+    get additionalNameInformation() { return this.json.additionalNameInformation; }
+    get documentAdditionalNumber() { return this.json.documentAdditionalNumber; }
+    get employer() { return this.json.employer; }
+    get issuingAuthority() { return this.json.issuingAuthority; }
+    get issuingJurisdiction() { return this.json.issuingJurisdiction; }
+    get issuingJurisdictionIso() { return this.json.issuingJurisdictionIso; }
+    get maritalStatus() { return this.json.maritalStatus; }
+    get personalIdNumber() { return this.json.personalIdNumber; }
+    get placeOfBirth() { return this.json.placeOfBirth; }
+    get profession() { return this.json.profession; }
+    get race() { return this.json.race; }
+    get religion() { return this.json.religion; }
+    get residentialStatus() { return this.json.residentialStatus; }
+    get capturedSides() { return this.json.capturedSides; }
+    get isBackSideCaptureSupported() { return this.json.isBackSideCaptureSupported; }
+    get bloodType() { return this.json.bloodType; }
+    get sponsor() { return this.json.sponsor; }
+    get mothersName() { return this.json.mothersName; }
+    get fathersName() { return this.json.fathersName; }
+    get passportNumber() { return this.json.passportNumber; }
+    get visaNumber() { return this.json.visaNumber; }
+    get firstName() { return this.json.firstName; }
+    get lastName() { return this.json.lastName; }
+    get secondaryLastName() { return this.json.secondaryLastName; }
+    get fullName() { return this.json.fullName; }
     static fromJSON(json) {
         const result = new VIZResult();
         result.json = json;
@@ -1396,51 +1332,23 @@ class CapturedId {
     constructor() {
         this._document = null;
     }
-    get firstName() {
-        return this.commonCapturedFields.firstName;
-    }
-    get lastName() {
-        return this.commonCapturedFields.lastName;
-    }
-    get fullName() {
-        return this.commonCapturedFields.fullName;
-    }
-    get secondaryLastName() {
-        return this.commonCapturedFields.secondaryLastName;
-    }
-    get sex() {
-        return this.commonCapturedFields.sex;
-    }
+    get firstName() { return this.commonCapturedFields.firstName; }
+    get lastName() { return this.commonCapturedFields.lastName; }
+    get fullName() { return this.commonCapturedFields.fullName; }
+    get secondaryLastName() { return this.commonCapturedFields.secondaryLastName; }
+    get sex() { return this.commonCapturedFields.sex; }
     get dateOfBirth() {
         return DateResult.fromJSON(this.commonCapturedFields.dateOfBirth);
     }
-    get age() {
-        return this.json.age;
-    }
-    get isExpired() {
-        return this.json.isExpired;
-    }
-    get nationality() {
-        return this.commonCapturedFields.nationality;
-    }
-    get address() {
-        return this.commonCapturedFields.address;
-    }
-    get document() {
-        return this._document;
-    }
-    get issuingCountryIso() {
-        return this.commonCapturedFields.issuingCountryIso;
-    }
-    get issuingCountry() {
-        return this.commonCapturedFields.issuingCountry;
-    }
-    get documentAdditionalNumber() {
-        return this.commonCapturedFields.documentAdditionalNumber;
-    }
-    get documentNumber() {
-        return this.commonCapturedFields.documentNumber;
-    }
+    get age() { return this.json.age; }
+    get isExpired() { return this.json.isExpired; }
+    get nationality() { return this.commonCapturedFields.nationality; }
+    get address() { return this.commonCapturedFields.address; }
+    get document() { return this._document; }
+    get issuingCountryIso() { return this.commonCapturedFields.issuingCountryIso; }
+    get issuingCountry() { return this.commonCapturedFields.issuingCountry; }
+    get documentAdditionalNumber() { return this.commonCapturedFields.documentAdditionalNumber; }
+    get documentNumber() { return this.commonCapturedFields.documentNumber; }
     get dateOfExpiry() {
         return DateResult.fromJSON(this.commonCapturedFields.dateOfExpiry);
     }
@@ -1449,7 +1357,8 @@ class CapturedId {
     }
     get barcode() {
         if (this._barcodeResult == null && this.json.barcodeResult != null) {
-            this._barcodeResult = BarcodeResult.fromJSON(this.json.barcodeResult);
+            this._barcodeResult = BarcodeResult.
+                fromJSON(this.json.barcodeResult);
         }
         return this._barcodeResult;
     }
@@ -1468,19 +1377,6 @@ class CapturedId {
     isIdCard() {
         var _a;
         return ((_a = this.document) === null || _a === void 0 ? void 0 : _a.isIdCard) === true;
-    }
-    get usRealIdStatus() {
-        const localVizResult = this.vizResult;
-        if ((localVizResult === null || localVizResult === void 0 ? void 0 : localVizResult.usRealIdStatus) && localVizResult.usRealIdStatus !== exports.UsRealIdStatus.NotAvailable) {
-            return localVizResult.usRealIdStatus;
-        }
-        if (this.barcode && this.barcode.isRealId !== null) {
-            if (this.barcode.isRealId)
-                return exports.UsRealIdStatus.RealIdCompliant;
-            else
-                return exports.UsRealIdStatus.NotRealIdCompliant;
-        }
-        return exports.UsRealIdStatus.NotAvailable;
     }
     isDriverLicense() {
         var _a;
