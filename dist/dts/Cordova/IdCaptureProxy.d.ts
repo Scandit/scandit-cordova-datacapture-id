@@ -6,8 +6,7 @@ export declare class NativeIdCaptureProxy implements IdCaptureProxy {
     resetMode(): Promise<void>;
     verifyCapturedIdAsync(capturedId: string): Promise<NativeCallResult | null>;
     setModeEnabledState(enabled: boolean): void;
-    updateIdCaptureMode(modeJson: string): Promise<void>;
     applyIdCaptureModeSettings(newSettingsJson: string): Promise<void>;
-    updateIdCaptureOverlay(overlayJson: string): Promise<void>;
+    updateIdCaptureMode(modeJson: string): Promise<void>;
     updateFeedback(feedbackJson: string): Promise<void>;
 }
