@@ -110,12 +110,40 @@ class ScanditIdCapture :
     }
 
     @PluginMethod
+    fun subscribeDidLocalizeListener(
+        @Suppress("UNUSED_PARAMETER") args: JSONArray,
+        callbackContext: CallbackContext
+    ) {
+        eventEmitter.registerCallback(
+            FrameworksIdCaptureListener.ON_ID_LOCALIZED_EVENT_NAME,
+            callbackContext
+        )
+
+        idCaptureModule.addListener()
+        callbackContext.successAndKeepCallback()
+    }
+
+    @PluginMethod
     fun subscribeDidRejectListener(
         @Suppress("UNUSED_PARAMETER") args: JSONArray,
         callbackContext: CallbackContext
     ) {
         eventEmitter.registerCallback(
             FrameworksIdCaptureListener.ON_ID_REJECTED_EVENT_NAME,
+            callbackContext
+        )
+
+        idCaptureModule.addListener()
+        callbackContext.successAndKeepCallback()
+    }
+
+    @PluginMethod
+    fun subscribeDidTimeOutListener(
+        @Suppress("UNUSED_PARAMETER") args: JSONArray,
+        callbackContext: CallbackContext
+    ) {
+        eventEmitter.registerCallback(
+            FrameworksIdCaptureListener.ON_TIMEOUT_EVENT_NAME,
             callbackContext
         )
 
@@ -133,7 +161,15 @@ class ScanditIdCapture :
         )
 
         eventEmitter.unregisterCallback(
+            FrameworksIdCaptureListener.ON_ID_LOCALIZED_EVENT_NAME,
+        )
+
+        eventEmitter.unregisterCallback(
             FrameworksIdCaptureListener.ON_ID_REJECTED_EVENT_NAME,
+        )
+
+        eventEmitter.unregisterCallback(
+            FrameworksIdCaptureListener.ON_TIMEOUT_EVENT_NAME,
         )
 
         idCaptureModule.removeListener()
@@ -161,8 +197,14 @@ class ScanditIdCapture :
                 FrameworksIdCaptureListener.ON_ID_CAPTURED_EVENT_NAME ->
                     idCaptureModule.finishDidCaptureId(resultData?.enabled == true)
 
+                FrameworksIdCaptureListener.ON_ID_LOCALIZED_EVENT_NAME ->
+                    idCaptureModule.finishDidLocalizeId(resultData?.enabled == true)
+
                 FrameworksIdCaptureListener.ON_ID_REJECTED_EVENT_NAME ->
                     idCaptureModule.finishDidRejectId(resultData?.enabled == true)
+
+                FrameworksIdCaptureListener.ON_TIMEOUT_EVENT_NAME ->
+                    idCaptureModule.finishDidTimeout(resultData?.enabled == true)
             }
         } catch (e: JSONException) {
             callbackContext.error(JsonParseError(e.message).serializeContent())
@@ -204,14 +246,25 @@ class ScanditIdCapture :
 
     @PluginMethod
     fun updateIdCaptureOverlay(args: JSONArray, callbackContext: CallbackContext) {
-        val overlayJson = args.getJSONObject(0).getString("overlayJson")
-        idCaptureModule.updateOverlay(overlayJson, CordovaResult(callbackContext))
+        idCaptureModule.updateOverlay(args.defaultArgumentAsString, CordovaResult(callbackContext))
     }
 
     @PluginMethod
-    fun verifyCapturedIdAsync(args: JSONArray, callbackContext: CallbackContext) {
+    fun verifyCapturedId(args: JSONArray, callbackContext: CallbackContext) {
         try {
-            idCaptureModule.verifyCapturedIdBarcode(
+            idCaptureModule.verifyCaptureId(
+                args.defaultArgumentAsString,
+                CordovaResult(callbackContext)
+            )
+        } catch (e: Exception) {
+            callbackContext.error(JsonParseError(e.message).toString())
+        }
+    }
+
+    @PluginMethod
+    fun verifyVizMrz(args: JSONArray, callbackContext: CallbackContext) {
+        try {
+            idCaptureModule.vizMrzVerification(
                 args.defaultArgumentAsString,
                 CordovaResult(callbackContext)
             )
