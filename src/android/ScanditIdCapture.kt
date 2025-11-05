@@ -204,7 +204,8 @@ class ScanditIdCapture :
 
     @PluginMethod
     fun updateIdCaptureOverlay(args: JSONArray, callbackContext: CallbackContext) {
-        idCaptureModule.updateOverlay(args.defaultArgumentAsString, CordovaResult(callbackContext))
+        val overlayJson = args.getJSONObject(0).getString("overlayJson")
+        idCaptureModule.updateOverlay(overlayJson, CordovaResult(callbackContext))
     }
 
     @PluginMethod
