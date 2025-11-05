@@ -31,7 +31,8 @@ public class ScanditIdCapture: CDVPlugin {
     override public func pluginInitialize() {
         super.pluginInitialize()
         emitter = CordovaEventEmitter(commandDelegate: commandDelegate)
-        idModule = IdCaptureModule(emitter: emitter)
+        let idCaptureListener = FrameworksIdCaptureListener(emitter: emitter)
+        idModule = IdCaptureModule(idCaptureListener: idCaptureListener)
         idModule.didStart()
     }
 
@@ -43,56 +44,58 @@ public class ScanditIdCapture: CDVPlugin {
 
     // MARK: Listeners
 
-    @objc(addIdCaptureListener:)
-    func addIdCaptureListener(command: CDVInvokedUrlCommand) {
-        guard let args = command.defaultArgumentAsDictionary,
-              let modeId = args["modeId"] as? Int else {
-            commandDelegate.send(.failure(with: .invalidJSON), callbackId: command.callbackId)
-            return
-        }
-        
-        idModule.addListener(modeId: modeId)
-        emitter.registerModeSpecificCallback(modeId, with: FrameworksIdCaptureEvent.didCaptureId.rawValue, call: command)
-        emitter.registerModeSpecificCallback(modeId, with: FrameworksIdCaptureEvent.didRejectId.rawValue, call: command)
+    @objc(subscribeDidCaptureListener:)
+    func subscribeDidCaptureListener(command: CDVInvokedUrlCommand) {
+        idModule.addListener()
+        emitter.registerCallback(with: FrameworksIdCaptureEvent.didCaptureId, call: command)
         commandDelegate.send(.keepCallback, callbackId: command.callbackId)
     }
 
-    @objc(removeIdCaptureListener:)
-    func removeIdCaptureListener(command: CDVInvokedUrlCommand) {
-        guard let args = command.defaultArgumentAsDictionary,
-              let modeId = args["modeId"] as? Int else {
+    @objc(subscribeDidRejectListener:)
+    func subscribeDidRejectListener(command: CDVInvokedUrlCommand) {
+        idModule.addListener()
+        emitter.registerCallback(with: FrameworksIdCaptureEvent.didRejectId, call: command)
+        commandDelegate.send(.keepCallback, callbackId: command.callbackId)
+    }
+
+    @objc(finishCallback:)
+    func finishCallback(command: CDVInvokedUrlCommand) {
+        guard let result = IdCaptureCallbackResult.from(command) else {
             commandDelegate.send(.failure(with: .invalidJSON), callbackId: command.callbackId)
             return
         }
-        
-        idModule.removeListener(modeId: modeId)
-        emitter.unregisterModeSpecificCallback(modeId, with: FrameworksIdCaptureEvent.didCaptureId.rawValue)
-        emitter.unregisterModeSpecificCallback(modeId, with: FrameworksIdCaptureEvent.didRejectId.rawValue)
+        let enabled = result.enabled ?? false
+        if result.isForListenerEvent(.didCaptureInIdCapture) {
+            idModule.finishDidCaptureId(enabled: enabled)
+        } else if result.isForListenerEvent(.didRejectInIdCapture) {
+            idModule.finishDidRejectId(enabled: enabled)
+        } else {
+            commandDelegate.send(.failure(with: .invalidJSON), callbackId: command.callbackId)
+        }
         commandDelegate.send(.success, callbackId: command.callbackId)
     }
 
-    @objc(finishDidCaptureCallback:)
-    func finishDidCaptureCallback(command: CDVInvokedUrlCommand) {
-        guard let args = command.defaultArgumentAsDictionary,
-              let modeId = args["modeId"] as? Int else {
+    @objc(verifyCapturedIdAsync:)
+    func verifyCapturedIdAsync(command: CDVInvokedUrlCommand) {
+        guard let jsonString = command.arguments[0] as? String else {
             commandDelegate.send(.failure(with: .invalidJSON), callbackId: command.callbackId)
             return
         }
-        
-        idModule.finishDidCaptureId(modeId: modeId, enabled: args["enabled"] as? Bool ?? false)
-        commandDelegate.send(.success, callbackId: command.callbackId)
+        idModule.verifyCapturedIdWithCloud(jsonString: jsonString,
+                                          result: CordovaResult(commandDelegate, command.callbackId))
     }
-    
-    @objc(finishDidRejectCallback:)
-    func finishDidRejectCallback(command: CDVInvokedUrlCommand) {
-        guard let args = command.defaultArgumentAsDictionary,
-              let modeId = args["modeId"] as? Int else {
-            commandDelegate.send(.failure(with: .invalidJSON), callbackId: command.callbackId)
-            return
-        }
-        
-        idModule.finishDidRejectId(modeId: modeId, enabled: args["enabled"] as? Bool ?? false)
-        commandDelegate.send(.success, callbackId: command.callbackId)
+
+    @objc(createContextForBarcodeVerification:)
+    func createContextForBarcodeVerification(command: CDVInvokedUrlCommand) {
+        idModule.createAamvaBarcodeVerifier(result: CordovaResult(commandDelegate, command.callbackId))
+    }
+
+    @objc(unregisterListenerForEvents:)
+    func unregisterListenerForEvents(command: CDVInvokedUrlCommand) {
+        idModule.removeListener()
+        idModule.removeAsyncListener()
+        emitter.unregisterCallback(with: FrameworksIdCaptureEvent.didCaptureId.rawValue)
+        emitter.unregisterCallback(with: FrameworksIdCaptureEvent.didRejectId.rawValue)
     }
 
     // MARK: Defaults
@@ -105,22 +108,15 @@ public class ScanditIdCapture: CDVPlugin {
 
     // MARK: Reset
 
-    @objc(resetIdCaptureMode:)
-    func resetIdCaptureMode(command: CDVInvokedUrlCommand) {
-        guard let args = command.defaultArgumentAsDictionary,
-              let modeId = args["modeId"] as? Int else {
-            commandDelegate.send(.failure(with: .invalidJSON), callbackId: command.callbackId)
-            return
-        }
-        
-        idModule.resetMode(modeId: modeId)
+    @objc(resetIdCapture:)
+    func resetIdCapture(command: CDVInvokedUrlCommand) {
+        idModule.resetMode()
         commandDelegate.send(.success, callbackId: command.callbackId)
     }
 
     @objc(updateIdCaptureOverlay:)
     func updateIdCaptureOverlay(command: CDVInvokedUrlCommand) {
-        guard let args = command.defaultArgumentAsDictionary,
-              let overlayJson = args["overlayJson"] as? String else {
+        guard let overlayJson = command.defaultArgumentAsString else {
             commandDelegate.send(.failure(with: .invalidJSON), callbackId: command.callbackId)
             return
         }
@@ -130,51 +126,41 @@ public class ScanditIdCapture: CDVPlugin {
 
     @objc(updateIdCaptureMode:)
     func updateIdCaptureMode(command: CDVInvokedUrlCommand) {
-        guard let args = command.defaultArgumentAsDictionary,
-              let modeId = args["modeId"] as? Int,
-              let modeJson = args["modeJson"] as? String else {
+        guard let modeJson = command.defaultArgumentAsString else {
             commandDelegate.send(.failure(with: .invalidJSON), callbackId: command.callbackId)
             return
         }
-        idModule.updateModeFromJson(modeId: modeId,
-                                    modeJson: modeJson,
+        idModule.updateModeFromJson(modeJson: modeJson,
                                     result: CordovaResult(commandDelegate, command.callbackId))
     }
 
     @objc(applyIdCaptureModeSettings:)
     func applyIdCaptureModeSettings(command: CDVInvokedUrlCommand) {
-        guard let args = command.defaultArgumentAsDictionary,
-              let modeId = args["modeId"] as? Int,
-              let settingsJson = args["settingsJson"] as? String else {
+        guard let modeSettingsJson = command.defaultArgumentAsString else {
             commandDelegate.send(.failure(with: .invalidJSON), callbackId: command.callbackId)
             return
         }
-        idModule.applyModeSettings(modeId: modeId,
-                                   modeSettingsJson: settingsJson,
+        idModule.applyModeSettings(modeSettingsJson: modeSettingsJson,
                                    result: CordovaResult(commandDelegate, command.callbackId))
     }
 
     @objc(setModeEnabledState:)
     func setModeEnabledState(command: CDVInvokedUrlCommand) {
-        guard let args = command.defaultArgumentAsDictionary,
-              let modeId = args["modeId"] as? Int else {
-            commandDelegate.send(.failure(with: .invalidJSON), callbackId: command.callbackId)
-            return
+        var enabled = false
+        if let value = command.defaultArgumentAsDictionary?["enabled"] as? Bool {
+            enabled = value
         }
-        idModule.setModeEnabled(modeId: modeId, enabled: args["enabled"] as? Bool ?? false)
+        idModule.setModeEnabled(enabled: enabled)
         commandDelegate.send(.success, callbackId: command.callbackId)
     }
 
     @objc(updateIdCaptureFeedback:)
     func updateIdCaptureFeedback(command: CDVInvokedUrlCommand) {
-        guard let args = command.defaultArgumentAsDictionary,
-              let modeId = args["modeId"] as? Int,
-              let feedbackJson = args["feedbackJson"] as? String else {
+        guard let feedbackJson = command.defaultArgumentAsString else {
             commandDelegate.send(.failure(with: .invalidJSON), callbackId: command.callbackId)
             return
         }
-        idModule.updateFeedback(modeId: modeId,
-                                feedbackJson: feedbackJson,
+        idModule.updateFeedback(feedbackJson: feedbackJson,
                                 result: CordovaResult(commandDelegate, command.callbackId))
     }
 }
