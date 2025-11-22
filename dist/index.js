@@ -61,8 +61,6 @@ exports.RejectionReason = void 0;
     RejectionReason["HolderUnderage"] = "holderUnderage";
     RejectionReason["ForgedAamvaBarcode"] = "forgedAamvaBarcode";
     RejectionReason["InconsistentData"] = "inconsistentData";
-    RejectionReason["BluetoothCommunicationError"] = "bluetoothCommunicationError";
-    RejectionReason["BluetoothUnavailable"] = "bluetoothUnavailable";
 })(exports.RejectionReason || (exports.RejectionReason = {}));
 
 exports.IdCaptureRegion = void 0;
@@ -321,13 +319,6 @@ exports.IdCaptureRegion = void 0;
     IdCaptureRegion["Zimbabwe"] = "zimbabwe";
 })(exports.IdCaptureRegion || (exports.IdCaptureRegion = {}));
 
-exports.UsRealIdStatus = void 0;
-(function (UsRealIdStatus) {
-    UsRealIdStatus["NotAvailable"] = "notAvailable";
-    UsRealIdStatus["NotRealIdCompliant"] = "notRealIdCompliant";
-    UsRealIdStatus["RealIdCompliant"] = "realIdCompliant";
-})(exports.UsRealIdStatus || (exports.UsRealIdStatus = {}));
-
 exports.RegionSpecificSubtype = void 0;
 (function (RegionSpecificSubtype) {
     RegionSpecificSubtype["UsBorderCrossingCard"] = "usBorderCrossingCard";
@@ -394,8 +385,6 @@ exports.RegionSpecificSubtype = void 0;
     RegionSpecificSubtype["UsMunicipalId"] = "usMunicipalId";
     RegionSpecificSubtype["AustraliaAsicCard"] = "australiaAsicCard";
     RegionSpecificSubtype["UaeVehicleRegistrationCard"] = "uaeVehicleRegistrationCard";
-    RegionSpecificSubtype["UaeEsaadCard"] = "uaeEsaadCard";
-    RegionSpecificSubtype["UkMilitaryId"] = "ukMilitaryId";
 })(exports.RegionSpecificSubtype || (exports.RegionSpecificSubtype = {}));
 
 exports.IdSide = void 0;
@@ -437,75 +426,6 @@ class IdImages {
     }
 }
 
-/******************************************************************************
-Copyright (c) Microsoft Corporation.
-
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
-***************************************************************************** */
-/* global Reflect, Promise, SuppressedError, Symbol, Iterator */
-
-
-function __decorate(decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-}
-
-function __awaiter(thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-}
-
-typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
-    var e = new Error(message);
-    return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
-};
-
-class Duration extends scanditDatacaptureFrameworksCore.DefaultSerializeable {
-    get days() {
-        return this._days;
-    }
-    get months() {
-        return this._months;
-    }
-    get years() {
-        return this._years;
-    }
-    constructor(days, months, years) {
-        super();
-        this._days = days;
-        this._months = months;
-        this._years = years;
-    }
-    static fromJSON(json) {
-        return new Duration(json.days, json.months, json.years);
-    }
-}
-__decorate([
-    scanditDatacaptureFrameworksCore.nameForSerialization('days')
-], Duration.prototype, "_days", void 0);
-__decorate([
-    scanditDatacaptureFrameworksCore.nameForSerialization('months')
-], Duration.prototype, "_months", void 0);
-__decorate([
-    scanditDatacaptureFrameworksCore.nameForSerialization('years')
-], Duration.prototype, "_years", void 0);
-
 function getIdDefaults() {
     return scanditDatacaptureFrameworksCore.FactoryMaker.getInstance('IdDefaults');
 }
@@ -545,13 +465,6 @@ function parseIdDefaults(jsonDefaults) {
                 anonymizationMode: jsonDefaults.IdCaptureSettings.anonymizationMode,
                 rejectVoidedIds: jsonDefaults.IdCaptureSettings.rejectVoidedIds,
                 decodeBackOfEuropeanDrivingLicense: jsonDefaults.IdCaptureSettings.decodeBackOfEuropeanDrivingLicense,
-                rejectExpiredIds: jsonDefaults.IdCaptureSettings.rejectExpiredIds,
-                rejectIdsExpiringIn: jsonDefaults.IdCaptureSettings.rejectIdsExpiringIn ? Duration
-                    .fromJSON(jsonDefaults.IdCaptureSettings.rejectIdsExpiringIn) : null,
-                rejectNotRealIdCompliant: jsonDefaults.IdCaptureSettings.rejectNotRealIdCompliant,
-                rejectForgedAamvaBarcodes: jsonDefaults.IdCaptureSettings.rejectForgedAamvaBarcodes,
-                rejectInconsistentData: jsonDefaults.IdCaptureSettings.rejectInconsistentData,
-                rejectHolderBelowAge: jsonDefaults.IdCaptureSettings.rejectHolderBelowAge,
             },
         },
     };
@@ -596,13 +509,53 @@ class AamvaBarcodeVerificationResult {
     }
 }
 
+/******************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+/* global Reflect, Promise, SuppressedError, Symbol, Iterator */
+
+
+function __decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+
+function __awaiter(thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+}
+
+typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
+    var e = new Error(message);
+    return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
+};
+
 class IdCaptureController extends scanditDatacaptureFrameworksCore.BaseController {
-    // This is also accpeting null here because the AamvaBarcodeVerifier is using this controller.
-    // Once we remove the AamvaBarcodeVerifier, we can remove the null here.
-    constructor(idCapture = null) {
+    static forIdCapture(idCapture) {
+        const controller = new IdCaptureController();
+        controller.idCapture = idCapture;
+        return controller;
+    }
+    constructor() {
         super('IdCaptureProxy');
-        this.idCapture = null;
-        this.idCapture = idCapture;
     }
     reset() {
         return this._proxy.resetMode();
@@ -623,13 +576,13 @@ class IdCaptureController extends scanditDatacaptureFrameworksCore.BaseControlle
         this._proxy.setModeEnabledState(enabled);
     }
     updateIdCaptureMode() {
-        if (this.idCapture == null) {
-            throw new Error('IdCaptureController is not initialized with an IdCapture instance');
-        }
         return this._proxy.updateIdCaptureMode(JSON.stringify(this.idCapture.toJSON()));
     }
     applyIdCaptureModeSettings(newSettings) {
         return this._proxy.applyIdCaptureModeSettings(JSON.stringify(newSettings.toJSON()));
+    }
+    updateIdCaptureOverlay(overlay) {
+        return this._proxy.updateIdCaptureOverlay(JSON.stringify(overlay.toJSON()));
     }
     updateFeedback(feedback) {
         return this._proxy.updateFeedback(JSON.stringify(feedback.toJSON()));
@@ -638,6 +591,7 @@ class IdCaptureController extends scanditDatacaptureFrameworksCore.BaseControlle
 
 exports.IdCaptureListenerEvents = void 0;
 (function (IdCaptureListenerEvents) {
+    IdCaptureListenerEvents["inCallback"] = "IdCaptureListener.inCallback";
     IdCaptureListenerEvents["didCapture"] = "IdCaptureListener.didCaptureId";
     IdCaptureListenerEvents["didReject"] = "IdCaptureListener.didRejectId";
 })(exports.IdCaptureListenerEvents || (exports.IdCaptureListenerEvents = {}));
@@ -645,16 +599,8 @@ exports.IdCaptureListenerEvents = void 0;
 class MRZResult {
     get documentCode() { return this.json.documentCode; }
     get namesAreTruncated() { return this.json.namesAreTruncated; }
-    /**
-     * @deprecated Use optionalDataInLine1 and optionalDataInLine2 instead. This property will be removed in SDK version 8.0.
-     */
     get optional() { return this.json.optional; }
-    /**
-     * @deprecated Use optionalDataInLine1 and optionalDataInLine2 instead. This property will be removed in SDK version 8.0.
-     */
     get optional1() { return this.json.optional1; }
-    get optionalDataInLine1() { return this.json.optionalDataInLine1; }
-    get optionalDataInLine2() { return this.json.optionalDataInLine2; }
     get capturedMrz() { return this.json.capturedMrz; }
     get personalIdNumber() { return this.json.personalIdNumber; }
     get renewalTimes() { return this.json.renewalTimes; }
@@ -780,87 +726,32 @@ class CommonCapturedIdFields {
 }
 
 class VIZResult {
-    get additionalAddressInformation() {
-        return this.json.additionalAddressInformation;
-    }
-    get additionalNameInformation() {
-        return this.json.additionalNameInformation;
-    }
-    get documentAdditionalNumber() {
-        return this.json.documentAdditionalNumber;
-    }
-    get employer() {
-        return this.json.employer;
-    }
-    get issuingAuthority() {
-        return this.json.issuingAuthority;
-    }
-    get issuingJurisdiction() {
-        return this.json.issuingJurisdiction;
-    }
-    get issuingJurisdictionIso() {
-        return this.json.issuingJurisdictionIso;
-    }
-    get maritalStatus() {
-        return this.json.maritalStatus;
-    }
-    get personalIdNumber() {
-        return this.json.personalIdNumber;
-    }
-    get placeOfBirth() {
-        return this.json.placeOfBirth;
-    }
-    get profession() {
-        return this.json.profession;
-    }
-    get race() {
-        return this.json.race;
-    }
-    get religion() {
-        return this.json.religion;
-    }
-    get residentialStatus() {
-        return this.json.residentialStatus;
-    }
-    get usRealIdStatus() {
-        return this.json.usRealIdStatus;
-    }
-    get capturedSides() {
-        return this.json.capturedSides;
-    }
-    get isBackSideCaptureSupported() {
-        return this.json.isBackSideCaptureSupported;
-    }
-    get bloodType() {
-        return this.json.bloodType;
-    }
-    get sponsor() {
-        return this.json.sponsor;
-    }
-    get mothersName() {
-        return this.json.mothersName;
-    }
-    get fathersName() {
-        return this.json.fathersName;
-    }
-    get passportNumber() {
-        return this.json.passportNumber;
-    }
-    get visaNumber() {
-        return this.json.visaNumber;
-    }
-    get firstName() {
-        return this.json.firstName;
-    }
-    get lastName() {
-        return this.json.lastName;
-    }
-    get secondaryLastName() {
-        return this.json.secondaryLastName;
-    }
-    get fullName() {
-        return this.json.fullName;
-    }
+    get additionalAddressInformation() { return this.json.additionalAddressInformation; }
+    get additionalNameInformation() { return this.json.additionalNameInformation; }
+    get documentAdditionalNumber() { return this.json.documentAdditionalNumber; }
+    get employer() { return this.json.employer; }
+    get issuingAuthority() { return this.json.issuingAuthority; }
+    get issuingJurisdiction() { return this.json.issuingJurisdiction; }
+    get issuingJurisdictionIso() { return this.json.issuingJurisdictionIso; }
+    get maritalStatus() { return this.json.maritalStatus; }
+    get personalIdNumber() { return this.json.personalIdNumber; }
+    get placeOfBirth() { return this.json.placeOfBirth; }
+    get profession() { return this.json.profession; }
+    get race() { return this.json.race; }
+    get religion() { return this.json.religion; }
+    get residentialStatus() { return this.json.residentialStatus; }
+    get capturedSides() { return this.json.capturedSides; }
+    get isBackSideCaptureSupported() { return this.json.isBackSideCaptureSupported; }
+    get bloodType() { return this.json.bloodType; }
+    get sponsor() { return this.json.sponsor; }
+    get mothersName() { return this.json.mothersName; }
+    get fathersName() { return this.json.fathersName; }
+    get passportNumber() { return this.json.passportNumber; }
+    get visaNumber() { return this.json.visaNumber; }
+    get firstName() { return this.json.firstName; }
+    get lastName() { return this.json.lastName; }
+    get secondaryLastName() { return this.json.secondaryLastName; }
+    get fullName() { return this.json.fullName; }
     static fromJSON(json) {
         const result = new VIZResult();
         result.json = json;
@@ -1441,51 +1332,23 @@ class CapturedId {
     constructor() {
         this._document = null;
     }
-    get firstName() {
-        return this.commonCapturedFields.firstName;
-    }
-    get lastName() {
-        return this.commonCapturedFields.lastName;
-    }
-    get fullName() {
-        return this.commonCapturedFields.fullName;
-    }
-    get secondaryLastName() {
-        return this.commonCapturedFields.secondaryLastName;
-    }
-    get sex() {
-        return this.commonCapturedFields.sex;
-    }
+    get firstName() { return this.commonCapturedFields.firstName; }
+    get lastName() { return this.commonCapturedFields.lastName; }
+    get fullName() { return this.commonCapturedFields.fullName; }
+    get secondaryLastName() { return this.commonCapturedFields.secondaryLastName; }
+    get sex() { return this.commonCapturedFields.sex; }
     get dateOfBirth() {
         return DateResult.fromJSON(this.commonCapturedFields.dateOfBirth);
     }
-    get age() {
-        return this.json.age;
-    }
-    get isExpired() {
-        return this.json.isExpired;
-    }
-    get nationality() {
-        return this.commonCapturedFields.nationality;
-    }
-    get address() {
-        return this.commonCapturedFields.address;
-    }
-    get document() {
-        return this._document;
-    }
-    get issuingCountryIso() {
-        return this.commonCapturedFields.issuingCountryIso;
-    }
-    get issuingCountry() {
-        return this.commonCapturedFields.issuingCountry;
-    }
-    get documentAdditionalNumber() {
-        return this.commonCapturedFields.documentAdditionalNumber;
-    }
-    get documentNumber() {
-        return this.commonCapturedFields.documentNumber;
-    }
+    get age() { return this.json.age; }
+    get isExpired() { return this.json.isExpired; }
+    get nationality() { return this.commonCapturedFields.nationality; }
+    get address() { return this.commonCapturedFields.address; }
+    get document() { return this._document; }
+    get issuingCountryIso() { return this.commonCapturedFields.issuingCountryIso; }
+    get issuingCountry() { return this.commonCapturedFields.issuingCountry; }
+    get documentAdditionalNumber() { return this.commonCapturedFields.documentAdditionalNumber; }
+    get documentNumber() { return this.commonCapturedFields.documentNumber; }
     get dateOfExpiry() {
         return DateResult.fromJSON(this.commonCapturedFields.dateOfExpiry);
     }
@@ -1494,7 +1357,8 @@ class CapturedId {
     }
     get barcode() {
         if (this._barcodeResult == null && this.json.barcodeResult != null) {
-            this._barcodeResult = BarcodeResult.fromJSON(this.json.barcodeResult);
+            this._barcodeResult = BarcodeResult.
+                fromJSON(this.json.barcodeResult);
         }
         return this._barcodeResult;
     }
@@ -1513,19 +1377,6 @@ class CapturedId {
     isIdCard() {
         var _a;
         return ((_a = this.document) === null || _a === void 0 ? void 0 : _a.isIdCard) === true;
-    }
-    get usRealIdStatus() {
-        const localVizResult = this.vizResult;
-        if ((localVizResult === null || localVizResult === void 0 ? void 0 : localVizResult.usRealIdStatus) && localVizResult.usRealIdStatus !== exports.UsRealIdStatus.NotAvailable) {
-            return localVizResult.usRealIdStatus;
-        }
-        if (this.barcode && this.barcode.isRealId !== null) {
-            if (this.barcode.isRealId)
-                return exports.UsRealIdStatus.RealIdCompliant;
-            else
-                return exports.UsRealIdStatus.NotRealIdCompliant;
-        }
-        return exports.UsRealIdStatus.NotAvailable;
     }
     isDriverLicense() {
         var _a;
@@ -1601,37 +1452,28 @@ class IdCaptureListenerController {
     get _proxy() {
         return scanditDatacaptureFrameworksCore.FactoryMaker.getInstance('IdCaptureListenerProxy');
     }
-    constructor(idCapture) {
-        this.hasListeners = false;
-        this.eventEmitter = scanditDatacaptureFrameworksCore.FactoryMaker.getInstance('EventEmitter');
-        this.idCapture = idCapture;
-        this._proxy.isModeEnabled = () => idCapture.isEnabled;
-        this.initialize();
+    static forIdCapture(idCapture) {
+        const controller = new IdCaptureListenerController();
+        controller.idCapture = idCapture;
+        controller._proxy.isModeEnabled = () => idCapture.isEnabled;
+        return controller;
     }
-    initialize() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this.idCapture.listeners.length > 0) {
-                this.subscribeListener();
-            }
-        });
+    constructor() {
+        this.eventEmitter = scanditDatacaptureFrameworksCore.FactoryMaker.getInstance('EventEmitter');
     }
     subscribeListener() {
-        if (this.hasListeners) {
-            return;
-        }
         this._proxy.subscribeDidCaptureListener();
         this._proxy.subscribeDidRejectListener();
+        this.eventEmitter.on(exports.IdCaptureListenerEvents.inCallback, (value) => {
+            this.idCapture.isInListenerCallback = value;
+        });
         this.eventEmitter.on(exports.IdCaptureListenerEvents.didCapture, (data) => {
             const event = scanditDatacaptureFrameworksCore.EventDataParser.parse(data);
             if (event === null) {
                 console.error('IdCaptureListenerController didCapture payload is null');
                 return;
             }
-            const capturedIdJson = JSON.parse(event.id);
-            if (event.imageInfo) {
-                capturedIdJson.imageInfo = event.imageInfo;
-            }
-            const captureId = CapturedId.fromJSON(capturedIdJson);
+            const captureId = CapturedId.fromJSON(JSON.parse(event.id));
             this.notifyListenersOfDidCapture(captureId);
             this._proxy.finishDidCaptureCallback(this.idCapture.isEnabled);
         });
@@ -1643,57 +1485,37 @@ class IdCaptureListenerController {
             }
             let rejectedId = null;
             if (event.id != null) {
-                const rejectedIdJson = JSON.parse(event.id);
-                if (event.imageInfo) {
-                    rejectedIdJson.imageInfo = event.imageInfo;
-                }
-                rejectedId = CapturedId.fromJSON(rejectedIdJson);
+                rejectedId = CapturedId.fromJSON(JSON.parse(event.id));
             }
             this.notifyListenersOfDidReject(rejectedId, event.rejectionReason);
             this._proxy.finishDidRejectCallback(this.idCapture.isEnabled);
         });
-        this.hasListeners = true;
     }
     unsubscribeListener() {
-        if (!this.hasListeners) {
-            return;
-        }
         this._proxy.unregisterListenerForEvents();
+        this.eventEmitter.removeAllListeners(exports.IdCaptureListenerEvents.inCallback);
         this.eventEmitter.removeAllListeners(exports.IdCaptureListenerEvents.didCapture);
         this.eventEmitter.removeAllListeners(exports.IdCaptureListenerEvents.didReject);
-        this.hasListeners = false;
     }
     notifyListenersOfDidCapture(captureId) {
         const mode = this.idCapture;
+        mode.isInListenerCallback = true;
         mode.listeners.forEach(listener => {
             if (listener.didCaptureId) {
                 listener.didCaptureId(this.idCapture, captureId);
             }
         });
+        mode.isInListenerCallback = false;
     }
     notifyListenersOfDidReject(captureId, rejectionReason) {
         const mode = this.idCapture;
+        mode.isInListenerCallback = true;
         mode.listeners.forEach(listener => {
             if (listener.didRejectId) {
                 listener.didRejectId(this.idCapture, captureId, rejectionReason);
             }
         });
-    }
-    dispose() {
-        this.unsubscribeListener();
-    }
-}
-
-class IdCaptureOverlayController extends scanditDatacaptureFrameworksCore.BaseNewController {
-    constructor(overlay) {
-        super('IdCaptureOverlayProxy');
-        this.overlay = overlay;
-    }
-    updateIdCaptureOverlay(overlay) {
-        return this._proxy.$updateIdCaptureOverlay({ overlayJson: JSON.stringify(overlay.toJSON()) });
-    }
-    dispose() {
-        this._proxy.dispose();
+        mode.isInListenerCallback = false;
     }
 }
 
@@ -1768,62 +1590,42 @@ class IdCapture extends scanditDatacaptureFrameworksCore.DefaultSerializeable {
         this._feedback.controller = this.controller;
         this.controller.updateFeedback(feedback);
     }
-    static createRecommendedCameraSettings() {
-        return new scanditDatacaptureFrameworksCore.CameraSettings(IdCapture.idCaptureDefaults.IdCapture.RecommendedCameraSettings);
-    }
-    /**
-     * @deprecated Use createRecommendedCameraSettings() instead to get a new instance that can be safely modified.
-     */
     static get recommendedCameraSettings() {
-        if (IdCapture._recommendedCameraSettings === null) {
-            IdCapture._recommendedCameraSettings = IdCapture.createRecommendedCameraSettings();
-        }
-        return IdCapture._recommendedCameraSettings;
+        return new scanditDatacaptureFrameworksCore.CameraSettings(IdCapture.idCaptureDefaults.IdCapture.RecommendedCameraSettings);
     }
     get _context() {
         return this.privateContext;
     }
     set _context(newContext) {
-        var _a, _b;
         if (newContext == null) {
-            (_a = this.listenerController) === null || _a === void 0 ? void 0 : _a.dispose();
-            this.listenerController = null;
-            this.privateContext = null;
-            return;
+            this.listenerController.unsubscribeListener();
+        }
+        else if (this.privateContext == null) {
+            this.listenerController.subscribeListener();
         }
         this.privateContext = newContext;
-        (_b = this.listenerController) !== null && _b !== void 0 ? _b : (this.listenerController = new IdCaptureListenerController(this));
     }
     static get idCaptureDefaults() {
         return scanditDatacaptureFrameworksCore.FactoryMaker.getInstance('IdDefaults');
     }
-    /**
-     * @deprecated Since 7.6. This factory will be removed in 8.0.
-     * Use the public constructor instead and configure the instance manually:
-     * ```ts
-     * const idCapture = new IdCapture(settings);
-     * context.addMode(idCapture);
-     * ```
-     */
     static forContext(context, settings) {
-        const idCapture = new IdCapture(settings);
+        const idCapture = new IdCapture();
+        idCapture.settings = settings;
         if (context) {
             context.addMode(idCapture);
         }
         return idCapture;
     }
-    constructor(settings) {
+    constructor() {
         super();
         this.type = 'idCapture';
-        this.modeId = Math.floor(Math.random() * 100000000);
         this._isEnabled = true;
         this._feedback = IdCaptureFeedback.defaultFeedback;
         this.privateContext = null;
         this.listeners = [];
-        this.listenerController = null;
         this.isInListenerCallback = false;
-        this.settings = settings;
-        this.controller = new IdCaptureController(this);
+        this.controller = IdCaptureController.forIdCapture(this);
+        this.listenerController = IdCaptureListenerController.forIdCapture(this);
         this.feedback.controller = this.controller;
     }
     applySettings(settings) {
@@ -1831,30 +1633,21 @@ class IdCapture extends scanditDatacaptureFrameworksCore.DefaultSerializeable {
         return this.controller.applyIdCaptureModeSettings(settings);
     }
     addListener(listener) {
-        var _a;
         if (this.listeners.includes(listener)) {
             return;
-        }
-        if (this.listeners.length === 0) {
-            (_a = this.listenerController) === null || _a === void 0 ? void 0 : _a.subscribeListener();
         }
         this.listeners.push(listener);
     }
     removeListener(listener) {
-        var _a;
         if (!this.listeners.includes(listener)) {
             return;
         }
         this.listeners.splice(this.listeners.indexOf(listener), 1);
-        if (this.listeners.length === 0) {
-            (_a = this.listenerController) === null || _a === void 0 ? void 0 : _a.unsubscribeListener();
-        }
     }
     reset() {
         return this.controller.reset();
     }
 }
-IdCapture._recommendedCameraSettings = null;
 __decorate([
     scanditDatacaptureFrameworksCore.ignoreFromSerialization
 ], IdCapture.prototype, "_isEnabled", void 0);
@@ -1893,50 +1686,23 @@ exports.IdLayoutStyle = void 0;
 })(exports.IdLayoutStyle || (exports.IdLayoutStyle = {}));
 
 class IdCaptureOverlay extends scanditDatacaptureFrameworksCore.DefaultSerializeable {
-    get view() {
-        return this._view;
-    }
-    set view(newView) {
-        var _a, _b;
-        if (newView === null) {
-            (_a = this.controller) === null || _a === void 0 ? void 0 : _a.dispose();
-            this.controller = null;
-            this._view = null;
-            return;
-        }
-        this._view = newView;
-        (_b = this.controller) !== null && _b !== void 0 ? _b : (this.controller = new IdCaptureOverlayController(this));
-    }
     static get idCaptureDefaults() {
         return scanditDatacaptureFrameworksCore.FactoryMaker.getInstance('IdDefaults');
     }
-    /**
-     * @deprecated Since 7.6. These factories will be removed in 8.0.
-     * Use the public constructor instead and add the overlay to the view manually:
-     * const overlay = new IdCaptureOverlay(idCapture);
-     * view.addOverlay(overlay);
-     */
     static withIdCapture(idCapture) {
         return IdCaptureOverlay.withIdCaptureForView(idCapture, null);
     }
-    /**
-     * @deprecated Since 7.6. These factories will be removed in 8.0.
-     * Use the public constructor instead and add the overlay to the view manually:
-     * const overlay = new IdCaptureOverlay(idCapture);
-     * view.addOverlay(overlay);
-     */
     static withIdCaptureForView(idCapture, view) {
-        const overlay = new IdCaptureOverlay(idCapture);
+        const overlay = new IdCaptureOverlay();
+        overlay.idCapture = idCapture;
         if (view) {
             view.addOverlay(overlay);
         }
         return overlay;
     }
-    constructor(mode) {
+    constructor() {
         super();
         this.type = 'idCapture';
-        this.controller = null;
-        this._view = null;
         this._idLayoutStyle = exports.IdLayoutStyle.Rounded;
         this._idLayoutLineStyle = exports.IdLayoutLineStyle.Light;
         this._textHintPosition = exports.TextHintPosition.AboveViewfinder;
@@ -1949,57 +1715,49 @@ class IdCaptureOverlay extends scanditDatacaptureFrameworksCore.DefaultSerialize
         this._rejectedBrush = this._defaultRejectedBrush;
         this._frontSideTextHint = null;
         this._backSideTextHint = null;
-        this.modeId = mode.modeId;
     }
     setFrontSideTextHint(text) {
-        var _a;
         this._frontSideTextHint = text;
-        (_a = this.controller) === null || _a === void 0 ? void 0 : _a.updateIdCaptureOverlay(this);
+        this.idCapture.controller.updateIdCaptureOverlay(this);
     }
     setBackSideTextHint(text) {
-        var _a;
         this._backSideTextHint = text;
-        (_a = this.controller) === null || _a === void 0 ? void 0 : _a.updateIdCaptureOverlay(this);
+        this.idCapture.controller.updateIdCaptureOverlay(this);
     }
     get idLayoutStyle() {
         return this._idLayoutStyle;
     }
     set idLayoutStyle(style) {
-        var _a;
         this._idLayoutStyle = style;
-        (_a = this.controller) === null || _a === void 0 ? void 0 : _a.updateIdCaptureOverlay(this);
+        this.idCapture.controller.updateIdCaptureOverlay(this);
     }
     get idLayoutLineStyle() {
         return this._idLayoutLineStyle;
     }
     set idLayoutLineStyle(lineStyle) {
-        var _a;
         this._idLayoutLineStyle = lineStyle;
-        (_a = this.controller) === null || _a === void 0 ? void 0 : _a.updateIdCaptureOverlay(this);
+        this.idCapture.controller.updateIdCaptureOverlay(this);
     }
     get capturedBrush() {
         return this._capturedBrush;
     }
     set capturedBrush(brush) {
-        var _a;
         this._capturedBrush = brush;
-        (_a = this.controller) === null || _a === void 0 ? void 0 : _a.updateIdCaptureOverlay(this);
+        this.idCapture.controller.updateIdCaptureOverlay(this);
     }
     get localizedBrush() {
         return this._localizedBrush;
     }
     set localizedBrush(brush) {
-        var _a;
         this._localizedBrush = brush;
-        (_a = this.controller) === null || _a === void 0 ? void 0 : _a.updateIdCaptureOverlay(this);
+        this.idCapture.controller.updateIdCaptureOverlay(this);
     }
     get rejectedBrush() {
         return this._rejectedBrush;
     }
     set rejectedBrush(brush) {
-        var _a;
         this._rejectedBrush = brush;
-        (_a = this.controller) === null || _a === void 0 ? void 0 : _a.updateIdCaptureOverlay(this);
+        this.idCapture.controller.updateIdCaptureOverlay(this);
     }
     get defaultCapturedBrush() {
         return this._defaultCapturedBrush;
@@ -2014,25 +1772,23 @@ class IdCaptureOverlay extends scanditDatacaptureFrameworksCore.DefaultSerialize
         return this._textHintPosition;
     }
     set textHintPosition(position) {
-        var _a;
         this._textHintPosition = position;
-        (_a = this.controller) === null || _a === void 0 ? void 0 : _a.updateIdCaptureOverlay(this);
+        this.idCapture.controller.updateIdCaptureOverlay(this);
     }
     get showTextHints() {
         return this._showTextHints;
     }
     set showTextHints(enabled) {
-        var _a;
         this._showTextHints = enabled;
-        (_a = this.controller) === null || _a === void 0 ? void 0 : _a.updateIdCaptureOverlay(this);
+        this.idCapture.controller.updateIdCaptureOverlay(this);
     }
 }
 __decorate([
     scanditDatacaptureFrameworksCore.ignoreFromSerialization
-], IdCaptureOverlay.prototype, "controller", void 0);
+], IdCaptureOverlay.prototype, "idCapture", void 0);
 __decorate([
     scanditDatacaptureFrameworksCore.ignoreFromSerialization
-], IdCaptureOverlay.prototype, "_view", void 0);
+], IdCaptureOverlay.prototype, "view", void 0);
 __decorate([
     scanditDatacaptureFrameworksCore.nameForSerialization('idLayoutStyle')
 ], IdCaptureOverlay.prototype, "_idLayoutStyle", void 0);
@@ -2138,12 +1894,6 @@ class IdCaptureSettings extends scanditDatacaptureFrameworksCore.DefaultSerializ
         this.acceptedDocuments = [];
         this.rejectedDocuments = [];
         this.scannerType = new SingleSideScanner(false, false, false);
-        this.rejectExpiredIds = IdCaptureSettings.idCaptureDefaults.IdCapture.IdCaptureSettings.rejectExpiredIds;
-        this.rejectIdsExpiringIn = IdCaptureSettings.idCaptureDefaults.IdCapture.IdCaptureSettings.rejectIdsExpiringIn;
-        this.rejectNotRealIdCompliant = IdCaptureSettings.idCaptureDefaults.IdCapture.IdCaptureSettings.rejectNotRealIdCompliant;
-        this.rejectForgedAamvaBarcodes = IdCaptureSettings.idCaptureDefaults.IdCapture.IdCaptureSettings.rejectForgedAamvaBarcodes;
-        this.rejectInconsistentData = IdCaptureSettings.idCaptureDefaults.IdCapture.IdCaptureSettings.rejectInconsistentData;
-        this.rejectHolderBelowAge = IdCaptureSettings.idCaptureDefaults.IdCapture.IdCaptureSettings.rejectHolderBelowAge;
     }
     static get idCaptureDefaults() {
         return scanditDatacaptureFrameworksCore.FactoryMaker.getInstance('IdDefaults');
@@ -2165,12 +1915,9 @@ __decorate([
     scanditDatacaptureFrameworksCore.ignoreFromSerialization
 ], IdCaptureSettings, "idCaptureDefaults", null);
 
-/**
- * @deprecated Replaced by IdCaptureSettings.rejectForgedAamvaBarcodes
- */
 class AamvaBarcodeVerifier {
     constructor() {
-        this.controller = new IdCaptureController(null);
+        this.controller = new IdCaptureController();
     }
     static create(context) {
         const verifier = new AamvaBarcodeVerifier();
@@ -2235,14 +1982,19 @@ class NativeIdCaptureProxy {
     setModeEnabledState(enabled) {
         NativeIdCaptureProxy.cordovaExec(null, null, CordovaFunction.SetModeEnabledState, [{ 'enabled': enabled }]);
     }
+    updateIdCaptureMode(modeJson) {
+        return new Promise((resolve, reject) => {
+            NativeIdCaptureProxy.cordovaExec(resolve, reject, CordovaFunction.UpdateIdCaptureMode, [modeJson]);
+        });
+    }
     applyIdCaptureModeSettings(newSettingsJson) {
         return new Promise((resolve, reject) => {
             NativeIdCaptureProxy.cordovaExec(resolve, reject, CordovaFunction.ApplyIdCaptureModeSettings, [newSettingsJson]);
         });
     }
-    updateIdCaptureMode(modeJson) {
+    updateIdCaptureOverlay(overlayJson) {
         return new Promise((resolve, reject) => {
-            NativeIdCaptureProxy.cordovaExec(resolve, reject, CordovaFunction.UpdateIdCaptureMode, [modeJson]);
+            NativeIdCaptureProxy.cordovaExec(resolve, reject, CordovaFunction.UpdateIdCaptureOverlay, [overlayJson]);
         });
     }
     updateFeedback(feedbackJson) {
@@ -2256,10 +2008,15 @@ class NativeIdCaptureListenerProxy extends scanditDatacaptureFrameworksCore.Base
     static get cordovaExec() {
         return Cordova.exec;
     }
+    emitInCallback(enabled) {
+        this.eventEmitter.emit(exports.IdCaptureListenerEvents.inCallback, enabled);
+    }
     notifyListeners(event) {
         const done = () => {
+            this.emitInCallback(false);
             return { enabled: this.isModeEnabled() };
         };
+        this.emitInCallback(true);
         if (!event) {
             // The event could be undefined/null in case the plugin result did not pass a "message",
             // which could happen e.g. in case of "ok" results, which could signal e.g. successful
@@ -2293,11 +2050,6 @@ class NativeIdCaptureListenerProxy extends scanditDatacaptureFrameworksCore.Base
 function initIdProxies() {
     scanditDatacaptureFrameworksCore.FactoryMaker.bindLazyInstance('IdCaptureProxy', () => new NativeIdCaptureProxy());
     scanditDatacaptureFrameworksCore.FactoryMaker.bindLazyInstance('IdCaptureListenerProxy', () => new NativeIdCaptureListenerProxy());
-    scanditDatacaptureFrameworksCore.FactoryMaker.bindLazyInstance('IdCaptureOverlayProxy', () => {
-        // This needs to be checked
-        const caller = scanditCordovaDatacaptureCore.createCordovaNativeCaller(Cordova.exec, Cordova.pluginName, []);
-        return scanditDatacaptureFrameworksCore.createNativeProxy(caller);
-    });
 }
 
 // tslint:disable-next-line:variable-name
@@ -2346,7 +2098,6 @@ exports.BarcodeResult = BarcodeResult;
 exports.CapturedId = CapturedId;
 exports.DateResult = DateResult;
 exports.DriverLicense = DriverLicense;
-exports.Duration = Duration;
 exports.FullDocumentScanner = FullDocumentScanner;
 exports.HealthInsuranceCard = HealthInsuranceCard;
 exports.IdCapture = IdCapture;

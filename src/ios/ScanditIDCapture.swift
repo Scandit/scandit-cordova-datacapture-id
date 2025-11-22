@@ -116,8 +116,7 @@ public class ScanditIdCapture: CDVPlugin {
 
     @objc(updateIdCaptureOverlay:)
     func updateIdCaptureOverlay(command: CDVInvokedUrlCommand) {
-        guard let args = command.defaultArgumentAsDictionary,
-              let overlayJson = args["overlayJson"] as? String else {
+        guard let overlayJson = command.defaultArgumentAsString else {
             commandDelegate.send(.failure(with: .invalidJSON), callbackId: command.callbackId)
             return
         }
