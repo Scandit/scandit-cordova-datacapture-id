@@ -7,9 +7,13 @@
 package com.scandit.datacapture.cordova.id
 
 import com.scandit.datacapture.cordova.core.ScanditCaptureCore
+import com.scandit.datacapture.cordova.core.data.SerializableCallbackAction
+import com.scandit.datacapture.cordova.core.data.SerializableFinishModeCallbackData
+import com.scandit.datacapture.cordova.core.errors.JsonParseError
 import com.scandit.datacapture.cordova.core.utils.CordovaEventEmitter
 import com.scandit.datacapture.cordova.core.utils.CordovaResult
 import com.scandit.datacapture.cordova.core.utils.PluginMethod
+import com.scandit.datacapture.cordova.core.utils.defaultArgumentAsString
 import com.scandit.datacapture.cordova.core.utils.optBoolean
 import com.scandit.datacapture.cordova.core.utils.successAndKeepCallback
 import com.scandit.datacapture.frameworks.id.IdCaptureModule
@@ -17,6 +21,7 @@ import com.scandit.datacapture.frameworks.id.listeners.FrameworksIdCaptureListen
 import org.apache.cordova.CallbackContext
 import org.apache.cordova.CordovaPlugin
 import org.json.JSONArray
+import org.json.JSONException
 import org.json.JSONObject
 import java.lang.reflect.Method
 
@@ -25,7 +30,7 @@ class ScanditIdCapture :
 
     private val eventEmitter = CordovaEventEmitter()
 
-    private val idCaptureModule = IdCaptureModule(eventEmitter)
+    private val idCaptureModule = IdCaptureModule(FrameworksIdCaptureListener(eventEmitter))
 
     private lateinit var exposedFunctionsToJs: Map<String, Method>
 
@@ -43,12 +48,12 @@ class ScanditIdCapture :
     }
 
     override fun onStop() {
-        lastIdCaptureEnabledState = idCaptureModule.isTopmostModeEnabled()
-        idCaptureModule.setTopmostModeEnabled(false)
+        lastIdCaptureEnabledState = idCaptureModule.isModeEnabled()
+        idCaptureModule.setModeEnabled(false)
     }
 
     override fun onStart() {
-        idCaptureModule.setTopmostModeEnabled(lastIdCaptureEnabledState)
+        idCaptureModule.setModeEnabled(lastIdCaptureEnabledState)
     }
 
     override fun onReset() {
@@ -83,112 +88,116 @@ class ScanditIdCapture :
     }
 
     @PluginMethod
-    fun resetIdCaptureMode(
-        args: JSONArray,
+    fun createContextForBarcodeVerification(
+        @Suppress("UNUSED_PARAMETER") args: JSONArray,
         callbackContext: CallbackContext
     ) {
-        val argsJson = args.getJSONObject(0)
-        val modeId = argsJson.getInt("modeId")
-        idCaptureModule.resetMode(modeId)
-        callbackContext.success()
+        idCaptureModule.createContextForBarcodeVerification(CordovaResult(callbackContext))
     }
 
     @PluginMethod
-    fun addIdCaptureListener(
-        args: JSONArray,
+    fun subscribeDidCaptureListener(
+        @Suppress("UNUSED_PARAMETER") args: JSONArray,
         callbackContext: CallbackContext
     ) {
-        val argsJson = args.getJSONObject(0)
-        val modeId = argsJson.getInt("modeId")
-
-        eventEmitter.registerModeSpecificCallback(
-            modeId,
+        eventEmitter.registerCallback(
             FrameworksIdCaptureListener.ON_ID_CAPTURED_EVENT_NAME,
             callbackContext
         )
-        eventEmitter.registerModeSpecificCallback(
-            modeId,
-            FrameworksIdCaptureListener.ON_ID_REJECTED_EVENT_NAME,
-            callbackContext
-        )
 
-        idCaptureModule.addListener(modeId)
+        idCaptureModule.addListener()
         callbackContext.successAndKeepCallback()
     }
 
     @PluginMethod
-    fun removeIdCaptureListener(
-        args: JSONArray,
+    fun subscribeDidRejectListener(
+        @Suppress("UNUSED_PARAMETER") args: JSONArray,
         callbackContext: CallbackContext
     ) {
-        val argsJson = args.getJSONObject(0)
-        val modeId = argsJson.getInt("modeId")
+        eventEmitter.registerCallback(
+            FrameworksIdCaptureListener.ON_ID_REJECTED_EVENT_NAME,
+            callbackContext
+        )
 
-        eventEmitter.unregisterModeSpecificCallback(
-            modeId,
+        idCaptureModule.addListener()
+        callbackContext.successAndKeepCallback()
+    }
+
+    @PluginMethod
+    fun unregisterListenerForEvents(
+        @Suppress("UNUSED_PARAMETER") args: JSONArray,
+        callbackContext: CallbackContext
+    ) {
+        eventEmitter.unregisterCallback(
             FrameworksIdCaptureListener.ON_ID_CAPTURED_EVENT_NAME,
         )
 
-        eventEmitter.unregisterModeSpecificCallback(
-            modeId,
+        eventEmitter.unregisterCallback(
             FrameworksIdCaptureListener.ON_ID_REJECTED_EVENT_NAME,
         )
 
-        idCaptureModule.removeListener(modeId)
+        idCaptureModule.removeListener()
+        idCaptureModule.removeAsyncListener()
         callbackContext.success()
     }
 
     @PluginMethod
-    fun finishDidCaptureCallback(
-        args: JSONArray,
-        callbackContext: CallbackContext
-    ) {
-        val argsJson = args.getJSONObject(0)
-        val modeId = argsJson.getInt("modeId")
-        idCaptureModule.finishDidCaptureId(modeId, argsJson.optBoolean("enabled", false))
-        callbackContext.success()
+    fun finishCallback(args: JSONArray, callbackContext: CallbackContext) {
+        try {
+            val data = args.getJSONObject(0)
+            // We need the "result" field to exist ( null is also allowed )
+            if (!data.has("result")) {
+                throw JSONException("Missing result field in response json")
+            }
+            val result: JSONObject = data.getJSONObject("result")
+
+            if (!data.has(SerializableCallbackAction.FIELD_FINISH_CALLBACK_ID)) {
+                throw JSONException("Cannot recognise finish callback action with data $data")
+            }
+
+            val resultData = SerializableFinishModeCallbackData.fromJson(result)
+
+            when (data[SerializableCallbackAction.FIELD_FINISH_CALLBACK_ID]) {
+                FrameworksIdCaptureListener.ON_ID_CAPTURED_EVENT_NAME ->
+                    idCaptureModule.finishDidCaptureId(resultData?.enabled == true)
+
+                FrameworksIdCaptureListener.ON_ID_REJECTED_EVENT_NAME ->
+                    idCaptureModule.finishDidRejectId(resultData?.enabled == true)
+            }
+        } catch (e: JSONException) {
+            callbackContext.error(JsonParseError(e.message).serializeContent())
+        } catch (e: RuntimeException) { // TODO [SDC-1851] - fine-catch deserializer exceptions
+            callbackContext.error(JsonParseError(e.message).serializeContent())
+        }
     }
 
     @PluginMethod
-    fun finishDidRejectCallback(
-        args: JSONArray,
+    fun resetIdCapture(
+        @Suppress("UNUSED_PARAMETER") args: JSONArray,
         callbackContext: CallbackContext
     ) {
-        val argsJson = args.getJSONObject(0)
-        val modeId = argsJson.getInt("modeId")
-        idCaptureModule.finishDidRejectId(modeId, argsJson.optBoolean("enabled", false))
+        idCaptureModule.resetMode()
         callbackContext.success()
     }
 
     @PluginMethod
     fun setModeEnabledState(args: JSONArray, callbackContext: CallbackContext) {
-        val argsJson = args.getJSONObject(0)
-        val modeId = argsJson.getInt("modeId")
-
-        idCaptureModule.setModeEnabled(modeId, argsJson.optBoolean("enabled", false))
+        idCaptureModule.setModeEnabled(args.optBoolean("enabled", false))
         callbackContext.success()
     }
 
     @PluginMethod
     fun applyIdCaptureModeSettings(args: JSONArray, callbackContext: CallbackContext) {
-        val argsJson = args.getJSONObject(0)
-        val modeId = argsJson.getInt("modeId")
-
         idCaptureModule.applyModeSettings(
-            modeId,
-            argsJson.getString("settingsJson"),
+            args.defaultArgumentAsString,
             CordovaResult(callbackContext)
         )
     }
 
     @PluginMethod
     fun updateIdCaptureMode(args: JSONArray, callbackContext: CallbackContext) {
-        val argsJson = args.getJSONObject(0)
-        val modeId = argsJson.getInt("modeId")
-
         idCaptureModule.updateModeFromJson(
-            modeId,
-            argsJson.getString("modeJson"),
+            args.defaultArgumentAsString,
             CordovaResult(callbackContext)
         )
     }
@@ -200,13 +209,21 @@ class ScanditIdCapture :
     }
 
     @PluginMethod
-    fun updateIdCaptureFeedback(args: JSONArray, callbackContext: CallbackContext) {
-        val argsJson = args.getJSONObject(0)
-        val modeId = argsJson.getInt("modeId")
+    fun verifyCapturedIdAsync(args: JSONArray, callbackContext: CallbackContext) {
+        try {
+            idCaptureModule.verifyCapturedIdBarcode(
+                args.defaultArgumentAsString,
+                CordovaResult(callbackContext)
+            )
+        } catch (e: Exception) {
+            callbackContext.error(JsonParseError(e.message).toString())
+        }
+    }
 
+    @PluginMethod
+    fun updateIdCaptureFeedback(args: JSONArray, callbackContext: CallbackContext) {
         idCaptureModule.updateFeedback(
-            modeId,
-            argsJson.getString("feedbackJson"),
+            args.defaultArgumentAsString,
             CordovaResult(callbackContext)
         )
     }

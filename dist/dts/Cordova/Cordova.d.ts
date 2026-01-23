@@ -7,6 +7,7 @@ export declare const Cordova: {
 };
 export declare function initializeCordovaId(): void;
 export declare enum CordovaFunction {
+    CreateContextForBarcodeVerification = "createContextForBarcodeVerification",
     SubscribeDidCaptureListener = "subscribeDidCaptureListener",
     SubscribeDidLocalizeListener = "subscribeDidLocalizeListener",
     SubscribeDidRejectListener = "subscribeDidRejectListener",
@@ -14,6 +15,9 @@ export declare enum CordovaFunction {
     UnregisterListenerForEvents = "unregisterListenerForEvents",
     SetModeEnabledState = "setModeEnabledState",
     ResetIdCapture = "resetIdCapture",
+    VerifyCapturedId = "verifyCapturedId",
+    VerifyCapturedIdAsync = "verifyCapturedIdAsync",
+    VerifyVizMrz = "verifyVizMrz",
     FinishCallback = "finishCallback",
     UpdateIdCaptureMode = "updateIdCaptureMode",
     ApplyIdCaptureModeSettings = "applyIdCaptureModeSettings",
