@@ -49,6 +49,3 @@ export { ProfessionalDrivingPermit } from 'scandit-datacapture-frameworks-id';
 export { VehicleRestriction } from 'scandit-datacapture-frameworks-id';
 export { DrivingLicenseCategory } from 'scandit-datacapture-frameworks-id';
 export { DrivingLicenseDetails } from 'scandit-datacapture-frameworks-id';
-export { IdCaptureListenerProxy } from 'scandit-datacapture-frameworks-id';
-export { IdCaptureListenerEvents } from 'scandit-datacapture-frameworks-id';
-export { IdCaptureProxy } from 'scandit-datacapture-frameworks-id';
