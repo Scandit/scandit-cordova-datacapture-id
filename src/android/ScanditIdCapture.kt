@@ -12,6 +12,7 @@ import com.scandit.datacapture.cordova.core.utils.CordovaMethodCall
 import com.scandit.datacapture.cordova.core.utils.CordovaResult
 import com.scandit.datacapture.cordova.core.utils.PluginMethod
 import com.scandit.datacapture.frameworks.core.CoreModule
+import com.scandit.datacapture.frameworks.core.listeners.registry.RegistryEmitter
 import com.scandit.datacapture.frameworks.core.locator.DefaultServiceLocator
 import com.scandit.datacapture.frameworks.id.IdCaptureModule
 import org.apache.cordova.CallbackContext
@@ -24,7 +25,7 @@ class ScanditIdCapture :
 
     private val emitter = CordovaEventEmitter()
 
-    private val idCaptureModule = IdCaptureModule(emitter)
+    private val idCaptureModule = IdCaptureModule(RegistryEmitter(emitter))
 
     private var lastIdCaptureEnabledState: Boolean = false
 
@@ -62,7 +63,7 @@ class ScanditIdCapture :
     ): Boolean {
         return when (action) {
             "executeId" -> executeId(args, callbackContext)
-            "getDefaults" -> getDefaults(callbackContext)
+            "getDynamicDefaults" -> getDynamicDefaults(callbackContext)
             else -> false
         }.let { true }
     }
@@ -88,7 +89,7 @@ class ScanditIdCapture :
     }
 
     @PluginMethod
-    fun getDefaults(callbackContext: CallbackContext) {
-        callbackContext.success(JSONObject(idCaptureModule.getDefaults()))
+    fun getDynamicDefaults(callbackContext: CallbackContext) {
+        callbackContext.success(JSONObject(idCaptureModule.getDynamicDefaults()))
     }
 }
