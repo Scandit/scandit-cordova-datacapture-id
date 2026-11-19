@@ -14,7 +14,7 @@ public class ScanditIdCapture: CDVPlugin {
     override public func pluginInitialize() {
         super.pluginInitialize()
         emitter = CordovaEventEmitter(commandDelegate: commandDelegate)
-        idModule = IdCaptureModule(emitter: RegistryEmitter(platformEmitter: emitter))
+        idModule = IdCaptureModule(emitter: emitter)
         idModule.didStart()
     }
 
@@ -56,10 +56,10 @@ public class ScanditIdCapture: CDVPlugin {
         }
     }
 
-    @objc(getDynamicDefaults:)
-    func getDynamicDefaults(command: CDVInvokedUrlCommand) {
+    @objc(getDefaults:)
+    func getDefaults(command: CDVInvokedUrlCommand) {
         commandDelegate.send(
-            .success(message: idModule.getDynamicDefaults() as CDVPluginResult.JSONMessage),
+            .success(message: idModule.getDefaults() as CDVPluginResult.JSONMessage),
             callbackId: command.callbackId
         )
     }
